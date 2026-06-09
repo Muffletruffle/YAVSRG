@@ -166,7 +166,7 @@ type ColumnErrorBars(ctx: HudContext) =
                 let sign = if t < 0.0f then -1.0f else 1.0f
                 let abs_time = if t < 0.0f then -t else t
                 let norm = abs_time / float32 MAX_WINDOW
-                center + float32 (Math.Asinh(float (norm * logfactor ** 2.0f)) / Math.Asinh(float (logfactor ** 2.0f))) * sign * h
+                center + float32 (Math.Asinh(float (norm * (6.0f * logfactor) ** 1.5f)) / Math.Asinh(float ((6.0f * logfactor) ** 1.5f))) * sign * h
         let r k time1 time2 =
             let left_edge = ctx.Playfield.Bounds.Left + ctx.Playfield.ColumnPositions.[k]
             Rect.FromEdges(left_edge, ms_to_y time1, left_edge + ctx.Playfield.ColumnWidth, ms_to_y time2).SliceX(ctx.Config.ColumnErrorBarsWidth)

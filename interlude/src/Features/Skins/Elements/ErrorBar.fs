@@ -182,7 +182,7 @@ type ErrorBar(ctx: HudContext) =
                     let sign = if t < 0.0f then -1.0f else 1.0f
                     let abs_time = if t < 0.0f then -t else t
                     let norm = abs_time / float32 MAX_WINDOW
-                    center + float32 (Math.Asinh(float (norm * logfactor ** 2.0f)) / Math.Asinh(float (logfactor ** 2.0f))) * sign * w
+                    center + float32 (Math.Asinh(float (norm * (6.0f * logfactor) ** 1.5f)) / Math.Asinh(float ((6.0f * logfactor) ** 1.5f))) * sign * w
                     
 
         let r time1 time2 = Rect.FromEdges(ms_to_x time1, this.Bounds.Top, ms_to_x time2, this.Bounds.Bottom)
