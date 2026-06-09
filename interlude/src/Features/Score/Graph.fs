@@ -201,6 +201,10 @@ and ScoreGraph(score_info: ScoreInfo, stats: ScoreScreenStats ref) =
             if stats.Value.ColumnFilterApplied then Colors.text_green else Colors.text
 
         let judgement_count = Array.sum info.Judgements
+        let ma = float32 info.Judgements[0] / float32(max 1 info.Judgements[1])
+
+        let pa =
+            if info.Judgements.Length < 3 then 0.0f else float32 info.Judgements[1] / float32(max 1 info.Judgements[2])
 
         let ma = JudgementRatio.Format(info.Judgements, 0)
         let pa = JudgementRatio.Format(info.Judgements, 1)
