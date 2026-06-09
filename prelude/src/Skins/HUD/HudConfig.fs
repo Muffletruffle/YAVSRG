@@ -179,6 +179,7 @@ type HudConfig =
         TimingDisplayMovingAverageType: ErrorBarMovingAverageType
         TimingDisplayMovingAverageSensitivity: float32
         TimingDisplayMovingAverageColor: Color
+        
 
         ColumnErrorBarsEnabled: bool
         ColumnErrorBarsPosition: HudPosition

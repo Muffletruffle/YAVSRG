@@ -19,6 +19,8 @@ module Grouping =
                 "pack", Packs
                 "collection", Collections
                 "level", Levels
+                // NEW VVV
+                "length", Normal format_duration
                 "difficulty", Normal format_difficulty
                 "date_played", Normal format_date_last_played
                 "date_installed", Normal format_date_added

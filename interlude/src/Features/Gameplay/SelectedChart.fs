@@ -1,4 +1,4 @@
-namespace Interlude.Features.Gameplay
+﻿namespace Interlude.Features.Gameplay
 
 open Percyqaz.Common
 open Percyqaz.Flux.Audio

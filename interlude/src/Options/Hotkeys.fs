@@ -81,6 +81,7 @@ module Hotkeys =
         Hotkeys.register "autoplay" (ctrl Keys.A)
         Hotkeys.register "reload_content" (Bind.Key(Keys.S, (true, true, true)))
         Hotkeys.register "graph_alt_info" (mk Keys.LeftShift)
+        Hotkeys.register "graph_alt_info_faster" (mk Keys.LeftControl)
         Hotkeys.register "difficulty_overlay" (mk Keys.F2)
 
         Hotkeys.register "skip" (mk Keys.Space)
