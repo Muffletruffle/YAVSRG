@@ -78,7 +78,7 @@ module Screen =
     let logo = Logo()
 
     let mutable enable_background = true
-    let mutable timescale = 1.0
+    let mutable timescale = 1.3
     let mutable current_type = ScreenType.SplashScreen
     let mutable private current = Unchecked.defaultof<Screen>
     let private screens: Screen array = Array.zeroCreate 5

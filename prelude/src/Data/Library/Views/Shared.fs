@@ -44,6 +44,17 @@ module internal Shared =
         elif days_ago < 3600 then 8, "A long time ago"
         else 9, "Never"
 
+    // NEW VVV
+    let format_duration (chart_meta: ChartMeta, _) : int * string =
+        let minutes = float32 (chart_meta.Length / 60000.0f) |> ceil |> int
+
+        if minutes = 1 then 0, "1 minute or less"
+        elif minutes >= 6 && minutes <= 8 then 5, "8 minutes or less"
+        elif minutes >= 9 && minutes <= 10 then 6, "10 minutes or less"
+        elif minutes >= 11 then 7, "11 minutes or more"
+        else (minutes - 1), sprintf "%i minutes or less" minutes
+
+
     let format_difficulty (chart_meta: ChartMeta, _) : int * string =
         let stars = chart_meta.Rating |> floor |> int
         if stars >= 15 then
