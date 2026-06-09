@@ -389,6 +389,7 @@ module Options =
                 Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Locale")
 
             let locales =
+<<<<<<< HEAD
                 try
                     Directory.GetFiles(locale_dir_path)
                 with :? DirectoryNotFoundException ->
@@ -396,6 +397,15 @@ module Options =
                 |> Seq.where(fun x -> Path.GetExtension(x).ToLower() = ".txt")
                 |> Seq.map(fun x -> Path.GetFileNameWithoutExtension(x))
 
+=======
+                if Directory.Exists(locale_dir_path) then // First check if the locale folder exists (avoid a crash)
+                    Directory.GetFiles(locale_dir_path)
+                    |> Seq.where(fun x -> Path.GetExtension(x).ToLower() = ".txt") 
+                    |> Seq.map(fun x -> Path.GetFileNameWithoutExtension(x))
+                else
+                    Seq.empty
+                
+>>>>>>> 142f63e (Locale folder fix (another small test))
             available_locales <- Set.union (Set.ofSeq EMBEDDED_LOCALES.Keys) (Set.ofSeq locales)
             Logging.Debug "%i available locales" available_locales.Count
 
