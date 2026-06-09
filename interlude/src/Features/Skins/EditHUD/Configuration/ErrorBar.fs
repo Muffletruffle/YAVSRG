@@ -31,7 +31,7 @@ type ErrorBarPage() =
         config.TimingDisplayFadeTime
         |> Setting.bounded (100.0f<ms / rate>, 2000.0f<ms / rate>)
 
-    let log_scale_sensitivity = config.TimingDisplayLogSensitivity |> Setting.bounded (0.0f, 4.0f)
+    let log_scale_sensitivity = config.TimingDisplayLogSensitivity |> Setting.bounded (0.0f, 1.0f)
 
     let moving_average_type = Setting.simple config.TimingDisplayMovingAverageType
     let moving_average_sensitivity = config.TimingDisplayMovingAverageSensitivity |> Setting.bounded (0.01f, 1.0f)
@@ -85,7 +85,7 @@ type ErrorBarPage() =
                 PageSetting(%"hud.error_bar.timingwindowsopacity", Slider.Percent(windows_opacity))
                     .Help(Help.Info("hud.error_bar.timingwindowsopacity"))
                     .Pos(14),
-                PageSetting(%"hud.error_bar.logsensitivity", Slider(log_scale_sensitivity, Step = 0.1f))
+                PageSetting(%"hud.error_bar.logsensitivity", Slider.Percent(log_scale_sensitivity, Step = 0.01f))
                     .Help(Help.Info("hud.error_bar.logsensitivity"))
                     .Pos(16),
                 PageSetting(%"hud.error_bar.moving_average_type",

@@ -51,7 +51,7 @@ type ErrorBar(ctx: HudContext) =
                 let sign = if delta < 0.0f then -1.0f else 1.0f
                 let abs_delta = MathF.Abs(delta)
                 let norm = abs_delta / float32 MAX_WINDOW
-                in sign * float32 (Math.Asinh(float (norm * logfactor ** 2.0f)) / Math.Asinh(float (logfactor ** 2.0f))) * w * 0.5f
+                in sign * float32 (Math.Asinh(float (norm * (6.0f * logfactor) ** 1.5f)) / Math.Asinh(float ((6.0f * logfactor) ** 1.5f))) * w * 0.5f
 
     override this.Init(parent: Widget) =
         if ctx.Config.TimingDisplayMovingAverageType <> ErrorBarMovingAverageType.None then
