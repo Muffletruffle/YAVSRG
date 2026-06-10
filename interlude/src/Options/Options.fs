@@ -157,6 +157,7 @@ type GameOptions =
         VisualOffset: Setting.Bounded<GameplayTime>
         AudioOffset: Setting.Bounded<GameplayTime>
         AudioVolume: Setting.Bounded<float>
+        AudioPitch: Setting.Bounded<float32>
         AudioPitchRatesDown: Setting<bool>
         AudioPitchRatesUp: Setting<bool>
         MenusMuffleSong: Setting<bool>
@@ -223,6 +224,16 @@ type GameOptions =
     static member Default =
         {
             Language = Setting.simple "en_GB"
+<<<<<<< HEAD
+=======
+
+            VisualOffset = 0.0f<ms / rate> |> Setting.bounded  (-500.0f<ms / rate>, 500.0f<ms / rate>) |> Setting.roundf_uom 0
+            AudioOffset =  0.0f<ms / rate> |> Setting.bounded (-500.0f<ms / rate>, 500.0f<ms / rate>) |> Setting.roundf_uom 0
+            AudioVolume = Setting.bounded (0.0, 1.0) 0.05
+            AudioPitch = 0.0f |> Setting.bounded (-12.0f, 12.0f)
+            AudioPitchRatesDown = Setting.simple true
+            AudioPitchRatesUp = Setting.simple true
+>>>>>>> 07d5e350d (Manual pitch adjustment slider (for nightcore or daycore enjoyers))
             CurrentChart = Setting.simple ""
             Theme = Themes.selected_id
 

@@ -39,6 +39,13 @@ type AudioPage() =
         )
             .Help(Help.Info("system.audio_pitch_rates_up"))
 
+    // static member AudioPitch() : PageSetting =
+    //     PageSetting(
+    //         %"system.audiopitch",
+    //         Slider(options.AudioPitch |> Setting.trigger(fun v -> Song.set_pitch_offset v), Step = 1f)
+    //     )
+    //         .Help(Help.Info("system.audiopitch"))
+
     static member MenusMuffleSong() : PageSetting =
         PageSetting(
             %"system.menus_muffle_song",
@@ -80,8 +87,9 @@ type AudioPage() =
                 AudioPage.RatesChangePitchUp().Pos(7),
                 AudioPage.MenusMuffleSong().Pos(9),
                 AudioPage.CrossfadeEnabled().Pos(11),
-                AudioPage.AudioOffset().Pos(14),
-                AudioPage.AutomaticOffset().Pos(16)
+                // AudioPage.AudioPitch().Pos(13),
+                AudioPage.AudioOffset().Pos(16),
+                AudioPage.AutomaticOffset().Pos(18)
             )
 
     override this.Title = Icons.SPEAKER + " " + %"system.audio"
