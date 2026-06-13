@@ -283,6 +283,7 @@ module Song =
         load_path <- path
         set_local_offset offset
         change_rate new_rate
+        apply_pitch ()
 
         if path_changed then
 
