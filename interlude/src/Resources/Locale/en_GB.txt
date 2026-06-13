@@ -98,6 +98,7 @@ gameplay.hide_hit_notes=Hide hit notes
 gameplay.hide_hit_notes.tooltip=When enabled, unhit notes scroll past the receptors, while hit notes vanish, even if they were hit early/before the receptors.\nIn short, notes only disappear when you hit them.\nLeave this on if you prefer the visual feedback given by this effect, or are used to it from other games.
 gameplay.hitposition=Hit position
 gameplay.hitposition.tooltip=Change this to adjust the position of receptors when playing.\nIncrease the number to move them closer to the centre of the screen, decrease to move closer to the edge.
+gameplay.hitposition.info= = %0 on osu!
 gameplay.hold_to_give_up=Hold to give up
 gameplay.hold_to_give_up.tooltip=When enabled, you need to briefly hold the exit/retry keys during gameplay to quit/retry.\nUseful if you accidentally bump your keys or have switches that occasionally rattle.
 gameplay.keybinds=Gameplay binds
