@@ -248,3 +248,10 @@ type ErrorBar(ctx: HudContext) =
                 Render.rect
                     (if hit.IsRelease then rect.ExpandY(ctx.Config.TimingDisplayReleasesExtraHeight) else rect)
                     color
+
+        if ctx.Config.TimingDisplayShowGuide then
+            Render.rect
+                (bar
+                    (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness)
+                    (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
+                Color.White
