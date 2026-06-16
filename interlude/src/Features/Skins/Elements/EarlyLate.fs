@@ -1,5 +1,6 @@
 ﻿namespace Interlude.Features.Play.HUD
 
+open System
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
 open Prelude
@@ -48,6 +49,8 @@ type EarlyLate(ctx: HudContext) =
                         Color.White.AsQuad
                         (Sprite.pick_texture (time_ago / ctx.Config.EarlyLateMeterFrameTime / SelectedChart.rate.Value |> floor |> int, if early then 0 else 1) texture)
                 else
+                    let opacity = Math.Clamp( int (255.0f - time_ago / duration * 255.0f), 0, 255)
+
                     Text.fill (
                         Style.font,
                         (if early then
@@ -56,8 +59,9 @@ type EarlyLate(ctx: HudContext) =
                              ctx.Config.EarlyLateMeterLateText),
                         this.Bounds,
                         (if early then
-                             ctx.Config.EarlyLateMeterEarlyColor
+                             Color.FromArgb(opacity, ctx.Config.EarlyLateMeterEarlyColor)
+                             
                          else
-                             ctx.Config.EarlyLateMeterLateColor),
+                             Color.FromArgb(opacity, ctx.Config.EarlyLateMeterLateColor)),
                         Alignment.CENTER
                     )
