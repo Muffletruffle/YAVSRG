@@ -8,6 +8,7 @@ open Interlude.UI
 open Interlude.Content
 open Interlude.Features.Gameplay
 open Interlude.Features.Play
+open Interlude.Options
 
 type Preview(info: LoadedChartInfo, change_rate: Rate -> unit) as this =
     inherit Dialog()
@@ -71,6 +72,10 @@ type Preview(info: LoadedChartInfo, change_rate: Rate -> unit) as this =
                 recreate_scoring()
             last_time <- now
 
+        let adjust_pitch(delta: float32) =
+            options.AudioPitch.Set (options.AudioPitch.Get() + delta)
+            Song.adjust_pitch_offset delta
+
         if (%%"preview").Pressed() || (%%"exit").Pressed() || Mouse.released Mouse.RIGHT then
             this.Close()
         elif (%%"select").Pressed() then
@@ -92,6 +97,14 @@ type Preview(info: LoadedChartInfo, change_rate: Rate -> unit) as this =
             if Song.playing () then
                 (if Song.time () > 0.0f<ms> then Song.pause ())
             elif not (Mouse.held Mouse.LEFT) then Song.resume ()
+        elif (%%"pitchup").Pressed() then
+            adjust_pitch 2.0f
+        elif (%%"pitchup_small").Pressed() then
+            adjust_pitch 1.0f
+        elif (%%"pitchdown").Pressed() then
+            adjust_pitch -2.0f
+        elif (%%"pitchdown_small").Pressed() then
+            adjust_pitch -1.0f
         else
             SelectedChart.change_rate_hotkeys change_rate
 

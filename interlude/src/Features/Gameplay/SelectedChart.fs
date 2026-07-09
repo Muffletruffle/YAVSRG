@@ -420,6 +420,16 @@ module SelectedChart =
         elif (%%"downrate").Pressed() then
             change_rate_by(-0.1f<rate>)
 
+    let change_pitch_hotkeys(change_pitch_by: float32 -> unit) =
+        if (%%"pitchup").Pressed() then
+            change_pitch_by(2.0f)
+        elif (%%"pitchup_small").Pressed() then
+            change_pitch_by(1.0f)
+        elif (%%"pitchdown").Pressed() then
+            change_pitch_by(-2.0f)
+        elif (%%"pitchdown_small").Pressed() then
+            change_pitch_by(-1.0f)
+
     let init () =
 
         match ChartDatabase.get_meta options.CurrentChart.Value Content.Charts with

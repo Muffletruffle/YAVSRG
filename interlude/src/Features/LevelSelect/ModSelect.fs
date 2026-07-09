@@ -10,6 +10,7 @@ open Interlude.Options
 open Interlude.UI
 open Interlude.Features.Pacemaker
 open Interlude.Features.Gameplay
+open Percyqaz.Flux.Audio
 
 type private ColumnSwapPage() =
     inherit Page()
@@ -235,6 +236,10 @@ type ModSelect(change_rate: Rate -> unit) =
             Hotkey = "mods"
         )
 
+    let adjust_pitch(delta: float32) =
+            options.AudioPitch.Set (options.AudioPitch.Get() + delta)
+            Song.adjust_pitch_offset delta
+
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)
 
@@ -245,5 +250,13 @@ type ModSelect(change_rate: Rate -> unit) =
             SelectedChart.autoplay <- false
             SelectedChart.set_rate_and_mods(1.0f<rate>, Map.empty)
             Style.click.Play()
+        elif (%%"pitchup").Pressed() then
+            adjust_pitch 2.0f
+        elif (%%"pitchup_small").Pressed() then
+            adjust_pitch 1.0f
+        elif (%%"pitchdown").Pressed() then
+            adjust_pitch -2.0f
+        elif (%%"pitchdown_small").Pressed() then
+            adjust_pitch -1.0f
         else
             SelectedChart.change_rate_hotkeys change_rate

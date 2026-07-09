@@ -243,6 +243,9 @@ module Song =
     let set_pitch_offset (semitones: float32) : unit =
         _pitch_offset <- semitones
         apply_pitch ()
+    let adjust_pitch_offset (semitonedelta: float32) : unit =
+        _pitch_offset <- (_pitch_offset + semitonedelta)
+        apply_pitch ()
     let set_local_offset (offset: Time): unit = _local_offset <- offset
     let set_global_offset (offset: float32<ms / rate>) : unit = _global_offset <- offset
 
