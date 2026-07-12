@@ -1,1 +1,1 @@
-﻿Case-insensitive Authorization Cloudflare fix
+﻿Leaderboard bug fix

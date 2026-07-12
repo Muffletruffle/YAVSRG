@@ -11,6 +11,7 @@ open Prelude
 open Prelude.Mods
 open Prelude.Data.Library
 open Interlude.Content
+open Interlude.Resources
 
 type Keymode =
     | ``3K`` = 3
@@ -383,22 +384,21 @@ module Options =
 
         let detect_locales() =
             let locale_dir_path = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Locale")
-            
+
             let locales =
-                if Directory.Exists(locale_dir_path) then // First check if the locale folder exists (avoid a crash)
+                try
                     Directory.GetFiles(locale_dir_path)
-                    |> Seq.where(fun x -> Path.GetExtension(x).ToLower() = ".txt") 
-                    |> Seq.map(fun x -> Path.GetFileNameWithoutExtension(x))
-                else
-                    Seq.empty
-                
+                with
+                | :? DirectoryNotFoundException -> [||]
+                |> Seq.where(fun x -> Path.GetExtension(x).ToLower() = ".txt")
+                |> Seq.map(fun x -> Path.GetFileNameWithoutExtension(x))
             available_locales <- Set.union (Set.ofSeq EMBEDDED_LOCALES.Keys) (Set.ofSeq locales)
             Logging.Debug "%i available locales" available_locales.Count
-        
+
         let get_locale_file(id: string) =
             let locale_path = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Locale", id + ".txt")
             if EMBEDDED_LOCALES.ContainsKey id then
-                Interlude.Utils.get_embedded_locale id |> Some
+                EmbeddedResource.GetLocale id |> Some
             elif File.Exists(locale_path) then
                 File.OpenRead(locale_path) :> Stream |> Some
             else
