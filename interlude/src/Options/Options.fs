@@ -157,7 +157,6 @@ type GameOptions =
         VisualOffset: Setting.Bounded<GameplayTime>
         AudioOffset: Setting.Bounded<GameplayTime>
         AudioVolume: Setting.Bounded<float>
-        AudioPitch: Setting.Bounded<float32>
         AudioPitchRatesDown: Setting<bool>
         AudioPitchRatesUp: Setting<bool>
         MenusMuffleSong: Setting<bool>
@@ -224,16 +223,6 @@ type GameOptions =
     static member Default =
         {
             Language = Setting.simple "en_GB"
-<<<<<<< HEAD
-=======
-
-            VisualOffset = 0.0f<ms / rate> |> Setting.bounded  (-500.0f<ms / rate>, 500.0f<ms / rate>) |> Setting.roundf_uom 0
-            AudioOffset =  0.0f<ms / rate> |> Setting.bounded (-500.0f<ms / rate>, 500.0f<ms / rate>) |> Setting.roundf_uom 0
-            AudioVolume = Setting.bounded (0.0, 1.0) 0.05
-            AudioPitch = 0.0f |> Setting.bounded (-12.0f, 12.0f)
-            AudioPitchRatesDown = Setting.simple true
-            AudioPitchRatesUp = Setting.simple true
->>>>>>> 07d5e350d (Manual pitch adjustment slider (for nightcore or daycore enjoyers))
             CurrentChart = Setting.simple ""
             Theme = Themes.selected_id
 
@@ -400,7 +389,6 @@ module Options =
                 Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Locale")
 
             let locales =
-<<<<<<< HEAD
                 try
                     Directory.GetFiles(locale_dir_path)
                 with :? DirectoryNotFoundException ->
@@ -408,15 +396,6 @@ module Options =
                 |> Seq.where(fun x -> Path.GetExtension(x).ToLower() = ".txt")
                 |> Seq.map(fun x -> Path.GetFileNameWithoutExtension(x))
 
-=======
-                if Directory.Exists(locale_dir_path) then // First check if the locale folder exists (avoid a crash)
-                    Directory.GetFiles(locale_dir_path)
-                    |> Seq.where(fun x -> Path.GetExtension(x).ToLower() = ".txt") 
-                    |> Seq.map(fun x -> Path.GetFileNameWithoutExtension(x))
-                else
-                    Seq.empty
-                
->>>>>>> 142f63e (Locale folder fix (another small test))
             available_locales <- Set.union (Set.ofSeq EMBEDDED_LOCALES.Keys) (Set.ofSeq locales)
             Logging.Debug "%i available locales" available_locales.Count
 
