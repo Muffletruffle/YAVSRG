@@ -175,12 +175,8 @@ and ScoreGraph(score_info: ScoreInfo, stats: ScoreScreenStats ref) =
         let text_color = if stats.Value.ColumnFilterApplied then Colors.text_green else Colors.text
         let judgement_count = Array.sum info.Judgements
 
-        let ma = if info.Judgements.Length <= 1 then sprintf "  •  MA: %i.0:0" info.Judgements.[0]
-                    else sprintf "  •  MA: %.1f:%i" (float32 info.Judgements.[0] / float32  (max 1 info.Judgements.[1])) (min info.Judgements.[1] 1)
-
-        let pa = if info.Judgements.Length <= 1 then sprintf "  •  PA: 0.0:0"
-                    else if info.Judgements.Length <= 2 then sprintf "  •  PA: %i.0:0" info.Judgements.[1]
-                    else sprintf "  •  PA: %.1f:%i" (float32 info.Judgements.[1] / float32 (max 1 info.Judgements.[2])) (min info.Judgements.[2] 1)
+        let ma = sprintf "  •  MA: %s" (JudgementRatio.Format(info.Judgements, 0))
+        let pa = sprintf "  •  PA: %s" (JudgementRatio.Format(info.Judgements, 1))
 
         Text.fill_b (
             Style.font,
@@ -262,12 +258,8 @@ and ScoreGraph(score_info: ScoreInfo, stats: ScoreScreenStats ref) =
             |> sqrt
         let ghost_taps = post.GhostTaps - pre.GhostTaps
 
-        let ma = if judgement_diff.Length <= 1 then sprintf "  •  MA: %i.0:0" judgement_diff.[0]
-                    else sprintf "  •  MA: %.1f:%i" (float32 judgement_diff.[0] / float32  (max 1 judgement_diff.[1])) (min judgement_diff.[1] 1)
-
-        let pa = if judgement_diff.Length <= 1 then "  •  PA: 0.0:0"
-                    else if judgement_diff.Length <= 2 then sprintf "  •  PA: %i:0" judgement_diff.[1]
-                    else sprintf "  •  PA: %.1f:%i" (float32 judgement_diff.[1] / float32 (max 1 judgement_diff.[2])) (min judgement_diff.[2] 1)
+        let ma = sprintf "  •  MA: %s" (JudgementRatio.Format(judgement_diff, 0))
+        let pa = sprintf "  •  PA: %s" (JudgementRatio.Format(judgement_diff, 1))
 
         Text.fill_b (
             Style.font,
@@ -479,7 +471,7 @@ and ScoreGraph(score_info: ScoreInfo, stats: ScoreScreenStats ref) =
 
         | ScoreGraphLineMode.MA when stats.Value.GraphPoints.Length > 0 && score_info.Scoring.JudgementCounts.Length > 1 ->
 
-            let ma (ss: GraphPoint) = if ss.Judgements.[1] = 0 then float32 ss.Judgements.[0] else float32 ss.Judgements.[0] / float32 ss.Judgements.[1]
+            let ma (ss: GraphPoint) = let r, _ = JudgementRatio.Calculate(ss.Judgements, 0) in r
             let ratios = stats.Value.GraphPoints |> Seq.map ma
             let max_ratio = ratios |> Seq.max
             let min_ratio = ratios |> Seq.min
@@ -489,7 +481,7 @@ and ScoreGraph(score_info: ScoreInfo, stats: ScoreScreenStats ref) =
 
         | ScoreGraphLineMode.PA when stats.Value.GraphPoints.Length > 0 && score_info.Scoring.JudgementCounts.Length > 2 ->
 
-            let pa (ss: GraphPoint) = if ss.Judgements.[2] = 0 then float32 ss.Judgements.[1] else float32 ss.Judgements.[1] / float32 ss.Judgements.[2]
+            let pa (ss: GraphPoint) = let r, _ = JudgementRatio.Calculate(ss.Judgements, 1) in r
             let ratios = stats.Value.GraphPoints |> Seq.map pa
             let max_ratio = ratios |> Seq.max
             let min_ratio = ratios |> Seq.min
@@ -611,17 +603,11 @@ and ScoreGraph(score_info: ScoreInfo, stats: ScoreScreenStats ref) =
             let s = Mouse.scroll()
             if GraphSettings.show_slice.Value <> (%%"graph_alt_info").Held() then
                 show_slice_info <- true
-                if GraphSettings.show_slice.Value <> (%%"graph_alt_info_faster").Held() then
-                    GraphSettings.slice_size.Value <- GraphSettings.slice_size.Value + s * 0.025f
-                else
-                    GraphSettings.slice_size.Value <- GraphSettings.slice_size.Value + s * 0.005f
+                GraphSettings.slice_size.Value <- GraphSettings.slice_size.Value + s * 0.005f
             else
                 show_slice_info <- false
                 if s <> 0.0f then
-                    if (%%"graph_alt_info_faster").Held() then
-                        GraphSettings.scale.Value <- GraphSettings.scale.Value + 0.25f * s
-                    else
-                        GraphSettings.scale.Value <- GraphSettings.scale.Value + 0.50f * s
+                    GraphSettings.scale.Value <- GraphSettings.scale.Value + 0.25f * s
                     refresh <- true
 
         for k = 0 to score_info.WithMods.Keys - 1 do
