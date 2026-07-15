@@ -12,28 +12,6 @@ open Interlude.Content
 open Interlude.Options
 open Interlude.Features.Gameplay
 
-type private StageLeft() =
-    inherit StaticWidget(NodeType.None)
-
-    let sprite = Content.Texture "stageleft"
-
-    override this.Draw() : unit =
-        let width = sprite.AspectRatio * this.Bounds.Height
-
-        Render.sprite
-            (Rect.FromSize(this.Bounds.Left - width, this.Bounds.Top, width, this.Bounds.Height))
-            Color.White
-            sprite
-
-type private StageRight() =
-    inherit StaticWidget(NodeType.None)
-
-    let sprite = Content.Texture "stageright"
-
-    override this.Draw() : unit =
-        let width = sprite.AspectRatio * this.Bounds.Height
-        Render.sprite (Rect.FromSize(this.Bounds.Right, this.Bounds.Top, width, this.Bounds.Height)) Color.White sprite
-
 [<Struct>]
 type private HoldRenderState =
     | HeadOffscreen of index: int
@@ -74,6 +52,8 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
     let holdhead = Content.Texture("holdhead")
     let holdbody = Content.Texture("holdbody")
     let note = Content.Texture("note")
+    let stage_left = Content.Texture("stageleft")
+    let stage_right = Content.Texture("stageright")
     let animation = Animation.Counter(float noteskin_config.AnimationFrameTime)
     let receptor_aspect_ratio = receptor.AspectRatio
 
@@ -140,9 +120,6 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
         let screen_align_percentage, playfield_align_percentage =
             noteskin_config.PlayfieldAlignment
 
-        if noteskin_config.EnableStageTextures then
-            this.Add(StageLeft(), StageRight())
-
         this.Position <-
             {
                 Left = screen_align_percentage %- (width * playfield_align_percentage)
@@ -168,6 +145,21 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
 
         if noteskin_config.UseExplosions then
             explosions.Update(elapsed_ms, moved)
+            
+    member private this.DrawStageTextures() : unit =
+        let inline draw_stage_left() : unit =
+            let width = stage_left.AspectRatio * this.Bounds.Height
+            let bounds = Rect.FromSize(this.Bounds.Left - width, this.Bounds.Top, width, this.Bounds.Height)
+            Render.sprite bounds Color.White stage_left
+                
+        let inline draw_stage_right() : unit =
+            let width = stage_right.AspectRatio * this.Bounds.Height
+            let bounds = Rect.FromSize(this.Bounds.Right, this.Bounds.Top, width, this.Bounds.Height)
+            Render.sprite bounds Color.White stage_right
+        
+        if noteskin_config.EnableStageTextures then
+            draw_stage_left()
+            draw_stage_right()
 
     member private this.DrawPlayfieldBackground() : unit =
         if fill_column_gaps then
@@ -267,8 +259,9 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
 
                 Render.tex_quad bounds tint.AsQuad (Sprite.pick_texture (animation.Loops, color) holdbody)
 
-        let inline draw_tail_using_tail (key: int, pos: float32, clip: float32, color: int, tint: Color) : unit =
-            let clip_percent = (clip - pos) / note_height
+        let inline draw_tail_using_tail (key: int, tailpos: float32, headpos: float32, color: int, tint: Color) : unit =
+            let clip = headpos + note_height * 0.5f
+            let clip_percent = (clip - tailpos) / note_height
 
             let inline quad_clip_correction (quad: Quad) : Quad =
                 if clip_percent > 0.0f then
@@ -287,9 +280,9 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
             let bounds =
                 Rect.FromEdges(
                     left + column_positions.[key],
-                    max clip pos,
+                    max clip tailpos,
                     left + column_positions.[key] + note_height,
-                    pos + note_height
+                    tailpos + note_height
                 )
                 |> scroll_direction_transform bottom
                 |> _.AsQuad
@@ -300,8 +293,8 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
                 tint.AsQuad
                 (Sprite.pick_texture (animation.Loops, color) holdtail |> _.Transform(quad_clip_correction))
 
-        let inline draw_tail_using_head (key: int, pos: float32, clip: float32, color: int, tint: Color) : unit =
-            let pos = max (clip - note_height * 0.5f) pos
+        let inline draw_tail_using_head (key: int, tailpos: float32, headpos: float32, color: int, tint: Color) : unit =
+            let pos = max headpos tailpos
 
             let bounds =
                 Rect.FromEdges(
@@ -317,11 +310,10 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
             Render.tex_quad bounds tint.AsQuad (Sprite.pick_texture (animation.Loops, color) holdhead)
 
         let inline draw_tail (key: int, tailpos: float32, headpos: float32, color: int, tint: Color) =
-            if headpos - tailpos < note_height * 0.5f then
-                if noteskin_config.UseHoldTailTexture then
-                    draw_tail_using_tail(key, tailpos, headpos + note_height * 0.5f, color, tint)
-                else
-                    draw_tail_using_head(key, tailpos, headpos + note_height * 0.5f, color, tint)
+            if noteskin_config.UseHoldTailTexture then
+                draw_tail_using_tail(key, tailpos, headpos, color, tint)
+            else
+                draw_tail_using_head(key, tailpos, headpos, color, tint)
 
         let inline prepare_hold_states () : unit =
             for key = 0 to keys - 1 do
@@ -416,10 +408,12 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
 
                 let tailpos =
                     let pos = current_render_position - holdnote_trim
-                    if noteskin_config.MinimumHoldNoteLength then max pos headpos else pos
+                    let min_pos =
+                        if noteskin_config.MinimumHoldNoteLength then headpos else headpos - note_height * 0.5f
+                    max pos min_pos
 
                 draw_body(key, headpos, tailpos, head_and_body_color, tint)
-                draw_tail(key, tailpos, headpos + note_height * 0.5f, color, tint)
+                draw_tail(key, tailpos, headpos, color, tint)
 
                 if not vanishing_notes || hold_state.ShowInReceptor then
                     draw_head(key, headpos, head_and_body_color, tint)
@@ -437,10 +431,12 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
 
                 let tailpos =
                     let pos = current_render_position - holdnote_trim
-                    if noteskin_config.MinimumHoldNoteLength then max pos headpos else pos
+                    let min_pos =
+                        if noteskin_config.MinimumHoldNoteLength then headpos else headpos - note_height * 0.5f
+                    max pos min_pos
 
                 draw_body(key, headpos, tailpos, head_and_body_color, tint)
-                draw_tail(key, tailpos, headpos + note_height * 0.5f, color, tint)
+                draw_tail(key, tailpos, headpos, color, tint)
                 draw_head(key, headpos, head_and_body_color, tint)
 
                 hold_draw_states.[key] <- NoHold
@@ -528,6 +524,7 @@ type Playfield(chart: ColoredChart, state: PlayState, noteskin_config: NoteskinC
     override this.Draw() : unit =
 
         this.DrawPlayfieldBackground()
+        this.DrawStageTextures()
 
         let hitposition = options.HitPosition.Value
 
