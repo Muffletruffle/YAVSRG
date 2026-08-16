@@ -18,8 +18,8 @@ module Time =
 module UnitConstants =
 
     let [<Literal>] MS_PER_MINUTE = 60_000.0f<ms / minute>
-    let [<Literal>] LOWEST_SUPPORTED_RATE = 0.5f<rate>
-    let [<Literal>] HIGHEST_SUPPORTED_RATE = 3.0f<rate>
+    let [<Literal>] LOWEST_SUPPORTED_RATE = 0.2f<rate>
+    let [<Literal>] HIGHEST_SUPPORTED_RATE = 5.0f<rate>
 
 module Setting =
     open Percyqaz.Common.Setting
