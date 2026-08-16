@@ -201,6 +201,7 @@ type GameOptions =
         EnableConsole: Setting<bool>
         Hotkeys: Dictionary<Hotkey, Bind>
         GameplayBinds: Bind array array
+        DetailedDifficultyGraph: Setting<bool>
 
         Preset1: Setting<Preset option>
         Preset2: Setting<Preset option>
@@ -269,6 +270,7 @@ type GameOptions =
 
             EnableExperiments = Setting.simple false
             EnableConsole = Setting.simple false
+            DetailedDifficultyGraph = Setting.simple false
             Hotkeys = Dictionary<Hotkey, Bind>()
             GameplayBinds =
                 [|

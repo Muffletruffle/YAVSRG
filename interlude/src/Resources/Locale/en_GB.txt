@@ -1337,6 +1337,7 @@ stats.time_ingame=Time ingame
 stats.time_other=Other
 stats.time_practice=Practice time
 stats.timeline_graph.click_hint=Click to view
+stats.timeline_detailed_option=Detailed difficulty graph
 stats.total_playtime=Total playtime
 system=System
 system.audio=Audio
