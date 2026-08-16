@@ -9,6 +9,7 @@ open Interlude.Content
 open Interlude.Features.Gameplay
 open Interlude.Features.Play
 open Interlude.Options
+open System
 
 type ChartPreview(info: LoadedChartInfo, change_rate: Rate -> unit) as this =
     inherit Dialog()
@@ -73,8 +74,17 @@ type ChartPreview(info: LoadedChartInfo, change_rate: Rate -> unit) as this =
             last_time <- now
 
         let adjust_pitch(delta: float32) =
-            options.AudioPitch.Set (options.AudioPitch.Get() + delta)
-            Song.adjust_pitch_offset delta
+            let current_pitch = options.AudioPitch.Get()
+            let clamped_delta = 
+                Math.Clamp (delta, (-12.0f - current_pitch), (12.0f - current_pitch))
+            options.AudioPitch.Set (current_pitch + clamped_delta)
+            Song.adjust_pitch_offset clamped_delta
+
+            Notifications.system_feedback(
+                Icons.ALERT_CIRCLE,
+                sprintf "Pitch offset set to %.0f" ( options.AudioPitch.Get() ),
+                ""
+            )
 
         if (%%"preview").Pressed() || (%%"exit").Pressed() || Mouse.released Mouse.RIGHT then
             this.Close()
@@ -105,6 +115,8 @@ type ChartPreview(info: LoadedChartInfo, change_rate: Rate -> unit) as this =
             adjust_pitch -2.0f
         elif (%%"pitchdown_small").Pressed() then
             adjust_pitch -1.0f
+        elif (%%"pitchreset").Pressed() then
+            adjust_pitch (options.AudioPitch.Get() * -1.0f)
         else
             SelectedChart.change_rate_hotkeys change_rate
 

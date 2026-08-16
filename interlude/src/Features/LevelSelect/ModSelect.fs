@@ -12,6 +12,8 @@ open Interlude.Features.Pacemaker
 open Interlude.Features.Gameplay
 open Percyqaz.Flux.Audio
 
+open System
+
 type private ColumnSwapPage() =
     inherit Page()
 
@@ -237,8 +239,17 @@ type ModSelect(change_rate: Rate -> unit) =
         )
 
     let adjust_pitch(delta: float32) =
-            options.AudioPitch.Set (options.AudioPitch.Get() + delta)
-            Song.adjust_pitch_offset delta
+        let current_pitch = options.AudioPitch.Get()
+        let clamped_delta = 
+            Math.Clamp (delta, (-12.0f - current_pitch), (12.0f - current_pitch))
+        options.AudioPitch.Set (current_pitch + clamped_delta)
+        Song.adjust_pitch_offset clamped_delta
+
+        Notifications.system_feedback(
+            Icons.ALERT_CIRCLE,
+            sprintf "Pitch offset set to %.0f" ( options.AudioPitch.Get() ),
+            ""
+        )
 
     override this.Update(elapsed_ms, moved) =
         base.Update(elapsed_ms, moved)
@@ -258,5 +269,7 @@ type ModSelect(change_rate: Rate -> unit) =
             adjust_pitch -2.0f
         elif (%%"pitchdown_small").Pressed() then
             adjust_pitch -1.0f
+        elif (%%"pitchreset").Pressed() then
+            adjust_pitch (options.AudioPitch.Get() * -1.0f)
         else
             SelectedChart.change_rate_hotkeys change_rate

@@ -75,6 +75,7 @@ module Hotkeys =
         Hotkeys.register "pitchup_small" (ctrl_shift Keys.RightBracket)
         Hotkeys.register "pitchdown" (ctrl Keys.LeftBracket)
         Hotkeys.register "pitchdown_small" (ctrl_shift Keys.LeftBracket)
+        Hotkeys.register "pitchreset" (ctrl Keys.Backslash)
 
         Hotkeys.register "preview" (mk Keys.A)
         Hotkeys.register "mods" (mk Keys.S)
