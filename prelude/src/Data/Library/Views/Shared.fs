@@ -44,7 +44,6 @@ module internal Shared =
         elif days_ago < 3600 then 8, "A long time ago"
         else 9, "Never"
 
-    // NEW VVV
     let format_duration (chart_meta: ChartMeta, _) : int * string =
         let minutes = float32 (chart_meta.Length / 60000.0f) |> ceil |> int
 
