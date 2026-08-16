@@ -41,9 +41,9 @@ module Updates =
         let v = Assembly.GetExecutingAssembly().GetName()
 
         if DEV_MODE then
-            sprintf "%s %s (%s)" v.Name short_version short_hash
+            sprintf "%s %s (%s) (Truffle)" v.Name short_version short_hash
         else
-            sprintf "%s %s" v.Name short_version
+            sprintf "%s %s (Truffle)" v.Name short_version
 
     let private get_interlude_location () : string =
         Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)
