@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net9.0</TargetFramework>
@@ -10,13 +9,11 @@
     <PackageProjectUrl>https://github.com/YAVSRG/YAVSRG</PackageProjectUrl>
     <RepositoryUrl>https://github.com/YAVSRG/YAVSRG</RepositoryUrl>
   </PropertyGroup>
-
   <PropertyGroup>
     <Optimize>True</Optimize>
     <Tailcalls>True</Tailcalls>
-	<NoWarn>NU1903,NU1902</NoWarn>
+    <NoWarn>NU1903,NU1902</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="Shared\Helpers.fs" />
     <Compile Include="Shared\Color.fs" />
@@ -31,13 +28,15 @@
     <Compile Include="Charts\Chart.fs" />
     <Compile Include="Charts\Imports.fs" />
     <Compile Include="Formats\Conversions.fs" />
+    <Compile Include="Formats\osu!\ParsedValue.fs" />
     <Compile Include="Formats\osu!\MapHelpers.fs" />
-    <Compile Include="Formats\osu!\CsvHelpers.fs" />
+    <Compile Include="Formats\osu!\SampleSet.fs" />
+    <Compile Include="Formats\osu!\TimingPoint.fs" />
+    <Compile Include="Formats\osu!\HitSample.fs" />
+    <Compile Include="Formats\osu!\HitObject.fs" />
     <Compile Include="Formats\osu!\Headers.fs" />
-    <Compile Include="Formats\osu!\HitObjects.fs" />
-    <Compile Include="Formats\osu!\TimingPoints.fs" />
-    <Compile Include="Formats\osu!\Events.fs" />
-    <Compile Include="Formats\osu!\Parser.fs" />
+    <Compile Include="Formats\osu!\StoryboardEvent.fs" />
+    <Compile Include="Formats\osu!\Beatmap.fs" />
     <Compile Include="Formats\osu!\Converter.fs" />
     <Compile Include="Formats\StepMania\Types.fs" />
     <Compile Include="Formats\StepMania\Parser.fs" />
@@ -105,7 +104,10 @@
     <Compile Include="Skins\Repo.fs" />
     <Compile Include="Skins\Conversions\Helpers.fs" />
     <Compile Include="Skins\Conversions\osu!\Parser.fs" />
-    <Compile Include="Skins\Conversions\osu!\Textures.fs" />
+    <Compile Include="Skins\Conversions\osu!\OsuSkinFileSystem.fs" />
+    <Compile Include="Skins\Conversions\osu!\LoadedTexture.fs" />
+    <Compile Include="Skins\Conversions\osu!\TextureSearchResult.fs" />
+    <Compile Include="Skins\Conversions\osu!\TextureAnimationSearchResult.fs" />
     <Compile Include="Skins\Conversions\osu!\ImageOperations.fs" />
     <Compile Include="Skins\Conversions\osu!\HUD\HudConverterContext.fs" />
     <Compile Include="Skins\Conversions\osu!\HUD\HudJudgementConverter.fs" />
@@ -121,7 +123,7 @@
     <Compile Include="Skins\Conversions\osu!\Noteskins\ExplosionsConverter.fs" />
     <Compile Include="Skins\Conversions\osu!\Noteskins\NoteskinConfigConverter.fs" />
     <Compile Include="Skins\Conversions\osu!\Noteskins\NoteskinConverter.fs" />
-    <Compile Include="Skins\Conversions\osu!\OsuSkinConverter.fs" />
+    <Compile Include="Skins\Conversions\osu!\OsuSkinConversion.fs" />
     <Compile Include="Skins\Conversions\StepMania\Converter.fs" />
     <Compile Include="Backbeat\Tables.fs" />
     <Compile Include="Backbeat\Archive.fs" />
@@ -169,21 +171,17 @@
     <Compile Include="Data\OsuClientInterop\Replays.fs" />
     <Compile Include="Data\OsuClientInterop\Scores.fs" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="FParsec" Version="1.1.1" />
     <PackageReference Include="LZMA-SDK" Version="22.1.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\libraries\Percyqaz.Common\src\Percyqaz.Common.fsproj" />
     <ProjectReference Include="..\..\libraries\Percyqaz.Data\src\Percyqaz.Data.fsproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="9.0.201" />
   </ItemGroup>
-
 </Project>

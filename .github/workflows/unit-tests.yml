@@ -1,13 +1,16 @@
 name: Continuous integration
 
 on:
-  push:
-    branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main" ]
+    
+permissions:
+  contents: write
+  pull-requests: write
+    
 jobs:
-  automated-tests:
-
+  pull-request-ci-checks:
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
 
     steps:
@@ -20,19 +23,21 @@ jobs:
       with:
         dotnet-version: 9.0.x
     
-    - name: Everything must build
+    - name: Ensure everything builds
       run: dotnet build
         
-    - name: Unit tests must pass
+    - name: Run unit tests
       run: |
         cd scripts
         chmod +x ./run_tests.sh
         ./run_tests.sh
         
-    - name: Notify of failure in main
-      if: failure() && github.repository == 'YAVSRG/YAVSRG'
-      uses: tsickert/discord-webhook@v5.3.0
-      with:
-        webhook-url: ${{ secrets.DEV_WEBHOOK_URL }}
-        content: |
-          <@165506274820096000> You broke the build. Skill issue exists between chair and keyboard
+    - name: Run formatting checks
+      run: dotnet tool restore && dotnet fantomas --check .
+        
+    - name: Approve PRs from Percyqaz if checks pass
+      if: github.event.pull_request.user.login == 'percyqaz'
+      run: gh pr review --approve "$PR_URL"
+      env:
+        PR_URL: ${{github.event.pull_request.html_url}}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

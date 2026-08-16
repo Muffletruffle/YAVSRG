@@ -1,4 +1,4 @@
-﻿namespace Prelude.Tests.Charts
+namespace Prelude.Tests.Charts
 
 open System
 open NUnit.Framework
@@ -32,12 +32,8 @@ module ChartConversionTests =
                 let mutable previous_value = 1.0f
 
                 for s in sv |> cleaned_sv do
-                    if abs (s.Data - previous_value) > 0.005f then
-                        yield
-                            {
-                                Time = s.Time
-                                Data = MathF.Round(s.Data, 3)
-                            }
+                    if abs(s.Data - previous_value) > 0.005f then
+                        yield { Time = s.Time; Data = MathF.Round(s.Data, 3) }
 
                         previous_value <- s.Data
             }
@@ -57,18 +53,28 @@ module ChartConversionTests =
             Assert.AreEqual(simplified_sv chart.SV, simplified_sv interlude_sv)
 
     [<Test>]
+    let OsuMania_StackedTimingPoints () =
+        let points =
+            [
+                TimingPoint.CreateBPM(0.0f<ms>, 500.0f<ms / beat>, 4)
+                TimingPoint.CreateSV(0.0f<ms>, 0.5f)
+                TimingPoint.CreateBPM(100.0f<ms>, 250.0f<ms / beat>, 4)
+                TimingPoint.CreateBPM(100.0f<ms>, 1000.0f<ms / beat>, 4)
+                TimingPoint.CreateSV(100f<ms>, 2.0f)
+            ]
+
+        let result_bpm, result_sv =
+            Osu_To_Interlude.convert_timing_points points 2000.0f<ms>
+
+        printfn "%A" result_bpm
+        printfn "%A" result_sv
+
+    [<Test>]
     let OsuMania_TimingPoints_SingleBPM () =
 
         let one_bpm =
             [|
-                {
-                    Time = 10f<ms>
-                    Data =
-                        {
-                            MsPerBeat = 500.0f<ms / beat>
-                            Meter = 4<beat>
-                        }
-                }
+                { Time = 10f<ms>; Data = { MsPerBeat = 500.0f<ms / beat>; Meter = 4<beat> } }
             |]
 
         let osu_points = OsuExport.convert_timing_points one_bpm [||] 500.0f<ms / beat>
@@ -86,46 +92,11 @@ module ChartConversionTests =
 
         let many_bpms =
             [|
-                {
-                    Time = 10f<ms>
-                    Data =
-                        {
-                            MsPerBeat = 500.0f<ms / beat>
-                            Meter = 4<beat>
-                        }
-                }
-                {
-                    Time = 40f<ms>
-                    Data =
-                        {
-                            MsPerBeat = 250.0f<ms / beat>
-                            Meter = 4<beat>
-                        }
-                }
-                {
-                    Time = 50f<ms>
-                    Data =
-                        {
-                            MsPerBeat = 500.0f<ms / beat>
-                            Meter = 4<beat>
-                        }
-                }
-                {
-                    Time = 100f<ms>
-                    Data =
-                        {
-                            MsPerBeat = 1000.0f<ms / beat>
-                            Meter = 4<beat>
-                        }
-                }
-                {
-                    Time = 110f<ms>
-                    Data =
-                        {
-                            MsPerBeat = 500.0f<ms / beat>
-                            Meter = 4<beat>
-                        }
-                }
+                { Time = 10f<ms>; Data = { MsPerBeat = 500.0f<ms / beat>; Meter = 4<beat> } }
+                { Time = 40f<ms>; Data = { MsPerBeat = 250.0f<ms / beat>; Meter = 4<beat> } }
+                { Time = 50f<ms>; Data = { MsPerBeat = 500.0f<ms / beat>; Meter = 4<beat> } }
+                { Time = 100f<ms>; Data = { MsPerBeat = 1000.0f<ms / beat>; Meter = 4<beat> } }
+                { Time = 110f<ms>; Data = { MsPerBeat = 500.0f<ms / beat>; Meter = 4<beat> } }
             |]
 
         let osu_points = OsuExport.convert_timing_points many_bpms [||] 500.0f<ms / beat>
@@ -251,10 +222,12 @@ module ChartConversionTests =
                 "5000.1,25,4,1,0,10,1,0"
                 "5000.2,250,4,1,0,10,1,0"
             ]
-            |> List.map OsuParser.parse_timing_point
+            |> List.map TimingPoint.FromString
+
         printfn "%A" points
 
         let bpm, sv = Osu_To_Interlude.convert_timing_points points 200000.0f<ms>
+
         Assert.AreEqual(
             [|
                 { Time = 200.0f<ms>; Data = { MsPerBeat = 250.0f<ms / beat>; Meter = 4<beat> } }
@@ -264,11 +237,9 @@ module ChartConversionTests =
             |],
             bpm
         )
+
         Assert.AreEqual(
-            [|
-                { Time = 5000.1f<ms>; Data = 10.0f }
-                { Time = 5000.2f<ms>; Data = 1.0f }
-            |],
+            [| { Time = 5000.1f<ms>; Data = 10.0f }; { Time = 5000.2f<ms>; Data = 1.0f } |],
             sv |> cleaned_sv
         )
 
@@ -277,8 +248,10 @@ module ChartConversionTests =
     // todo: test to cover SV pruning logic
 
     [<Test>]
-    let BackbeatManiac () =
-        let beatmap = Beatmap.FromFile "./Data/Camellia - Backbeat Maniac (Evening) [Rewind VIP].osu" |> expect
+    let BackbeatManiac_RoundTrip () =
+        let beatmap =
+            Beatmap.TryReadFromFile("./Data/Camellia - Backbeat Maniac (Evening) [Rewind VIP].osu") |> expect
+
         let converted =
             Osu_To_Interlude.convert
                 beatmap
@@ -287,11 +260,26 @@ module ChartConversionTests =
                     Source = "./Data/Camellia - Backbeat Maniac (Evening) [Rewind VIP].osu"
                 }
             |> expect
-        printfn "%A" converted.Header
-        let chart = converted.Chart
 
-        match chart.CheckForErrors() with
+        match converted.Chart.CheckForErrors() with
         | Ok _ -> ()
         | Error reason -> Assert.Fail(reason)
 
-        Assert.AreEqual(chart.Hash(), "785CAC8E416B32EF134D16D504E1F71E43AC595219EC347B89E896758F5F2795")
+        Assert.AreEqual(converted.Chart.Hash(), "785CAC8E416B32EF134D16D504E1F71E43AC595219EC347B89E896758F5F2795")
+
+        let chart_meta =
+            ChartMeta.CreateFromImport (Timestamp.now()) (K AssetLocation.Missing) converted
+
+        let exported_beatmap =
+            OsuExport.convert { HP = 8; OD = 8 } converted.Chart chart_meta
+
+        let round_trip =
+            Osu_To_Interlude.convert
+                exported_beatmap
+                {
+                    Config = ConversionOptions.Pack("osu!", None, LinkAssetFiles)
+                    Source = "./Data/Camellia - Backbeat Maniac (Evening) [Rewind VIP].osu"
+                }
+            |> expect
+
+        Assert.AreEqual(round_trip.Chart.Hash(), "785CAC8E416B32EF134D16D504E1F71E43AC595219EC347B89E896758F5F2795")
