@@ -244,7 +244,7 @@ type Stats =
                 | Some sessions_on_day ->
                     Some(date, sessions_on_day.[0])
                 | None ->
-                    if date = TODAY then None else loop()
+                    if date >= TODAY then None else loop()
             loop()
                 
         find_session_later_today() |> Option.orElseWith find_next_day_with_sessions
