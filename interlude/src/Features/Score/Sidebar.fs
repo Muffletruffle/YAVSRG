@@ -32,6 +32,17 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
         else
             sprintf "%iK" score_info.WithMods.Keys
 
+    let calc_msd = 
+        let all_msd = MinaCalc.calculate_all_rates(score_info.Chart.ToNoteData())
+        if all_msd.IsSome then
+            let msd_rate = MinaCalc.msd_at_rate((float32) score_info.Rate, all_msd.Value)
+            if msd_rate.IsSome then
+                sprintf "MSD: %.2f" msd_rate.Value.overall
+            else
+                "MSD: --.-"
+        else
+            "MSD: --.-"
+
     override this.Init(parent) =
         this
         |+ Text(sprintf "%s  %s" Icons.ZAP mod_string)
@@ -68,6 +79,10 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
             .Align(Alignment.LEFT)
             .Position(Position.ShrinkB(50.0f).SliceB(40.0f).ShrinkX(25.0f))
             .Conditional(show_more_info.Get >> not)
+        |+ Text(fun () -> calc_msd)
+            .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
+            .Align(Alignment.CENTER)
+            .Position(Position.ShrinkB(5.0f).SliceB(50.0f).ShrinkX(25.0f))
 
         |+ Button(
             (fun () -> sprintf "MA: %s  •  PA: %s" (!stats).MA (!stats).PA),

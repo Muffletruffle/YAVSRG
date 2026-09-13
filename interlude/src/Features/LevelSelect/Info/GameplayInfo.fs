@@ -14,15 +14,31 @@ type GameplayInfo() =
 
     let never_played = %"levelselect.last_played.never"
 
+    
     let mutable rating = 0.0f
+    let mutable msd = 0.0f
+    let mutable msd_str = ""
+    // let mutable msd_rates = MsdForAllRates()
     let mutable notecounts = ""
+    // let mutable test_str = ""
     let mutable last_played = K never_played
     let mutable mod_string = "--"
+    
     let mutable mod_status = ModStatus.Ranked
 
     let refresh(info: LoadedChartInfo) =
         rating <- info.Difficulty.Overall
         notecounts <- info.NotecountsString
+        let all_msd = MinaCalc.calculate_all_rates(info.Chart.ToNoteData())
+        if all_msd.IsNone then 
+            msd_str <- "--.-"
+        else
+            let msd = MinaCalc.msd_at_rate(float32 SelectedChart.rate.Value, all_msd.Value)
+            if msd.IsSome then
+                msd_str <- sprintf "%.2f" msd.Value.overall
+            else
+                msd_str <- "--.-"
+
         last_played <-
             let mutable ts = info.SaveData.LastPlayed
             let text (ts: int64) =
@@ -69,6 +85,8 @@ type GameplayInfo() =
         let chart_info = this.Bounds.SliceT(130.0f, 30.0f).ShrinkX(15.0f)
         Text.fill_b (Style.font, (match SelectedChart.CACHE_DATA with Some chart_meta -> chart_meta.DifficultyName | None -> ""), chart_info.SlicePercentL 0.5f, Colors.text_subheading, Alignment.LEFT)
         Text.fill_b (Style.font, notecounts, chart_info, Colors.text_subheading, Alignment.RIGHT)
+
+        Text.fill_b (Style.font, sprintf "MSD: %s" msd_str, play_info, Colors.text, Alignment.CENTER)
 
         let three_icon_infos = this.Bounds.SliceT(155.0f, 70.0f).ShrinkX(15.0f)
         Text.fill_b (Style.font, sprintf "%s %.2f" Icons.STAR rating, three_icon_infos, (Colors.white, Difficulty.color rating), Alignment.LEFT)
