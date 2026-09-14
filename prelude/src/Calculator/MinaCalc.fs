@@ -3,7 +3,6 @@ namespace Prelude.Calculator
 open System.Runtime.InteropServices
 open Prelude
 open Prelude.Charts
-open Percyqaz.Common
 
 [<StructLayout(LayoutKind.Sequential)>]
 type NoteInfo =
@@ -48,7 +47,6 @@ module MinaCalcNative =
 module MinaCalc =
 
     let private handle : nativeint = MinaCalcNative.create_calc()
-    let private lock_obj = obj()
 
     let to_note_info (note_data: NoteData) : NoteInfo[] =
         note_data.Notes
@@ -69,28 +67,16 @@ module MinaCalc =
         )
 
     let calculate_all_rates (note_data: NoteData) : MsdForAllRates option =
-        lock lock_obj (fun () -> 
-        
-        if note_data.Keys <> 4 && note_data.Keys <> 6 && note_data.Keys <> 7 then
-            None
+
+        if note_data.Keys <> 4 && note_data.Keys <> 6 && note_data.Keys <> 7 then None
         else
-        
             let rows = to_note_info note_data
-            if rows.Length < 10 then
-                None
+            if rows.Length < 10 then None
             else
-                let size = Marshal.SizeOf<MsdForAllRates>()
-                let buffer = Marshal.AllocHGlobal(size)
-                try
-                    MinaCalcNative.calc_msd_into(handle, rows, unativeint rows.Length, buffer)
-                    Some (Marshal.PtrToStructure<MsdForAllRates>(buffer))
-                finally
-                    Marshal.FreeHGlobal(buffer)
-        )
+                Some (MinaCalcNative.calc_msd(handle, rows, unativeint rows.Length))
 
     let msd_at_rate (rate: float32, all_rates: MsdForAllRates) : Ssr option =
-        if rate >= 0.7f && rate <= 2.0f then 
-            let index = System.MathF.Round((rate - 0.7f) * 10.0f) |> int |> max 0 |> min 13
-            Some all_rates.msds.[index]
+        if rate < 0.7f || rate > 2.0f then None
         else
-            None
+            let index = System.Math.Clamp(System.MathF.Round((rate - 0.7f) * 10.0f) |> int, 0, 13) 
+            Some all_rates.msds.[index]
