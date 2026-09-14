@@ -37,11 +37,11 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
         if all_msd.IsSome then
             let msd_rate = MinaCalc.msd_at_rate((float32) score_info.Rate, all_msd.Value)
             if msd_rate.IsSome then
-                sprintf "MSD: %.2f" msd_rate.Value.overall
+                sprintf "%.2f" msd_rate.Value.overall
             else
-                "MSD: --.-"
+                "--.-"
         else
-            "MSD: --.-"
+            "--.-"
 
     override this.Init(parent) =
         this
@@ -52,10 +52,21 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
             .Color(Colors.text_subheading)
             .Align(Alignment.CENTER)
             .Position(Position.ShrinkT(90.0f).SliceT(70.0f).ShrinkX(25.0f))
-        |+ Text(sprintf "%s %.2f" Icons.STAR score_info.Rating.Overall)
+            
+        |+ Text(sprintf "%s" Icons.STAR)
             .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
             .Align(Alignment.LEFT)
             .Position(Position.ShrinkT(530.0f).SliceT(70.0f).ShrinkX(25.0f))
+        |+ Text(sprintf "%.2f" score_info.Rating.Overall)
+            .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
+            .Align(Alignment.LEFT)
+            .Position(Position.ShrinkT(516.0f).SliceT(60.0f).TranslateX(90.0f))
+        |+ Text(sprintf "%s" calc_msd)
+            .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
+            .Align(Alignment.LEFT)
+            .Position(Position.ShrinkT(560.0f).SliceT(46.0f).TranslateX(90.0f))
+
+            
         |+ Text(fun () -> sprintf "%ix" score_info.Scoring.BestCombo)
             .Align(Alignment.CENTER)
             .Position(Position.ShrinkT(530.0f).SliceT(70.0f).ShrinkX(25.0f))
@@ -79,10 +90,6 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
             .Align(Alignment.LEFT)
             .Position(Position.ShrinkB(50.0f).SliceB(40.0f).ShrinkX(25.0f))
             .Conditional(show_more_info.Get >> not)
-        |+ Text(fun () -> calc_msd)
-            .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
-            .Align(Alignment.CENTER)
-            .Position(Position.ShrinkB(5.0f).SliceB(50.0f).ShrinkX(25.0f))
 
         |+ Button(
             (fun () -> sprintf "MA: %s  •  PA: %s" (!stats).MA (!stats).PA),

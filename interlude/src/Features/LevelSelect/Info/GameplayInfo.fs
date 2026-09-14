@@ -86,10 +86,14 @@ type GameplayInfo() =
         Text.fill_b (Style.font, (match SelectedChart.CACHE_DATA with Some chart_meta -> chart_meta.DifficultyName | None -> ""), chart_info.SlicePercentL 0.5f, Colors.text_subheading, Alignment.LEFT)
         Text.fill_b (Style.font, notecounts, chart_info, Colors.text_subheading, Alignment.RIGHT)
 
-        Text.fill_b (Style.font, sprintf "MSD: %s" msd_str, play_info, Colors.text, Alignment.CENTER)
 
         let three_icon_infos = this.Bounds.SliceT(155.0f, 70.0f).ShrinkX(15.0f)
-        Text.fill_b (Style.font, sprintf "%s %.2f" Icons.STAR rating, three_icon_infos, (Colors.white, Difficulty.color rating), Alignment.LEFT)
+        let star_rate_box = three_icon_infos.SliceT(-8.0f, 60.0f).TranslateX(70.0f)
+        let msd_box = three_icon_infos.SliceT(34.0f, 45.0f).TranslateX(70.0f)
+
+        Text.fill_b (Style.font, sprintf "%.2f" rating, star_rate_box, (Colors.white, Difficulty.color rating), Alignment.LEFT)
+        Text.fill_b (Style.font, msd_str, msd_box, (Colors.white, Difficulty.color rating), Alignment.LEFT)
+        Text.fill_b (Style.font, sprintf "%s" Icons.STAR, three_icon_infos, (Colors.white, Difficulty.color rating), Alignment.LEFT)
         Text.fill_b (Style.font, SelectedChart.FMT_BPM, three_icon_infos, Colors.text, Alignment.CENTER)
         Text.fill_b (Style.font, SelectedChart.FMT_DURATION, three_icon_infos, Colors.text, Alignment.RIGHT)
 
