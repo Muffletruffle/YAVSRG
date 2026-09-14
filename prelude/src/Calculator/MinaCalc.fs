@@ -89,7 +89,7 @@ module MinaCalc =
         )
 
     let msd_at_rate (rate: float32, all_rates: MsdForAllRates) : Ssr option =
-        if rate > 0.7f && rate < 2.0f then 
+        if rate >= 0.7f && rate <= 2.0f then 
             let index = System.MathF.Round((rate - 0.7f) * 10.0f) |> int |> max 0 |> min 13
             Some all_rates.msds.[index]
         else
