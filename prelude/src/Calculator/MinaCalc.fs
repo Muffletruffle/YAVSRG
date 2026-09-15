@@ -76,7 +76,7 @@ module MinaCalc =
                 Some (MinaCalcNative.calc_msd(handle, rows, unativeint rows.Length))
 
     let msd_at_rate (rate: float32, all_rates: MsdForAllRates) : Ssr option =
-        if rate < 0.7f || rate > 2.0f then None
+        if rate < 0.5f || rate > 1.5f then None
         else
-            let index = System.Math.Clamp(System.MathF.Round((rate - 0.7f) * 10.0f) |> int, 0, 13) 
+            let index = System.Math.Clamp(System.MathF.Round((rate - 0.5f) * 10.0f) |> int, 0, 10) 
             Some all_rates.msds.[index]
