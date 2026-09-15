@@ -33,15 +33,11 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
             sprintf "%iK" score_info.WithMods.Keys
 
     let calc_msd = 
-        let all_msd = MinaCalc.calculate_all_rates(score_info.Chart.ToNoteData())
-        if all_msd.IsSome then
-            let msd_rate = MinaCalc.msd_at_rate((float32) score_info.Rate, all_msd.Value)
-            if msd_rate.IsSome then
-                sprintf "%.2f" msd_rate.Value.overall
-            else
-                "--.-"
+        let msd_float = MinaCalc.calc_msd_at_rate(score_info.Chart.ToNoteData(), float32 score_info.Rate)
+        if msd_float.IsSome then
+            sprintf "%.2f" msd_float.Value
         else
-            "--.-"
+            "--.--"
 
     override this.Init(parent) =
         this

@@ -48,7 +48,7 @@ module MinaCalc =
 
     let private handle : nativeint = MinaCalcNative.create_calc()
 
-    let to_note_info (note_data: NoteData) : NoteInfo[] =
+    let to_note_info (note_data: NoteData, rate: float32) : NoteInfo[] =
         note_data.Notes
         |> Array.choose (fun { Time = time; Data = row } ->
             let mutable bitmask = 0u
@@ -62,21 +62,30 @@ module MinaCalc =
             else
                 let mutable ni = NoteInfo()
                 ni.notes <- bitmask
-                ni.rowTime <- float32 time / 1000.0f
+                ni.rowTime <- float32 time / 1000.0f / rate
                 Some ni
         )
 
-    let calculate_all_rates (note_data: NoteData) : MsdForAllRates option =
-
+    let calc_msd_at_rate (note_data: NoteData, rate: float32) : float32 option =
         if note_data.Keys <> 4 && note_data.Keys <> 6 && note_data.Keys <> 7 then None
         else
-            let rows = to_note_info note_data
+            let rows = to_note_info(note_data, rate)
             if rows.Length < 10 then None
             else
-                Some (MinaCalcNative.calc_msd(handle, rows, unativeint rows.Length))
+                let calculated = MinaCalcNative.calc_msd(handle, rows, unativeint rows.Length)
+                Some calculated.msds.[0].overall // Only has one element
 
-    let msd_at_rate (rate: float32, all_rates: MsdForAllRates) : Ssr option =
-        if rate < 0.5f || rate > 1.5f then None
-        else
-            let index = System.Math.Clamp(System.MathF.Round((rate - 0.5f) * 10.0f) |> int, 0, 10) 
-            Some all_rates.msds.[index]
+    // let calculate_all_rates (note_data: NoteData) : MsdForAllRates option =
+
+    //     if note_data.Keys <> 4 && note_data.Keys <> 6 && note_data.Keys <> 7 then None
+    //     else
+    //         let rows = to_note_info note_data
+    //         if rows.Length < 10 then None
+    //         else
+    //             Some (MinaCalcNative.calc_msd(handle, rows, unativeint rows.Length))
+
+    // let msd_at_rate (rate: float32, all_rates: MsdForAllRates) : Ssr option =
+    //     if rate < 0.5f || rate > 1.5f then None
+    //     else
+    //         let index = System.Math.Clamp(System.MathF.Round((rate - 0.5f) * 10.0f) |> int, 0, 10) 
+    //         Some all_rates.msds.[index]

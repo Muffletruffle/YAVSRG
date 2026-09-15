@@ -16,7 +16,7 @@ type GameplayInfo() =
 
     
     let mutable rating = 0.0f
-    let mutable msd = 0.0f
+    let mutable msd_float = 0.0f
     let mutable msd_str = ""
     // let mutable msd_rates = MsdForAllRates()
     let mutable notecounts = ""
@@ -29,15 +29,11 @@ type GameplayInfo() =
     let refresh(info: LoadedChartInfo) =
         rating <- info.Difficulty.Overall
         notecounts <- info.NotecountsString
-        let all_msd = MinaCalc.calculate_all_rates(info.Chart.ToNoteData())
-        if all_msd.IsNone then 
-            msd_str <- "--.-"
+        let msd_float = MinaCalc.calc_msd_at_rate(info.Chart.ToNoteData(), float32 SelectedChart.rate.Value)
+        if msd_float.IsNone then 
+            msd_str <- "--.--"
         else
-            let msd = MinaCalc.msd_at_rate(float32 SelectedChart.rate.Value, all_msd.Value)
-            if msd.IsSome then
-                msd_str <- sprintf "%.2f" msd.Value.overall
-            else
-                msd_str <- "--.-"
+            msd_str <- sprintf "%.2f" msd_float.Value
 
         last_played <-
             let mutable ts = info.SaveData.LastPlayed
