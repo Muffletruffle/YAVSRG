@@ -31,6 +31,9 @@ type MsdForAllRates =
         val mutable msds: Ssr[]
     end
 
+/// Uses an adapted version of minacalc-standalone by kangalio (https://github.com/kangalio/minacalc-standalone)
+/// Right now, the game will not run without libminacalc.so/dll
+
 module MinaCalcNative =
     [<DllImport("minacalc", CallingConvention = CallingConvention.Cdecl)>]
     extern nativeint create_calc()
