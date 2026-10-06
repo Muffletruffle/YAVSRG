@@ -181,6 +181,7 @@
     <Compile Include="Features\Skins\Elements\Combo.fs" />
     <Compile Include="Features\Skins\Elements\ProgressPie.fs" />
     <Compile Include="Features\Skins\Elements\SkipButton.fs" />
+    <Compile Include="Features\Skins\Elements\SDMean.fs" />
     <Compile Include="Features\Skins\Elements\Pacemaker.fs" />
     <Compile Include="Features\Skins\Elements\JudgementCounter.fs" />
     <Compile Include="Features\Skins\Elements\MultiplayerScores.fs" />
@@ -224,6 +225,7 @@
     <Compile Include="Features\Skins\EditHUD\Configuration\ComboPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ProgressPiePage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\SkipButtonPage.fs" />
+    <Compile Include="Features\Skins\EditHUD\Configuration\SDMean.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\PacemakerPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\JudgementCounterPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\RateModsPage.fs" />
