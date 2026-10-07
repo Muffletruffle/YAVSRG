@@ -202,12 +202,14 @@ type HudConfig =
         ColumnErrorBarsFadeTime: float32<ms / rate>
         ColumnErrorBarsThickness: float32
         ColumnErrorBarsShowGuide: bool
+        ColumnErrorBarsGuideOnTop: bool
         ColumnErrorBarsGuideThickness: float32
         ColumnErrorBarsGuideColor: Color
         ColumnErrorBarsShowNonJudgements: bool
         ColumnErrorBarsReleasesYScale: float32
         ColumnErrorBarsReleasesXScale: float32
         ColumnErrorBarsWindowsOpacity: float32
+        ColumnErrorBarsWindowScale: float32
         ColumnErrorBarsLogSensitivity: float32
         ColumnErrorBarsMovingAverage: bool
         ColumnErrorBarsMovingAverageSensitivity: float32
@@ -365,12 +367,14 @@ type HudConfig =
             ColumnErrorBarsThickness = 5.0f
             ColumnErrorBarsWidth = 25.0f
             ColumnErrorBarsShowGuide = true
+            ColumnErrorBarsGuideOnTop = false
             ColumnErrorBarsGuideThickness = 1.0f
             ColumnErrorBarsGuideColor = Color.White
             ColumnErrorBarsShowNonJudgements = false
             ColumnErrorBarsReleasesYScale = 0.5f
             ColumnErrorBarsReleasesXScale = 1.25f
             ColumnErrorBarsWindowsOpacity = 0.0f
+            ColumnErrorBarsWindowScale = 1.0f
             ColumnErrorBarsLogSensitivity = 0.0f
             ColumnErrorBarsMovingAverage = false
             ColumnErrorBarsMovingAverageSensitivity = 0.5f

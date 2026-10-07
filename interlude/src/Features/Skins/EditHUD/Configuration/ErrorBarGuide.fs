@@ -13,6 +13,7 @@ type ErrorBarGuidePage() =
     let config = Content.HUD
 
     let show_guide = Setting.simple config.TimingDisplayShowGuide
+    let guide_on_top = Setting.simple config.TimingDisplayGuideOnTop
     let guide_thickness = Setting.percentf config.TimingDisplayGuideThickness
     let guide_color = Setting.simple config.TimingDisplayGuideColor
 
@@ -20,6 +21,7 @@ type ErrorBarGuidePage() =
         Skins.save_hud_config
             { Content.HUD with
                 TimingDisplayShowGuide = show_guide.Value
+                TimingDisplayGuideOnTop = guide_on_top.Value
                 TimingDisplayGuideThickness = guide_thickness.Value
                 TimingDisplayGuideColor = guide_color.Value
             }
@@ -32,13 +34,17 @@ type ErrorBarGuidePage() =
                 PageSetting(%"hud.error_bar.showguide", Checkbox show_guide)
                     .Help(Help.Info("hud.error_bar.showguide"))
                     .Pos(0),
+                PageSetting(%"hud.error_bar.guideontop", Checkbox guide_on_top)
+                    .Help(Help.Info("hud.error_bar.guideontop"))
+                    .Pos(2)
+                    .Conditional(show_guide.Get),
                 PageSetting(%"hud.error_bar.guide_thickness", Slider.Percent(guide_thickness))
                     .Help(Help.Info("hud.error_bar.guide_thickness"))
-                    .Pos(2)
+                    .Pos(4)
                     .Conditional(show_guide.Get),
                 PageSetting(%"hud.error_bar.guide_color", ColorPicker(%"hud.error_bar.guide_color", guide_color, true))
                     .Help(Help.Info("hud.error_bar.guide_color"))
-                    .Pos(4)
+                    .Pos(6)
                     .Conditional(show_guide.Get)
             )
     

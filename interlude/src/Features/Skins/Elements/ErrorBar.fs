@@ -40,7 +40,7 @@ type ErrorBar(ctx: HudContext) =
     let window_opacity = ctx.Config.TimingDisplayWindowsOpacity * 255.0f |> int |> min 255 |> max 0
 
     let MAX_WINDOW = ctx.State.Ruleset.LargestWindow
-    let max_window_scaled = ctx.State.Ruleset.LargestWindow * ctx.Config.TimingDisplayWindowScale // ctx.Config.TimingDisplayWindowScale * MAX_WINDOW
+    let max_window_scaled = MAX_WINDOW * ctx.Config.TimingDisplayWindowScale // ctx.Config.TimingDisplayWindowScale * MAX_WINDOW
 
     let log_factor = ctx.Config.TimingDisplayLogSensitivity
 
