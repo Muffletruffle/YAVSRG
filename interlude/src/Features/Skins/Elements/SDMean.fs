@@ -20,12 +20,19 @@ type SDMean(ctx: HudContext) =
     let mutable note_count = 0
 
     let calc_mean_sd() =
-        // formula: sqrt((cumul_square_sum / n) - mean^2)
         mean <- cumul_sum / (float32) note_count
         sd <- sqrt((cumul_square_sum / (max 1.0f (float32 note_count))) - (mean * mean))
-
+    
+    let clear_notes() =
+        cumul_sum <- 0.0f
+        cumul_square_sum <- 0.0f
+        mean <- 0.0f
+        sd <- 0.0f
+        note_count <- 0
 
     override this.Init(parent: Widget) =
+        ctx.State.OnScoringChanged(fun () -> clear_notes()) |> ignore // clear when seeked
+
         ctx.State.Subscribe(fun ev ->
             let x =
                 match ev.Inner with
@@ -66,7 +73,7 @@ type SDMean(ctx: HudContext) =
 
         Text.fill(
             Style.font,
-            "Mean:", 
+            "M:", 
             mean_bounds,
             Color.White,
             Alignment.LEFT
