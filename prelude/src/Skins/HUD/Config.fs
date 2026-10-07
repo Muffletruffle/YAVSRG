@@ -182,6 +182,7 @@ type HudConfig =
         TimingDisplayFadeTime: float32<ms / rate>
         TimingDisplayThickness: float32
         TimingDisplayShowGuide: bool
+        TimingDisplayGuideOnTop: bool
         TimingDisplayGuideThickness: float32
         TimingDisplayGuideColor: Color
         TimingDisplayShowNonJudgements: bool
@@ -338,6 +339,7 @@ type HudConfig =
             TimingDisplayFadeTime = 1000.0f<ms / rate>
             TimingDisplayThickness = 5.0f
             TimingDisplayShowGuide = true
+            TimingDisplayGuideOnTop = false
             TimingDisplayGuideThickness = 1.0f
             TimingDisplayGuideColor = Color.White
             TimingDisplayShowNonJudgements = true

@@ -207,7 +207,7 @@ type ErrorBar(ctx: HudContext) =
             Render.quad arrow ctx.Config.TimingDisplayMovingAverageColor
         | _ -> ()
 
-        if ctx.Config.TimingDisplayShowGuide then
+        if ctx.Config.TimingDisplayShowGuide && not ctx.Config.TimingDisplayGuideOnTop then
             Render.rect
                 (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
                 ctx.Config.TimingDisplayGuideColor
@@ -237,4 +237,7 @@ type ErrorBar(ctx: HudContext) =
                     )
                     color
 
-
+        if ctx.Config.TimingDisplayShowGuide && ctx.Config.TimingDisplayGuideOnTop then
+            Render.rect
+                (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
+                ctx.Config.TimingDisplayGuideColor
