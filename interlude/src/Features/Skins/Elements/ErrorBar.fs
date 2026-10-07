@@ -207,6 +207,11 @@ type ErrorBar(ctx: HudContext) =
             Render.quad arrow ctx.Config.TimingDisplayMovingAverageColor
         | _ -> ()
 
+        if ctx.Config.TimingDisplayShowGuide then
+            Render.rect
+                (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
+                ctx.Config.TimingDisplayGuideColor
+
         for hit in hits do
             let rect = bar (hit.Position - ctx.Config.TimingDisplayThickness) (hit.Position + ctx.Config.TimingDisplayThickness)
             let color =
@@ -232,7 +237,4 @@ type ErrorBar(ctx: HudContext) =
                     )
                     color
 
-        if ctx.Config.TimingDisplayShowGuide then
-            Render.rect
-                (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
-                ctx.Config.TimingDisplayGuideColor
+
