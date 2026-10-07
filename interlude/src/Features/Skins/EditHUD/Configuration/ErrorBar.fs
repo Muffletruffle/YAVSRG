@@ -12,11 +12,7 @@ type ErrorBarPage() =
 
     let config = Content.HUD
 
-    let show_guide = Setting.simple config.TimingDisplayShowGuide
-    let guide_thickness = Setting.percentf config.TimingDisplayGuideThickness
-    let guide_color = Setting.simple config.TimingDisplayGuideColor
     let show_non_judgements = Setting.simple config.TimingDisplayShowNonJudgements
-
     let thickness =
         config.TimingDisplayThickness |> Setting.bounded (1.0f, 25.0f)
 
@@ -44,11 +40,8 @@ type ErrorBarPage() =
     member this.SaveChanges() =
         Skins.save_hud_config
             { Content.HUD with
-                TimingDisplayShowGuide = show_guide.Value
                 TimingDisplayShowNonJudgements = show_non_judgements.Value
                 TimingDisplayThickness = thickness.Value
-                TimingDisplayGuideThickness = guide_thickness.Value
-                TimingDisplayGuideColor = guide_color.Value
                 TimingDisplayReleasesExtraHeight = release_thickness.Value
                 TimingDisplayWindowsOpacity = windows_opacity.Value
                 TimingDisplayWindowScale = window_scale.Value
@@ -74,32 +67,24 @@ type ErrorBarPage() =
                 PageSetting(%"hud.error_bar.thickness", Slider(thickness, Step = 1f))
                     .Help(Help.Info("hud.error_bar.thickness"))
                     .Pos(4),
-                PageSetting(%"hud.error_bar.showguide", Checkbox show_guide)
-                    .Help(Help.Info("hud.error_bar.showguide"))
+                PageButton(%"hud.error_bar.guide_settings", fun () -> ErrorBarGuidePage().Show())
+                    .Help(Help.Info("hud.error_bar.guide_settings"))
                     .Pos(6),
-                PageSetting(%"hud.error_bar.guide_thickness", Slider.Percent(guide_thickness))
-                    .Help(Help.Info("hud.error_bar.guide_thickness"))
-                    .Pos(8)
-                    .Conditional(show_guide.Get),
-                PageSetting(%"hud.error_bar.guide_color", ColorPicker(%"hud.error_bar.guide_color", guide_color, true))
-                    .Help(Help.Info("hud.error_bar.guide_color"))
-                    .Pos(10)
-                    .Conditional(show_guide.Get),
                 PageSetting(%"hud.error_bar.releasesextraheight", Slider(release_thickness, Step = 1f))
                     .Help(Help.Info("hud.error_bar.releasesextraheight"))
-                    .Pos(12),
+                    .Pos(8),
                 PageSetting(%"hud.error_bar.animationtime", Slider(Setting.uom animation_time, Step = 5f))
                     .Help(Help.Info("hud.error_bar.animationtime"))
-                    .Pos(14),
+                    .Pos(10),
                 PageSetting(%"hud.error_bar.timingwindowsopacity", Slider.Percent(windows_opacity))
                     .Help(Help.Info("hud.error_bar.timingwindowsopacity"))
-                    .Pos(16),
+                    .Pos(12),
                 PageSetting(%"hud.error_bar.windowscale", Slider.Percent(window_scale))
                     .Help(Help.Info("hud.error_bar.windowscale"))
-                    .Pos(18),
+                    .Pos(14),
                 PageSetting(%"hud.error_bar.logsensitivity", Slider.Percent(log_scale_sensitivity, Step = 0.01f))
                     .Help(Help.Info("hud.error_bar.logsensitivity"))
-                    .Pos(20),
+                    .Pos(16),
                 PageSetting(%"hud.error_bar.moving_average_type",
                     SelectDropdown(
                         [|
@@ -111,16 +96,16 @@ type ErrorBarPage() =
                     )
                 )
                     .Help(Help.Info("hud.error_bar.moving_average_type"))
-                    .Pos(22)
+                    .Pos(18)
             ).WithConditional(
                 (fun () -> moving_average_type.Value <> ErrorBarMovingAverageType.None),
 
                 PageSetting(%"hud.error_bar.moving_average_sensitivity", Slider.Percent(moving_average_sensitivity, Step = 0.05f))
                     .Help(Help.Info("hud.error_bar.moving_average_sensitivity"))
-                    .Pos(24),
+                    .Pos(20),
                 PageSetting(%"hud.error_bar.moving_average_color", ColorPicker(%"hud.error_bar.moving_average_color", moving_average_color, true))
                     .Help(Help.Info("hud.error_bar.moving_average_color"))
-                    .Pos(26)
+                    .Pos(22)
             )
 
     override this.Title = %"hud.error_bar"
