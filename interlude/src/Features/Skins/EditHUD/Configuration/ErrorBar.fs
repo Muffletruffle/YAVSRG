@@ -25,6 +25,8 @@ type ErrorBarPage() =
 
     let windows_opacity = config.TimingDisplayWindowsOpacity |> Setting.bounded (0.0f, 0.6f)
 
+    let window_scale = Setting.percentf config.TimingDisplayWindowScale
+
     let half_scale_releases = Setting.simple config.TimingDisplayHalfScaleReleases
 
     let animation_time =
@@ -47,6 +49,7 @@ type ErrorBarPage() =
                 TimingDisplayGuideThickness = guide_thickness.Value
                 TimingDisplayReleasesExtraHeight = release_thickness.Value
                 TimingDisplayWindowsOpacity = windows_opacity.Value
+                TimingDisplayWindowScale = window_scale.Value
                 TimingDisplayHalfScaleReleases = half_scale_releases.Value
                 TimingDisplayFadeTime = animation_time.Value
                 TimingDisplayMovingAverageType = moving_average_type.Value
@@ -85,9 +88,12 @@ type ErrorBarPage() =
                 PageSetting(%"hud.error_bar.timingwindowsopacity", Slider.Percent(windows_opacity))
                     .Help(Help.Info("hud.error_bar.timingwindowsopacity"))
                     .Pos(14),
+                PageSetting(%"hud.error_bar.windowscale", Slider.Percent(window_scale))
+                    .Help(Help.Info("hud.error_bar.windowscale"))
+                    .Pos(16),
                 PageSetting(%"hud.error_bar.logsensitivity", Slider.Percent(log_scale_sensitivity, Step = 0.01f))
                     .Help(Help.Info("hud.error_bar.logsensitivity"))
-                    .Pos(16),
+                    .Pos(18),
                 PageSetting(%"hud.error_bar.moving_average_type",
                     SelectDropdown(
                         [|
@@ -99,7 +105,7 @@ type ErrorBarPage() =
                     )
                 )
                     .Help(Help.Info("hud.error_bar.moving_average_type"))
-                    .Pos(18)
+                    .Pos(20)
             )
             .WithConditional(
                 (fun () -> moving_average_type.Value <> ErrorBarMovingAverageType.None),

@@ -186,6 +186,7 @@ type HudConfig =
         TimingDisplayShowNonJudgements: bool
         TimingDisplayReleasesExtraHeight: float32
         TimingDisplayWindowsOpacity: float32
+        TimingDisplayWindowScale: float32
         TimingDisplayHalfScaleReleases: bool
         TimingDisplayLogSensitivity: float32
         TimingDisplayMovingAverageType: ErrorBarMovingAverageType
@@ -339,6 +340,7 @@ type HudConfig =
             TimingDisplayShowNonJudgements = true
             TimingDisplayReleasesExtraHeight = 5.0f
             TimingDisplayWindowsOpacity = 0.0f
+            TimingDisplayWindowScale = 1.0f
             TimingDisplayHalfScaleReleases = true
             TimingDisplayMovingAverageType = ErrorBarMovingAverageType.None
             TimingDisplayMovingAverageSensitivity = 0.5f
