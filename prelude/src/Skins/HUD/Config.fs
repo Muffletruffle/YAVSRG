@@ -183,6 +183,7 @@ type HudConfig =
         TimingDisplayThickness: float32
         TimingDisplayShowGuide: bool
         TimingDisplayGuideThickness: float32
+        TimingDisplayGuideColor: Color
         TimingDisplayShowNonJudgements: bool
         TimingDisplayReleasesExtraHeight: float32
         TimingDisplayWindowsOpacity: float32
@@ -337,6 +338,7 @@ type HudConfig =
             TimingDisplayThickness = 5.0f
             TimingDisplayShowGuide = true
             TimingDisplayGuideThickness = 1.0f
+            TimingDisplayGuideColor = Color.White
             TimingDisplayShowNonJudgements = true
             TimingDisplayReleasesExtraHeight = 5.0f
             TimingDisplayWindowsOpacity = 0.0f
