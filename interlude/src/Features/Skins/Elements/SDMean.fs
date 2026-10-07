@@ -9,6 +9,7 @@ open Prelude.Skins.HudLayouts
 open Interlude.Content
 open Interlude.Features.Play
 open Interlude.Features.Gameplay
+open Prelude.Calculator.Performance
 
 type SDMean(ctx: HudContext) = 
     inherit StaticWidget(NodeType.None)
@@ -56,32 +57,35 @@ type SDMean(ctx: HudContext) =
         let sd_bounds = this.Bounds.SlicePercentT 0.5f
         let mean_bounds = this.Bounds.SlicePercentB 0.5f
 
-        Text.fill(
+        Text.fill_b(
             Style.font,
             "SD:", 
             sd_bounds,
-            Color.White,
+            Colors.text,
             Alignment.LEFT
         )
         Text.fill(
             Style.font,
             sprintf "%.2fms" sd,
             sd_bounds,
-            Color.White,
+            // Color.FromHsv(1.0f, 1.0f, 1.0f),
+            // Color.FromHsv(Math.Clamp((100.0f - 2.8f * MathF.Pow(MathF.Abs(sd), 1.04f)) / 255.0f, 0.0f, 1.0f), 1.0f, 1.0f),
+            Color.FromHsv(Math.Clamp((100.0f - 1.7f * MathF.Pow(MathF.Abs(sd), 1.16f)) / 255.0f, 0.0f, 1.0f), 1.0f, 1.0f),
             Alignment.RIGHT
         )
 
-        Text.fill(
+        Text.fill_b(
             Style.font,
             "M:", 
             mean_bounds,
-            Color.White,
+            Colors.text,
             Alignment.LEFT
         )
         Text.fill(
             Style.font,
-            sprintf "%.2fms" mean, 
+            sprintf "%.2fms" mean,
             mean_bounds,
-            Color.White,
+            // Color.FromHsv(0.5f, 1.0f, 1.0f),
+            Color.FromHsv(Math.Clamp((100.0f - 16.5f * MathF.Pow(MathF.Abs(mean), 0.88f)) / 255.0f, 0.0f, 1.0f), 1.0f, 1.0f),
             Alignment.RIGHT
         )
