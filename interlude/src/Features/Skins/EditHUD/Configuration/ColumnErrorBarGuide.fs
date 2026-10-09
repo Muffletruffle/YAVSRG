@@ -14,12 +14,14 @@ type ColumnErrorBarsGuidePage() =
 
     let show_guide = Setting.simple config.ColumnErrorBarsShowGuide
     let guide_thickness = Setting.percentf config.ColumnErrorBarsGuideThickness
+    let guide_color = Setting.simple config.ColumnErrorBarsGuideColor
 
     member this.SaveChanges() =
         Skins.save_hud_config
             { Content.HUD with
                 ColumnErrorBarsShowGuide = show_guide.Value
                 ColumnErrorBarsGuideThickness = guide_thickness.Value
+                ColumnErrorBarsGuideColor = guide_color.Value
             }
     
     override this.Content() =
@@ -33,6 +35,10 @@ type ColumnErrorBarsGuidePage() =
                 PageSetting(%"hud.column_error_bars.guide_thickness", Slider.Percent(guide_thickness))
                     .Help(Help.Info("hud.column_error_bars.guide_thickness"))
                     .Pos(2)
+                    .Conditional(show_guide.Get),
+                PageSetting(%"hud.column_error_bars.guide_color", ColorPicker(%"hud.column_error_bars_guide_color.guide_color", guide_color, true))
+                    .Help(Help.Info("hud.column_error_bars.guide_color"))
+                    .Pos(4)
                     .Conditional(show_guide.Get)
             )
     
