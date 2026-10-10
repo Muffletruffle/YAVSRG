@@ -104,6 +104,12 @@ type ErrorBarMovingAverageType =
     | Arrow = 1
     | ReplaceBars = 2
 
+type PerformancePointText =
+    | None = 0
+    | Prefix = 1
+    | Suffix = 2
+    | SuffixSpace = 3
+
 [<Json.AutoCodec(false)>]
 type HudPosition =
     {
@@ -275,6 +281,8 @@ type HudConfig =
 
         PerformancePointEnabled: bool
         PerformancePointPosition: HudPosition
+        PerformancePointTextType: PerformancePointText
+        PerformancePointUpdateInterval: float32
 
         InputMeterEnabled: bool
         InputMeterPosition: HudPosition
@@ -508,6 +516,8 @@ type HudConfig =
                     Right = 200.0f, 0.5f
                     Bottom  = 230.0f, 0.5f
                 }
+            PerformancePointTextType = PerformancePointText.SuffixSpace
+            PerformancePointUpdateInterval = 2.0f
 
             InputMeterEnabled = false
             InputMeterPosition =

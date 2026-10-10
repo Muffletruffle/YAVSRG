@@ -58,7 +58,6 @@ module HudElement =
     let can_configure (element: HudElement) : bool =
         match element with
         | HudElement.BPM -> false
-        | HudElement.PerformancePoint -> false
         | HudElement.Pacemaker -> false
         | HudElement.MultiplayerScores -> false
         | _ -> true

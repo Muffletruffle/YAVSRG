@@ -18,7 +18,7 @@ module private ConfigurationPageHelper =
         | HudElement.JudgementCounter -> JudgementCounterPage()
         | HudElement.RateMods -> RateModsPage()
         | HudElement.BPM -> BPMPage()
-        | HudElement.PerformancePoint -> BPMPage() // FIX LATER
+        | HudElement.PerformancePoint -> PerformancePointPage()
         | HudElement.InputMeter -> InputMeterPage()
         | HudElement.Pacemaker -> PacemakerPage()
         | HudElement.KeysPerSecond -> KeysPerSecondPage()
