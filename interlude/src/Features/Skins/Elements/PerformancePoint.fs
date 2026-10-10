@@ -14,7 +14,7 @@ open Prelude.Calculator
 type PerformancePoint(ctx: HudContext) = 
     inherit StaticWidget(NodeType.None)
 
-    let UPDATE_INTERVAL = 500.0
+    let UPDATE_INTERVAL = 2000.0
     let mutable update_timer = UPDATE_INTERVAL
 
     let mutable current_pr = 0.0f
