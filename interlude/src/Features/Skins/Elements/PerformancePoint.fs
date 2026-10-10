@@ -11,8 +11,25 @@ open Interlude.Content
 open Interlude.Features.Play
 open Prelude.Calculator
 
+
+
 type PerformancePoint(ctx: HudContext) = 
     inherit StaticWidget(NodeType.None)
+
+    let mutable current_pr = 0.0f
+
+    let chart_data = ctx.State.WithColors.ToNoteData()
+    let chart_diff = Difficulty.calculate(ctx.State.Scoring.Rate, chart_data)
+
+    let perfAgent = MailboxProcessor.Start(fun inbox ->
+        let rec loop () = async {
+            let! processor = inbox.Receive()
+            let new_pr = Performance.calculate chart_diff processor
+            current_pr <- new_pr
+            return! loop ()
+        }
+        loop ()
+    )
 
     let UPDATE_INTERVAL = ctx.Config.PerformancePointUpdateInterval * 1000.0f
     let mutable update_timer = UPDATE_INTERVAL
@@ -27,11 +44,6 @@ type PerformancePoint(ctx: HudContext) =
             | PerformancePointText.Suffix -> "PR"
             | PerformancePointText.SuffixSpace -> " PR"
             | _ -> ""
-
-    let mutable current_pr = 0.0f
-    let chart_data = ctx.State.WithColors.ToNoteData()
-    let chart_diff = Difficulty.calculate(ctx.State.Scoring.Rate, chart_data)
-
     override this.Init(parent: Widget) =
         base.Init(parent)
 
@@ -56,7 +68,7 @@ type PerformancePoint(ctx: HudContext) =
     override this.Update (elapsed_ms: float, moved: bool): unit = 
         base.Update(elapsed_ms, moved)
         update_timer <- update_timer - float32 elapsed_ms
-        if update_timer <= 0.0f then
-            current_pr <- Performance.calculate chart_diff ctx.State.Scoring
+        if update_timer <= 0.0f && not ctx.Inner.IsMultiplayer && not ctx.Inner.IsSpectate then
+            perfAgent.Post ctx.State.Scoring
             update_timer <- UPDATE_INTERVAL
 
