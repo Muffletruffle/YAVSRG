@@ -58,6 +58,7 @@ module HudElement =
     let can_configure (element: HudElement) : bool =
         match element with
         | HudElement.BPM -> false
+        | HudElement.PerformancePoint -> false
         | HudElement.Pacemaker -> false
         | HudElement.MultiplayerScores -> false
         | _ -> true
@@ -182,10 +183,10 @@ module HudElement =
                 (fun v ->
                     Skins.save_hud_config
                         { Content.HUD with
-                            BPMMeterEnabled = v // FIX LATER
+                            PerformancePointEnabled = v
                         }
                 )
-                (fun () -> Content.HUD.BPMMeterEnabled)
+                (fun () -> Content.HUD.PerformancePointEnabled)
         | HudElement.Pacemaker -> show_pacemaker
         | HudElement.InputMeter ->
             Setting.make

@@ -215,7 +215,7 @@
     <Compile Include="Features\Skins\EditHUD\Configuration\ColumnErrorBarsPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ElementPreview.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\Accuracy.fs" />
-
+    <Compile Include="Features\Skins\EditHUD\Configuration\PerformancePoint.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ErrorBar.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\Judgement.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\EarlyLate.fs" />
