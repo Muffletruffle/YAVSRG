@@ -19,6 +19,7 @@ type HudElement =
     | JudgementCounter
     | RateMods
     | BPM
+    | PerformancePoint
     | Pacemaker
     | InputMeter
     | KeysPerSecond
@@ -50,6 +51,7 @@ type HudElement =
             EarlyLate
             RateMods
             BPM
+            PerformancePoint
             InputMeter
             KeysPerSecond
             CustomImage
@@ -73,6 +75,7 @@ type HudElement =
             JudgementCounter
             RateMods
             BPM
+            PerformancePoint
             Pacemaker
             InputMeter
             KeysPerSecond
@@ -269,6 +272,9 @@ type HudConfig =
 
         BPMMeterEnabled: bool
         BPMMeterPosition: HudPosition
+
+        PerformancePointEnabled: bool
+        PerformancePointPosition: HudPosition
 
         InputMeterEnabled: bool
         InputMeterPosition: HudPosition
@@ -491,6 +497,16 @@ type HudConfig =
                     Top = -40.0f, 1.0f
                     Right = 100.0f, 0.5f
                     Bottom = -10.0f, 1.0f
+                }
+
+            PerformancePointEnabled = false
+            PerformancePointPosition =
+                {
+                    RelativeToPlayfield = true
+                    Left = -200.0f, 0.5f
+                    Top = 130.0f, 0.5f
+                    Right = 200.0f, 0.5f
+                    Bottom  = 230.0f, 0.5f
                 }
 
             InputMeterEnabled = false
