@@ -24,7 +24,7 @@ type PerformancePoint(ctx: HudContext) =
     let perfAgent = MailboxProcessor.Start(fun inbox ->
         let rec loop () = async {
             let! processor = inbox.Receive()
-            let new_pr = Performance.calculate chart_diff processor
+            let new_pr = Performance.calculate_partial chart_diff processor (ctx.State.CurrentChartTime())
             current_pr <- new_pr
             return! loop ()
         }

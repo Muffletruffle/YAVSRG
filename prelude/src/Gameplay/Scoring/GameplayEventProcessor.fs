@@ -422,3 +422,6 @@ type GameplayEventProcessor(ruleset: Ruleset, replay: ReplaySource, note_data: N
     member this.ProcessEntireReplay() : unit =
         // todo: assert that replay has full data
         this.Update(Time.infinity)
+
+    member this.ProcessReplayUntil(chart_time) =
+        this.Update(chart_time)
