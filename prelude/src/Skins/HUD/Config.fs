@@ -283,6 +283,7 @@ type HudConfig =
         PerformancePointPosition: HudPosition
         PerformancePointTextType: PerformancePointText
         PerformancePointUpdateInterval: float32
+        PerformancePointLerp: bool
 
         InputMeterEnabled: bool
         InputMeterPosition: HudPosition
@@ -518,6 +519,7 @@ type HudConfig =
                 }
             PerformancePointTextType = PerformancePointText.SuffixSpace
             PerformancePointUpdateInterval = 2.0f
+            PerformancePointLerp = false
 
             InputMeterEnabled = false
             InputMeterPosition =

@@ -14,13 +14,15 @@ type PerformancePointPage() =
     let config = Content.HUD
 
     let text_format = Setting.simple config.PerformancePointTextType
-    let update_frequency = config.PerformancePointUpdateInterval |> Setting.bounded (0.5f, 5.0f)
+    let update_frequency = config.PerformancePointUpdateInterval |> Setting.bounded (0.1f, 2.0f)
+    let lerp_toggle = Setting.simple config.PerformancePointLerp
 
     member this.SaveChanges() =
         Skins.save_hud_config
             { Content.HUD with
                 PerformancePointTextType = text_format.Value
                 PerformancePointUpdateInterval = update_frequency.Value
+                PerformancePointLerp = lerp_toggle.Value
             }
 
     override this.Content() = 
@@ -43,7 +45,10 @@ type PerformancePointPage() =
                     .Pos(0),
                 PageSetting(%"hud.performance_point.updateinterval", Slider(update_frequency, Step = 0.1f))
                     .Help(Help.Info("hud.performance_point.updateinterval"))
-                    .Pos(2)
+                    .Pos(2),
+                PageSetting(%"hud.performance_point.lerp", Checkbox lerp_toggle)
+                    .Help(Help.Info("hud.performance_point.lerp"))
+                    .Pos(4)
             )
 
     override this.Title = %"hud.performance_point"
