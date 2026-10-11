@@ -6,6 +6,7 @@ open Percyqaz.Flux.UI
 open Prelude.Skins.HudLayouts
 open Interlude.Features.Play
 open Prelude.Calculator
+open Prelude.Gameplay.Rulesets
 
 type PerformancePoint(ctx: HudContext) = 
     inherit StaticWidget(NodeType.None)
@@ -18,8 +19,16 @@ type PerformancePoint(ctx: HudContext) =
 
     let perfAgent = MailboxProcessor.Start(fun inbox ->
         let rec loop () = async {
-            let! processor = inbox.Receive()
-            let new_pr = Performance.calculate_partial chart_diff processor (ctx.State.CurrentChartTime())
+            let! (processor: Prelude.Gameplay.Scoring.ScoreProcessor) = inbox.Receive()
+            let sc_j4_processor: Prelude.Gameplay.Scoring.ScoreProcessor =
+                if Ruleset.hash ctx.State.Ruleset <> SC_J4_HASH then
+                    let standard_ruleset = processor.RecreatePartial(SC_J4)
+                    standard_ruleset.Update(ctx.State.CurrentChartTime())
+                    standard_ruleset
+                else
+                    processor
+
+            let new_pr = Performance.calculate chart_diff sc_j4_processor
             prev_pr <- current_pr
             current_pr <- new_pr
             return! loop ()

@@ -82,16 +82,6 @@ module Performance =
 
         Difficulty.weighted_overall_difficulty (note_values |> Array.ofSeq)
 
-    let calculate_partial (rr: Difficulty) (scoring: ScoreProcessor) (chart_time) : float32 = 
-        let scoring =
-            if SC_J4_HASH <> Ruleset.hash scoring.Ruleset then
-                let on_standard_ruleset = scoring.Recreate(SC_J4)
-                on_standard_ruleset.ProcessReplayUntil(chart_time)
-                on_standard_ruleset
-            else
-                scoring
-        calculate rr scoring
-
     let accuracy_to_rating (accuracy: float32, rate: Rate, note_data: NoteData, rr: Difficulty) : float32 =
         // naive approach
         let scaled_notes = rr.NoteDifficulty |> Array.mapi (fun i nr -> Array.map (scale_note accuracy rr.Variety.[i]) nr)
