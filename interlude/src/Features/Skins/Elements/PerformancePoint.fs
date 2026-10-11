@@ -1,18 +1,11 @@
 namespace Interlude.Features.Play.HUD
 
-open System
 open Percyqaz.Common
 open Percyqaz.Flux.Graphics
 open Percyqaz.Flux.UI
-open Percyqaz.Flux
-open Prelude
-open Prelude.Gameplay.Scoring
 open Prelude.Skins.HudLayouts
-open Interlude.Content
 open Interlude.Features.Play
 open Prelude.Calculator
-
-
 
 type PerformancePoint(ctx: HudContext) = 
     inherit StaticWidget(NodeType.None)
@@ -34,9 +27,9 @@ type PerformancePoint(ctx: HudContext) =
         loop ()
     )
 
-    let UPDATE_INTERVAL = ctx.Config.PerformancePointUpdateInterval * 1000.0f
-    let mutable update_timer = UPDATE_INTERVAL
-    let LERP = ctx.Config.PerformancePointLerp
+    let update_interval = ctx.Config.PerformancePointUpdateInterval * 1000.0f
+    let mutable update_timer = update_interval
+    let lerp = ctx.Config.PerformancePointLerp
 
     let prefix =
         match ctx.Config.PerformancePointTextType with
@@ -53,17 +46,20 @@ type PerformancePoint(ctx: HudContext) =
 
     override this.Draw() =
         Text.fill_b(
+            let no_data = current_pr = 0.0f || ctx.State.Scoring.Events.Count <= 0
             Style.font,
             (
-                if current_pr = 0.0f || ctx.State.Scoring.Events.Count <= 0 then 
+                if no_data then 
                     sprintf "%s-.--%s" prefix suffix
                 else 
                     sprintf "%s%.2f%s" prefix
-                        (if LERP then (lerp ((UPDATE_INTERVAL - update_timer) / UPDATE_INTERVAL) (prev_pr) (current_pr)) else current_pr)
+                        (if lerp then 
+                            (Combinators.lerp ((update_interval - update_timer) / update_interval) (prev_pr) (current_pr)) 
+                            else current_pr)
                         suffix),
             this.Bounds,
             (
-                if current_pr = 0.0f || ctx.State.Scoring.Events.Count <= 0 then
+                if no_data then
                     Colors.text_subheading
                 else
                     (Colors.white, Difficulty.color current_pr)
@@ -76,5 +72,5 @@ type PerformancePoint(ctx: HudContext) =
         update_timer <- update_timer - float32 elapsed_ms
         if update_timer <= 0.0f then
             perfAgent.Post ctx.State.Scoring
-            update_timer <- UPDATE_INTERVAL
+            update_timer <- update_interval
 
