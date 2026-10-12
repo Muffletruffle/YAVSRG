@@ -29,6 +29,7 @@ module HudElement =
         | HudElement.JudgementCounter -> %"hud.judgement_counter"
         | HudElement.RateMods -> %"hud.ratemodmeter"
         | HudElement.BPM -> %"hud.bpm"
+        | HudElement.PerformancePoint -> %"hud.performance_point"
         | HudElement.Pacemaker -> %"hud.pacemaker"
         | HudElement.InputMeter -> %"hud.input_meter"
         | HudElement.KeysPerSecond -> %"hud.kps_meter"
@@ -49,6 +50,7 @@ module HudElement =
         | HudElement.JudgementCounter -> %"hud.judgement_counter.tooltip"
         | HudElement.RateMods -> %"hud.ratemodmeter.tooltip"
         | HudElement.BPM -> %"hud.bpm.tooltip"
+        | HudElement.PerformancePoint -> %"hud.performance_point.tooltip"
         | HudElement.Pacemaker -> %"hud.pacemaker.tooltip"
         | HudElement.InputMeter -> %"hud.input_meter.tooltip"
         | HudElement.KeysPerSecond -> %"hud.kps_meter.tooltip"
@@ -78,6 +80,7 @@ module HudElement =
         | HudElement.JudgementCounter -> cast JudgementCounter
         | HudElement.RateMods -> cast RateMods
         | HudElement.BPM -> cast BPM
+        | HudElement.PerformancePoint -> cast PerformancePoint
         | HudElement.Pacemaker -> cast Pacemaker
         | HudElement.InputMeter -> cast InputMeter
         | HudElement.KeysPerSecond -> cast KeysPerSecond
@@ -136,6 +139,15 @@ module HudElement =
             Setting.make
                 (fun v -> Skins.save_hud_config { Content.HUD with BPMMeterEnabled = v })
                 (fun () -> Content.HUD.BPMMeterEnabled)
+        | HudElement.PerformancePoint ->
+            Setting.make
+                (fun v ->
+                    Skins.save_hud_config
+                        { Content.HUD with
+                            PerformancePointEnabled = v
+                        }
+                )
+                (fun () -> Content.HUD.PerformancePointEnabled)
         | HudElement.Pacemaker -> show_pacemaker
         | HudElement.InputMeter ->
             Setting.make
@@ -206,6 +218,15 @@ module HudElement =
             Setting.make
                 (fun v -> Skins.save_hud_config { Content.HUD with BPMMeterPosition = v })
                 (fun () -> Content.HUD.BPMMeterPosition)
+        | HudElement.PerformancePoint ->
+            Setting.make
+                (fun v ->
+                    Skins.save_hud_config
+                        { Content.HUD with
+                            PerformancePointPosition = v
+                        }
+                )
+                (fun () -> Content.HUD.PerformancePointPosition)
         | HudElement.Pacemaker ->
             Setting.make
                 (fun v -> Skins.save_hud_config { Content.HUD with PacemakerPosition = v })
@@ -243,6 +264,7 @@ module HudElement =
         | HudElement.JudgementCounter -> all_defaults.JudgementCounterPosition
         | HudElement.RateMods -> all_defaults.RateModMeterPosition
         | HudElement.BPM -> all_defaults.BPMMeterPosition
+        | HudElement.PerformancePoint -> all_defaults.PerformancePointPosition
         | HudElement.Pacemaker -> all_defaults.PacemakerPosition
         | HudElement.InputMeter -> all_defaults.InputMeterPosition
         | HudElement.KeysPerSecond -> all_defaults.KeysPerSecondMeterPosition

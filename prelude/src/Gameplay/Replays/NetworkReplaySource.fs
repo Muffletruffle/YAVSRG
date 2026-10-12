@@ -27,6 +27,7 @@ type NetworkReplaySource() =
             else
                 invalidOp "Online play is not declared as over, we don't have the full replay yet!"
 
+        member this.GetPartialReplay (): Replay = { Frames = buffer.ToArray() }
         member this.EnumerateRecentFrames() : ReplayFrame seq =
             seq {
                 let mutable j = i - 1

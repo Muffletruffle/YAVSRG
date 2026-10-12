@@ -15,6 +15,7 @@ type StoredReplaySource(data: Replay) =
             data.Frames.[i - 1]
 
         member this.GetFullReplay() : Replay = data
+        member this.GetPartialReplay (): Replay = data
 
         member this.EnumerateRecentFrames() : ReplayFrame seq =
             seq {

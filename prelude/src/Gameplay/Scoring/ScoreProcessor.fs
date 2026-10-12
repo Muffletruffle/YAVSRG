@@ -1,4 +1,4 @@
-namespace Prelude.Gameplay.Scoring
+﻿namespace Prelude.Gameplay.Scoring
 
 open System.Collections.ObjectModel
 open Prelude
@@ -139,7 +139,11 @@ type ScoreProcessor(ruleset: Ruleset, replay: ReplaySource, note_data: NoteData,
     member this.Recreate(ruleset: Ruleset) : ScoreProcessor =
         ScoreProcessor(ruleset, replay.GetFullReplay() |> StoredReplaySource, note_data, rate)
 
+    member this.RecreatePartial(ruleset: Ruleset) : ScoreProcessor =
+        ScoreProcessor(ruleset, replay.GetPartialReplay() |> StoredReplaySource, note_data, rate)
+
     member this.Recreate() : ScoreProcessor = this.Recreate(ruleset)
+
 
     member private this.ProcessHit(delta: GameplayTime, is_missed: bool) : ComboChange * ScoringEventInner =
 
