@@ -10,3 +10,4 @@
 **/obj
 **/nupkg
 GAME
+prelude/src/Calculator/libminacalc.so

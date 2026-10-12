@@ -14,15 +14,27 @@ type GameplayInfo() =
 
     let never_played = %"levelselect.last_played.never"
 
+    
     let mutable rating = 0.0f
+    let mutable msd_float = 0.0f
+    let mutable msd_str = ""
+    // let mutable msd_rates = MsdForAllRates()
     let mutable notecounts = ""
+    // let mutable test_str = ""
     let mutable last_played = K never_played
     let mutable mod_string = "--"
+    
     let mutable mod_status = ModStatus.Ranked
 
     let refresh(info: LoadedChartInfo) =
         rating <- info.Difficulty.Overall
         notecounts <- info.NotecountsString
+        let msd_float = MinaCalc.calc_msd_at_rate(info.Chart.ToNoteData(), float32 SelectedChart.rate.Value)
+        if msd_float.IsNone then 
+            msd_str <- "--.--"
+        else
+            msd_str <- sprintf "%.2f" msd_float.Value
+
         last_played <-
             let mutable ts = info.SaveData.LastPlayed
             let text (ts: int64) =
@@ -70,8 +82,14 @@ type GameplayInfo() =
         Text.fill_b (Style.font, (match SelectedChart.CACHE_DATA with Some chart_meta -> chart_meta.DifficultyName | None -> ""), chart_info.SlicePercentL 0.5f, Colors.text_subheading, Alignment.LEFT)
         Text.fill_b (Style.font, notecounts, chart_info, Colors.text_subheading, Alignment.RIGHT)
 
+
         let three_icon_infos = this.Bounds.SliceT(155.0f, 70.0f).ShrinkX(15.0f)
-        Text.fill_b (Style.font, sprintf "%s %.2f" Icons.STAR rating, three_icon_infos, (Colors.white, Difficulty.color rating), Alignment.LEFT)
+        let star_rate_box = three_icon_infos.SliceT(-8.0f, 60.0f).TranslateX(70.0f)
+        let msd_box = three_icon_infos.SliceT(34.0f, 45.0f).TranslateX(70.0f)
+
+        Text.fill_b (Style.font, sprintf "%.2f" rating, star_rate_box, (Colors.white, Difficulty.color rating), Alignment.LEFT)
+        Text.fill_b (Style.font, msd_str, msd_box, (Colors.white, Difficulty.color rating), Alignment.LEFT)
+        Text.fill_b (Style.font, sprintf "%s" Icons.STAR, three_icon_infos, (Colors.white, Difficulty.color rating), Alignment.LEFT)
         Text.fill_b (Style.font, SelectedChart.FMT_BPM, three_icon_infos, Colors.text, Alignment.CENTER)
         Text.fill_b (Style.font, SelectedChart.FMT_DURATION, three_icon_infos, Colors.text, Alignment.RIGHT)
 

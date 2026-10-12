@@ -78,6 +78,7 @@
     <Compile Include="Gameplay\Scoring\ScoreProcessor.fs" />
     <Compile Include="Gameplay\Scoring\ScoreScreenStats.fs" />
     <Compile Include="Calculator\Layout.fs" />
+    <Compile Include="Calculator\MinaCalc.fs" />
     <Compile Include="Calculator\NoteDifficulty.fs" />
     <Compile Include="Calculator\Variety.fs" />
     <Compile Include="Calculator\HoldCoverage.fs" />

@@ -191,10 +191,13 @@ type HudConfig =
         TimingDisplayFadeTime: float32<ms / rate>
         TimingDisplayThickness: float32
         TimingDisplayShowGuide: bool
+        TimingDisplayGuideOnTop: bool
         TimingDisplayGuideThickness: float32
+        TimingDisplayGuideColor: Color
         TimingDisplayShowNonJudgements: bool
         TimingDisplayReleasesExtraHeight: float32
         TimingDisplayWindowsOpacity: float32
+        TimingDisplayWindowScale: float32
         TimingDisplayHalfScaleReleases: bool
         TimingDisplayLogSensitivity: float32
         TimingDisplayMovingAverageType: ErrorBarMovingAverageType
@@ -208,11 +211,14 @@ type HudConfig =
         ColumnErrorBarsFadeTime: float32<ms / rate>
         ColumnErrorBarsThickness: float32
         ColumnErrorBarsShowGuide: bool
+        ColumnErrorBarsGuideOnTop: bool
         ColumnErrorBarsGuideThickness: float32
+        ColumnErrorBarsGuideColor: Color
         ColumnErrorBarsShowNonJudgements: bool
         ColumnErrorBarsReleasesYScale: float32
         ColumnErrorBarsReleasesXScale: float32
         ColumnErrorBarsWindowsOpacity: float32
+        ColumnErrorBarsWindowScale: float32
         ColumnErrorBarsLogSensitivity: float32
         ColumnErrorBarsMovingAverage: bool
         ColumnErrorBarsMovingAverageSensitivity: float32
@@ -350,10 +356,13 @@ type HudConfig =
             TimingDisplayFadeTime = 1000.0f<ms / rate>
             TimingDisplayThickness = 5.0f
             TimingDisplayShowGuide = true
+            TimingDisplayGuideOnTop = false
             TimingDisplayGuideThickness = 1.0f
+            TimingDisplayGuideColor = Color.White
             TimingDisplayShowNonJudgements = true
             TimingDisplayReleasesExtraHeight = 5.0f
             TimingDisplayWindowsOpacity = 0.0f
+            TimingDisplayWindowScale = 1.0f
             TimingDisplayHalfScaleReleases = true
             TimingDisplayMovingAverageType = ErrorBarMovingAverageType.None
             TimingDisplayMovingAverageSensitivity = 0.5f
@@ -373,11 +382,14 @@ type HudConfig =
             ColumnErrorBarsThickness = 5.0f
             ColumnErrorBarsWidth = 25.0f
             ColumnErrorBarsShowGuide = true
+            ColumnErrorBarsGuideOnTop = false
             ColumnErrorBarsGuideThickness = 1.0f
+            ColumnErrorBarsGuideColor = Color.White
             ColumnErrorBarsShowNonJudgements = false
             ColumnErrorBarsReleasesYScale = 0.5f
             ColumnErrorBarsReleasesXScale = 1.25f
             ColumnErrorBarsWindowsOpacity = 0.0f
+            ColumnErrorBarsWindowScale = 1.0f
             ColumnErrorBarsLogSensitivity = 0.0f
             ColumnErrorBarsMovingAverage = false
             ColumnErrorBarsMovingAverageSensitivity = 0.5f
