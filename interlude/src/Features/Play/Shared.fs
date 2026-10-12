@@ -33,6 +33,7 @@ type HudContextExtensions =
         | HudElement.JudgementCounter -> ctx.Config.JudgementCounterEnabled
         | HudElement.RateMods -> ctx.Config.RateModMeterEnabled
         | HudElement.BPM -> ctx.Config.BPMMeterEnabled
+        | HudElement.PerformancePoint -> ctx.Config.PerformancePointEnabled
         | HudElement.InputMeter -> ctx.Config.InputMeterEnabled
         | HudElement.Pacemaker -> not ctx.State.Pacemaker.IsNone
         | HudElement.KeysPerSecond -> ctx.Config.KeysPerSecondMeterEnabled
@@ -54,6 +55,7 @@ type HudContextExtensions =
         | HudElement.JudgementCounter -> ctx.Config.JudgementCounterPosition
         | HudElement.RateMods -> ctx.Config.RateModMeterPosition
         | HudElement.BPM -> ctx.Config.BPMMeterPosition
+        | HudElement.PerformancePoint -> ctx.Config.PerformancePointPosition
         | HudElement.InputMeter -> ctx.Config.InputMeterPosition
         | HudElement.Pacemaker -> ctx.Config.PacemakerPosition
         | HudElement.KeysPerSecond -> ctx.Config.KeysPerSecondMeterPosition
@@ -76,6 +78,7 @@ type HudContextExtensions =
         | HudElement.JudgementCounter -> cast JudgementCounter
         | HudElement.RateMods -> cast RateMods
         | HudElement.BPM -> cast BPM
+        | HudElement.PerformancePoint -> cast PerformancePoint
         | HudElement.InputMeter -> cast InputMeter
         | HudElement.Pacemaker -> cast Pacemaker
         | HudElement.KeysPerSecond -> cast KeysPerSecond

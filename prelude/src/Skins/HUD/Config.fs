@@ -20,6 +20,7 @@ type HudElement =
     | JudgementCounter
     | RateMods
     | BPM
+    | PerformancePoint
     | Pacemaker
     | InputMeter
     | KeysPerSecond
@@ -52,6 +53,7 @@ type HudElement =
             SDMean
             RateMods
             BPM
+            PerformancePoint
             InputMeter
             KeysPerSecond
             CustomImage
@@ -75,6 +77,7 @@ type HudElement =
             JudgementCounter
             RateMods
             BPM
+            PerformancePoint
             Pacemaker
             SDMean
             InputMeter
@@ -103,6 +106,12 @@ type ErrorBarMovingAverageType =
     | None = 0
     | Arrow = 1
     | ReplaceBars = 2
+
+type PerformancePointText =
+    | None = 0
+    | Prefix = 1
+    | Suffix = 2
+    | SuffixSpace = 3
 
 [<Json.AutoCodec(false)>]
 type HudPosition =
@@ -278,6 +287,12 @@ type HudConfig =
 
         BPMMeterEnabled: bool
         BPMMeterPosition: HudPosition
+
+        PerformancePointEnabled: bool
+        PerformancePointPosition: HudPosition
+        PerformancePointTextType: PerformancePointText
+        PerformancePointUpdateInterval: float32
+        PerformancePointLerp: bool
 
         InputMeterEnabled: bool
         InputMeterPosition: HudPosition
@@ -513,6 +528,19 @@ type HudConfig =
                     Right = 100.0f, 0.5f
                     Bottom = -10.0f, 1.0f
                 }
+
+            PerformancePointEnabled = false
+            PerformancePointPosition =
+                {
+                    RelativeToPlayfield = true
+                    Left = -200.0f, 0.5f
+                    Top = 130.0f, 0.5f
+                    Right = 200.0f, 0.5f
+                    Bottom  = 230.0f, 0.5f
+                }
+            PerformancePointTextType = PerformancePointText.SuffixSpace
+            PerformancePointUpdateInterval = 2.0f
+            PerformancePointLerp = false
 
             InputMeterEnabled = false
             InputMeterPosition =
