@@ -8,6 +8,7 @@ open Percyqaz.Flux.Input
 open Prelude
 open Prelude.Mods
 open Prelude.Calculator.Patterns
+open Interlude.Options
 
 type Timeline(with_mods: ModdedChart, on_seek: Time -> unit, rate: Setting.Bounded<Rate>) =
     inherit StaticWidget(NodeType.None)
@@ -21,9 +22,9 @@ type Timeline(with_mods: ModdedChart, on_seek: Time -> unit, rate: Setting.Bound
     let BOX_WIDTH = 200.0f
 
     let samples =
-        int ((LAST_NOTE - FIRST_NOTE) / 1000.0f)
-        |> max 10
-        |> min 400
+        int ((LAST_NOTE - FIRST_NOTE) / if options.DetailedDifficultyGraph.Value then 500.0f else 1000.0f)
+        |> max (if options.DetailedDifficultyGraph.Value then 20 else 10)
+        |> min (if options.DetailedDifficultyGraph.Value then 800 else 400)
 
     let duration_on_1x = (LAST_NOTE - FIRST_NOTE) |> format_duration_ms
 

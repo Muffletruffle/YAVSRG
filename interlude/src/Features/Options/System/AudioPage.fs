@@ -46,6 +46,17 @@ type AudioPage() =
         )
             .Help(Help.Info("system.audio_pitch_rates_up"))
 
+    static member AudioPitch() : PageSetting =
+        PageSetting(
+            %"system.audiopitch",
+            Slider(
+                options.AudioPitch
+                |> Setting.trigger (fun v -> Song.set_pitch_offset v),
+                Step = 1f
+            )
+        )
+            .Help(Help.Info("system.audiopitch"))
+
     static member MenusMuffleSong() : PageSetting =
         PageSetting(%"system.menus_muffle_song",
             Checkbox (
@@ -77,9 +88,10 @@ type AudioPage() =
                 AudioPage.AudioDevice().Pos(2),
                 AudioPage.RatesChangePitchDown().Pos(5),
                 AudioPage.RatesChangePitchUp().Pos(7),
-                AudioPage.MenusMuffleSong().Pos(9),
-                AudioPage.AudioOffset().Pos(12),
-                AudioPage.AutomaticOffset().Pos(14)
+                AudioPage.AudioPitch().Pos(9),
+                AudioPage.MenusMuffleSong().Pos(11),
+                AudioPage.AudioOffset().Pos(14),
+                AudioPage.AutomaticOffset().Pos(16)
             )
 
     override this.Title = Icons.SPEAKER + " " + %"system.audio"

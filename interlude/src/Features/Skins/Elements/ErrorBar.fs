@@ -230,3 +230,8 @@ type ErrorBar(ctx: HudContext) =
                             rect
                     )
                     color
+
+        if ctx.Config.TimingDisplayShowGuide then
+            Render.rect
+                (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
+                Color.White

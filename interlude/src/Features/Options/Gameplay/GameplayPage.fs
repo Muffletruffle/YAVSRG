@@ -30,8 +30,19 @@ type GameplayPage() =
 
     static member HitPosition() : PageSetting =
         PageSetting(%"gameplay.hitposition", Slider(options.HitPosition, Step = 1f))
+            .With(
+                Text(fun () ->
+                    [
+                        ((540.0f - options.HitPosition.Value * 2.0f).ToString("F0")
+                        ) // Insert some more conversions here, I don't know of any more
+                    ]
+                    %> "gameplay.hitposition.info"
+                )
+                    .Align(Alignment.CENTER)
+                    .Position(page_position(2, 1, PageWidth.Normal).ShrinkL PAGE_LABEL_WIDTH)
+            )
             .Help(Help.Info("gameplay.hitposition"))
-
+    
     static member Upscroll() : PageSetting =
         PageSetting(%"gameplay.upscroll", Checkbox options.Upscroll)
             .Help(Help.Info("gameplay.upscroll"))
@@ -79,14 +90,14 @@ type GameplayPage() =
             .With(
                 GameplayPage.ScrollSpeed().Pos(0),
                 GameplayPage.HitPosition().Pos(3),
-                GameplayPage.Upscroll().Pos(5),
-                GameplayPage.BackgroundDim().Pos(7),
-                GameplayPage.HoldToGiveUp().Pos(9),
-                GameplayPage.HideHitNotes().Pos(11),
-                GameplayPage.OnQuitOut().Pos(13),
-                GameplayPage.Lanecover().Pos(16),
-                GameplayPage.Pacemaker().Pos(18),
-                GameplayPage.Keybinds().Pos(21)
+                GameplayPage.Upscroll().Pos(6),
+                GameplayPage.BackgroundDim().Pos(8),
+                GameplayPage.HoldToGiveUp().Pos(10),
+                GameplayPage.HideHitNotes().Pos(12),
+                GameplayPage.OnQuitOut().Pos(14),
+                GameplayPage.Lanecover().Pos(17),
+                GameplayPage.Pacemaker().Pos(19),
+                GameplayPage.Keybinds().Pos(22)
             )
         |> Container.Create
         |+ preview

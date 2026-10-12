@@ -62,7 +62,17 @@ module SelectedChart =
         | None -> sprintf "%s 120" Icons.MUSIC
 
     let private format_notecounts (chart: ModdedChart) =
-        let notes, lnotes = Chart.notecount chart
+        let mutable notes = 0
+        let mutable lnotes = 0
+
+        for { Data = nr } in chart.Notes do
+            for n in nr do
+                if n = NoteType.NORMAL then
+                    notes <- notes + 1
+                elif n = NoteType.HOLDHEAD then
+                    notes <- notes + 1
+                    lnotes <- lnotes + 1
+
         let hold_count =
             let pc = (100.0f * float32 lnotes / float32 notes)
             let lnotes_suffix = if lnotes <> 1 then %"levelselect.holds" else %"levelselect.hold"
@@ -410,6 +420,16 @@ module SelectedChart =
             change_rate_by(-0.25f<rate>)
         elif (%%"downrate").Pressed() then
             change_rate_by(-0.1f<rate>)
+
+    let change_pitch_hotkeys(change_pitch_by: float32 -> unit) =
+        if (%%"pitchup").Pressed() then
+            change_pitch_by(2.0f)
+        elif (%%"pitchup_small").Pressed() then
+            change_pitch_by(1.0f)
+        elif (%%"pitchdown").Pressed() then
+            change_pitch_by(-2.0f)
+        elif (%%"pitchdown_small").Pressed() then
+            change_pitch_by(-1.0f)
 
     let init () =
 
