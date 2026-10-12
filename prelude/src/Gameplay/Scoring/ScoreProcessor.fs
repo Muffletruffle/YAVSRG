@@ -140,6 +140,7 @@ type ScoreProcessor(ruleset: Ruleset, replay: ReplaySource, note_data: NoteData,
 
     /// Throws an exception if used on a live/online replay
     member this.Recreate(ruleset: Ruleset) = ScoreProcessor(ruleset, replay.GetFullReplay() |> StoredReplaySource, note_data, rate)
+    member this.RecreatePartial(ruleset: Ruleset) = ScoreProcessor(ruleset, replay.GetPartialReplay() |> StoredReplaySource, note_data, rate)
     member this.Recreate() = this.Recreate(ruleset)
 
     member private this.ProcessHit(delta: GameplayTime, is_missed: bool) : ComboChange * ScoringEventInner =

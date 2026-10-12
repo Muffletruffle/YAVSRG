@@ -42,14 +42,14 @@ type EarlyLate(ctx: HudContext) =
             let time_ago = ctx.State.CurrentChartTime() - time
 
             if time_ago < duration then
+                let opacity = Math.Clamp( int (255.0f - time_ago / duration * 255.0f), 0, 255)
 
                 if ctx.Config.EarlyLateMeterUseTexture then
                     Render.tex_quad
                         (Sprite.fill this.Bounds texture).AsQuad
-                        Color.White.AsQuad
+                        (Color.White.O4a(opacity).AsQuad)
                         (Sprite.pick_texture (time_ago / ctx.Config.EarlyLateMeterFrameTime / SelectedChart.rate.Value |> floor |> int, if early then 0 else 1) texture)
                 else
-                    let opacity = Math.Clamp( int (255.0f - time_ago / duration * 255.0f), 0, 255)
 
                     Text.fill (
                         Style.font,
@@ -59,9 +59,8 @@ type EarlyLate(ctx: HudContext) =
                              ctx.Config.EarlyLateMeterLateText),
                         this.Bounds,
                         (if early then
-                             Color.FromArgb(opacity, ctx.Config.EarlyLateMeterEarlyColor)
-                             
+                             (ctx.Config.EarlyLateMeterEarlyColor.O4a(opacity))
                          else
-                             Color.FromArgb(opacity, ctx.Config.EarlyLateMeterLateColor)),
+                             (ctx.Config.EarlyLateMeterLateColor.O4a(opacity))),
                         Alignment.CENTER
                     )

@@ -38,6 +38,9 @@ type GameplayReplaySource(first_note: Time) =
             if not finished then invalidOp "Live play is not declared as over, we don't have the full replay yet!"
             { Frames = buffer.ToArray() }
 
+        member this.GetPartialReplay() : Replay =
+            { Frames = buffer.ToArray() }
+
         member this.EnumerateRecentFrames() : ReplayFrame seq =
             seq {
                 let mutable j = buffer.Count - 1
