@@ -120,3 +120,22 @@ module Strain =
                 yield { Strains = strain; Left = left_hand_burst, left_hand_stamina; Right = right_hand_burst, right_hand_stamina }
         }
         |> Array.ofSeq
+    
+    type IncrStrainState =
+        {
+            last_strain: float32 array
+            last_time: Time array
+        }
+    
+    let init_incremental (keys: int) : IncrStrainState =
+        {
+            last_strain = Array.zeroCreate keys
+            last_time = Array.zeroCreate keys
+        }
+    
+    let insert_note (state: IncrStrainState) (rate: Rate) (col: int) (offset: Time) (diff: float32) : float32 =
+        let delta = (offset - state.last_time.[col]) / rate
+        let str = strain_burst state.last_strain.[col] diff delta   // only need to do one loop of calcuating strains, then put into the incremental state & return it
+        state.last_strain.[col] <- str
+        state.last_time.[col] <- offset
+        str
