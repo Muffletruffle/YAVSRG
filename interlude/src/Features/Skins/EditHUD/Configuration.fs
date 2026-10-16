@@ -14,7 +14,6 @@ module private ConfigurationPageHelper =
         | HudElement.SkipButton -> SkipButtonPage()
         | HudElement.Judgement -> JudgementPage()
         | HudElement.EarlyLate -> EarlyLatePage()
-        | HudElement.SDMean -> SDMeanPage()
         | HudElement.ProgressPie -> ProgressPiePage()
         | HudElement.JudgementCounter -> JudgementCounterPage()
         | HudElement.RateMods -> RateModsPage()

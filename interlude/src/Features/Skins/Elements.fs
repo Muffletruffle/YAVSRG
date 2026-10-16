@@ -22,7 +22,6 @@ module HudElement =
         | HudElement.ColumnErrorBars -> %"hud.column_error_bars"
         | HudElement.Combo -> %"hud.combo"
         | HudElement.SkipButton -> %"hud.skip_button"
-        | HudElement.SDMean -> %"hud.sdmean"
         | HudElement.Judgement -> %"hud.judgement"
         | HudElement.EarlyLate -> %"hud.early_late"
         | HudElement.ProgressPie -> %"hud.progress_pie"
@@ -43,7 +42,6 @@ module HudElement =
         | HudElement.ColumnErrorBars -> %"hud.column_error_bars.tooltip"
         | HudElement.Combo -> %"hud.combo.tooltip"
         | HudElement.SkipButton -> %"hud.skip_button.tooltip"
-        | HudElement.SDMean -> %"hud.sdmean.tooltip"
         | HudElement.Judgement -> %"hud.judgement.tooltip"
         | HudElement.EarlyLate -> %"hud.early_late.tooltip"
         | HudElement.ProgressPie -> %"hud.progress_pie.tooltip"
@@ -73,7 +71,6 @@ module HudElement =
         | HudElement.ColumnErrorBars -> cast ColumnErrorBars
         | HudElement.Combo -> cast Combo
         | HudElement.SkipButton -> cast SkipButton
-        | HudElement.SDMean -> cast SDMean
         | HudElement.Judgement -> cast Judgement
         | HudElement.EarlyLate -> cast EarlyLate
         | HudElement.ProgressPie -> cast ProgressPie
@@ -135,15 +132,6 @@ module HudElement =
                         }
                 )
                 (fun () -> Content.HUD.JudgementMeterEnabled)
-        | HudElement.SDMean ->
-            Setting.make
-                (fun v ->
-                    Skins.save_hud_config
-                        { Content.HUD with
-                            SDMeanEnabled = v
-                        }
-                )
-                (fun () -> Content.HUD.SDMeanEnabled)
         | HudElement.EarlyLate ->
             Setting.make
                 (fun v ->
@@ -275,15 +263,6 @@ module HudElement =
                         }
                 )
                 (fun () -> Content.HUD.SkipButtonPosition)
-        | HudElement.SDMean ->
-            Setting.make
-                (fun v ->
-                    Skins.save_hud_config
-                        { Content.HUD with
-                            SDMeanPosition = v
-                        }
-                )
-                (fun () -> Content.HUD.SDMeanPosition)
         | HudElement.Judgement ->
             Setting.make
                 (fun v ->
@@ -402,7 +381,6 @@ module HudElement =
         | HudElement.ColumnErrorBars -> all_defaults.ColumnErrorBarsPosition
         | HudElement.Combo -> all_defaults.ComboPosition
         | HudElement.SkipButton -> all_defaults.SkipButtonPosition
-        | HudElement.SDMean -> all_defaults.SDMeanPosition
         | HudElement.Judgement -> all_defaults.JudgementMeterPosition
         | HudElement.EarlyLate -> all_defaults.EarlyLateMeterPosition
         | HudElement.ProgressPie -> all_defaults.ProgressMeterPosition

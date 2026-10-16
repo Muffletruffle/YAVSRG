@@ -154,7 +154,6 @@ type GameOptions =
         VisualOffset: Setting.Bounded<GameplayTime>
         AudioOffset: Setting.Bounded<GameplayTime>
         AudioVolume: Setting.Bounded<float>
-        AudioPitch: Setting.Bounded<float32>
         AudioPitchRatesDown: Setting<bool>
         AudioPitchRatesUp: Setting<bool>
         CurrentChart: Setting<string>
@@ -201,7 +200,6 @@ type GameOptions =
         EnableConsole: Setting<bool>
         Hotkeys: Dictionary<Hotkey, Bind>
         GameplayBinds: Bind array array
-        DetailedDifficultyGraph: Setting<bool>
 
         Preset1: Setting<Preset option>
         Preset2: Setting<Preset option>
@@ -225,7 +223,6 @@ type GameOptions =
             VisualOffset = 0.0f<ms / rate> |> Setting.bounded  (-500.0f<ms / rate>, 500.0f<ms / rate>) |> Setting.roundf_uom 0
             AudioOffset =  0.0f<ms / rate> |> Setting.bounded (-500.0f<ms / rate>, 500.0f<ms / rate>) |> Setting.roundf_uom 0
             AudioVolume = Setting.bounded (0.0, 1.0) 0.05
-            AudioPitch = 0.0f |> Setting.bounded (-12.0f, 12.0f)
             AudioPitchRatesDown = Setting.simple true
             AudioPitchRatesUp = Setting.simple true
             CurrentChart = Setting.simple ""
@@ -270,7 +267,6 @@ type GameOptions =
 
             EnableExperiments = Setting.simple false
             EnableConsole = Setting.simple false
-            DetailedDifficultyGraph = Setting.simple false
             Hotkeys = Dictionary<Hotkey, Bind>()
             GameplayBinds =
                 [|
@@ -394,6 +390,7 @@ module Options =
                 | :? DirectoryNotFoundException -> [||]
                 |> Seq.where(fun x -> Path.GetExtension(x).ToLower() = ".txt")
                 |> Seq.map(fun x -> Path.GetFileNameWithoutExtension(x))
+
             available_locales <- Set.union (Set.ofSeq EMBEDDED_LOCALES.Keys) (Set.ofSeq locales)
             Logging.Debug "%i available locales" available_locales.Count
 

@@ -13,7 +13,6 @@ type HudElement =
     | ColumnErrorBars
     | Combo
     | SkipButton
-    | SDMean
     | Judgement
     | EarlyLate
     | ProgressPie
@@ -50,7 +49,6 @@ type HudElement =
             JudgementCounter
             Judgement
             EarlyLate
-            SDMean
             RateMods
             BPM
             PerformancePoint
@@ -79,7 +77,6 @@ type HudElement =
             BPM
             PerformancePoint
             Pacemaker
-            SDMean
             InputMeter
             KeysPerSecond
             CustomImage
@@ -200,7 +197,6 @@ type HudConfig =
         TimingDisplayMovingAverageType: ErrorBarMovingAverageType
         TimingDisplayMovingAverageSensitivity: float32
         TimingDisplayMovingAverageColor: Color
-        
 
         ColumnErrorBarsEnabled: bool
         ColumnErrorBarsPosition: HudPosition
@@ -228,11 +224,6 @@ type HudConfig =
 
         SkipButtonPosition: HudPosition
         SkipButtonBackground: BackgroundTextureOptions
-
-        SDMeanEnabled: bool
-        SDMeanPosition: HudPosition
-        SDMeanShowMean: bool
-        SDMeanShowSD: bool
 
         JudgementMeterEnabled: bool
         JudgementMeterPosition: HudPosition
@@ -413,18 +404,6 @@ type HudConfig =
                     AlignmentX = 0.5f
                     AlignmentY = 0.5f
                 }
-
-            SDMeanPosition =
-                {
-                    RelativeToPlayfield = true
-                    Left = -200.0f, 0.5f
-                    Top = 130.0f, 0.5f
-                    Right = 200.0f, 0.5f
-                    Bottom  = 230.0f, 0.5f
-                }
-            SDMeanEnabled = false
-            SDMeanShowMean = true
-            SDMeanShowSD = true
 
             JudgementMeterEnabled = true
             JudgementMeterPosition =

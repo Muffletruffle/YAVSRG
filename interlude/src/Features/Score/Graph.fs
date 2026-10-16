@@ -603,17 +603,11 @@ and ScoreGraph(score_info: ScoreInfo, stats: ScoreScreenStats ref) =
             let s = Mouse.scroll()
             if GraphSettings.show_slice.Value <> (%%"graph_alt_info").Held() then
                 show_slice_info <- true
-                if GraphSettings.show_slice.Value <> (%%"graph_alt_info_faster").Held() then
-                    GraphSettings.slice_size.Value <- GraphSettings.slice_size.Value + s * 0.025f
-                else
-                    GraphSettings.slice_size.Value <- GraphSettings.slice_size.Value + s * 0.005f
+                GraphSettings.slice_size.Value <- GraphSettings.slice_size.Value + s * 0.005f
             else
                 show_slice_info <- false
                 if s <> 0.0f then
-                    if (%%"graph_alt_info_faster").Held() then
-                        GraphSettings.scale.Value <- GraphSettings.scale.Value + 0.50f * s
-                    else
-                        GraphSettings.scale.Value <- GraphSettings.scale.Value + 0.25f * s
+                    GraphSettings.scale.Value <- GraphSettings.scale.Value + 0.25f * s
                     refresh <- true
 
         for k = 0 to score_info.WithMods.Keys - 1 do

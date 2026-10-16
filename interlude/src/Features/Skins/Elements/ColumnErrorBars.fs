@@ -64,7 +64,6 @@ type ColumnErrorBars(ctx: HudContext) =
                 if ev.Time >= last_seen_time - animation_time then
                     match ev.Inner with
                     | Hit e ->
-
                         let log_hit_err= ErrorBar.log_error (float32 e.Delta, h, log_factor, MAX_WINDOW)
                         hits.[ev.Column].Add
                             {
@@ -149,8 +148,6 @@ type ColumnErrorBars(ctx: HudContext) =
                 | None -> ()
 
         let center = this.Bounds.CenterY
-        let h = this.Bounds.Height * 0.5f
-
         let ms_to_y =
             let h = this.Bounds.Height
             fun (time: float32<ms/rate>) ->

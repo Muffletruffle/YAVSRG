@@ -107,7 +107,6 @@ module Song =
     let mutable private enable_pitch_rate_down = true
     let mutable private enable_pitch_rate_up = true
 
-    let mutable private _pitch_offset = 0.0f
     let mutable private _local_offset = 0.0f<ms>
     let mutable private _global_offset = 0.0f<ms / rate>
 
@@ -237,15 +236,6 @@ module Song =
         low_pass_target <- amount
         now_playing.SetLowPass low_pass_amount
 
-    let private apply_pitch () : unit =
-        Bass.ChannelSetAttribute(now_playing.ID, ChannelAttribute.Pitch, _pitch_offset) |> display_bass_error
-
-    let set_pitch_offset (semitones: float32) : unit =
-        _pitch_offset <- semitones
-        apply_pitch ()
-    let adjust_pitch_offset (semitonedelta: float32) : unit =
-        _pitch_offset <- (_pitch_offset + semitonedelta)
-        apply_pitch ()
     let set_local_offset (offset: Time): unit = _local_offset <- offset
     let set_global_offset (offset: float32<ms / rate>) : unit = _global_offset <- offset
 
@@ -263,7 +253,6 @@ module Song =
                 loading <- false
                 now_playing <- song
                 change_rate rate
-                apply_pitch ()
 
                 song.SetLowPass low_pass_amount
 
@@ -286,7 +275,6 @@ module Song =
         load_path <- path
         set_local_offset offset
         change_rate new_rate
-        apply_pitch ()
 
         if path_changed then
 
