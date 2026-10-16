@@ -32,13 +32,6 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
         else
             sprintf "%iK" score_info.WithMods.Keys
 
-    let calc_msd = 
-        let msd_float = MinaCalc.calc_msd_at_rate(score_info.Chart.ToNoteData(), float32 score_info.Rate)
-        if msd_float.IsSome then
-            sprintf "%.2f" msd_float.Value
-        else
-            "--.--"
-
     override this.Init(parent) =
         this
         |+ Text(sprintf "%s  %s" Icons.ZAP mod_string)
@@ -48,21 +41,10 @@ type Sidebar(stats: ScoreScreenStats ref, score_info: ScoreInfo) =
             .Color(Colors.text_subheading)
             .Align(Alignment.CENTER)
             .Position(Position.ShrinkT(90.0f).SliceT(70.0f).ShrinkX(25.0f))
-            
-        |+ Text(sprintf "%s" Icons.STAR)
+        |+ Text(sprintf "%s %.2f" Icons.STAR score_info.Rating.Overall)
             .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
             .Align(Alignment.LEFT)
             .Position(Position.ShrinkT(530.0f).SliceT(70.0f).ShrinkX(25.0f))
-        |+ Text(sprintf "%.2f" score_info.Rating.Overall)
-            .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
-            .Align(Alignment.LEFT)
-            .Position(Position.ShrinkT(516.0f).SliceT(60.0f).TranslateX(90.0f))
-        |+ Text(sprintf "%s" calc_msd)
-            .Color(Colors.white, Difficulty.color score_info.Rating.Overall)
-            .Align(Alignment.LEFT)
-            .Position(Position.ShrinkT(560.0f).SliceT(46.0f).TranslateX(90.0f))
-
-            
         |+ Text(fun () -> sprintf "%ix" score_info.Scoring.BestCombo)
             .Align(Alignment.CENTER)
             .Position(Position.ShrinkT(530.0f).SliceT(70.0f).ShrinkX(25.0f))

@@ -190,7 +190,6 @@ module SelectedChart =
                         let with_colors = NoteColors.apply Content.NoteskinConfig.NoteColors with_mods
 
                         let rating = Difficulty.calculate(rate, with_mods.ToNoteData())
-                        // let msd = MinaCalc.msd_at_rate((float32) rate, MinaCalc.calculate_all_rates (with_mods.ToNoteData()))
                         let patterns = PatternReport.from_chart(rating, with_mods.AsChart)
 
                         let note_counts = format_notecounts with_mods
@@ -224,7 +223,6 @@ module SelectedChart =
                         let with_colors = NoteColors.apply Content.NoteskinConfig.NoteColors with_mods
 
                         let rating = Difficulty.calculate(rate, with_mods.ToNoteData())
-                        // let msd = MinaCalc.msd_at_rate((float32) rate, MinaCalc.calculate_all_rates (with_mods.ToNoteData()))
 
                         let note_counts = format_notecounts with_mods
                         let patterns = PatternReport.from_chart(rating, with_mods.AsChart)

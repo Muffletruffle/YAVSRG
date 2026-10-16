@@ -9,7 +9,6 @@ open Prelude.Skins.HudLayouts
 open Interlude.Content
 open Interlude.Features.Play
 open Interlude.Features.Gameplay
-open Prelude.Calculator.Performance
 
 type SDMean(ctx: HudContext) = 
     inherit StaticWidget(NodeType.None)
@@ -21,19 +20,12 @@ type SDMean(ctx: HudContext) =
     let mutable note_count = 0
 
     let calc_mean_sd() =
+        // formula: sqrt((cumul_square_sum / n) - mean^2)
         mean <- cumul_sum / (float32) note_count
         sd <- sqrt((cumul_square_sum / (max 1.0f (float32 note_count))) - (mean * mean))
-    
-    let clear_notes() =
-        cumul_sum <- 0.0f
-        cumul_square_sum <- 0.0f
-        mean <- 0.0f
-        sd <- 0.0f
-        note_count <- 0
+
 
     override this.Init(parent: Widget) =
-        ctx.State.OnScoringChanged(fun () -> clear_notes()) |> ignore // clear when seeked
-
         ctx.State.Subscribe(fun ev ->
             let x =
                 match ev.Inner with
@@ -57,32 +49,32 @@ type SDMean(ctx: HudContext) =
         let sd_bounds = this.Bounds.SlicePercentT 0.5f
         let mean_bounds = this.Bounds.SlicePercentB 0.5f
 
-        Text.fill_b(
+        Text.fill(
             Style.font,
             "SD:", 
             sd_bounds,
-            Colors.text,
+            Color.White,
             Alignment.LEFT
         )
         Text.fill(
             Style.font,
             sprintf "%.2fms" sd,
             sd_bounds,
-            Color.FromHsv(Math.Clamp((100.0f - 1.7f * MathF.Pow(MathF.Abs(sd), 1.16f)) / 255.0f, 0.0f, 1.0f), 1.0f, 1.0f),
+            Color.White,
             Alignment.RIGHT
         )
 
-        Text.fill_b(
+        Text.fill(
             Style.font,
-            "M:", 
+            "Mean:", 
             mean_bounds,
-            Colors.text,
+            Color.White,
             Alignment.LEFT
         )
         Text.fill(
             Style.font,
-            sprintf "%.2fms" mean,
+            sprintf "%.2fms" mean, 
             mean_bounds,
-            Color.FromHsv(Math.Clamp((100.0f - 16.5f * MathF.Pow(MathF.Abs(mean), 0.88f)) / 255.0f, 0.0f, 1.0f), 1.0f, 1.0f),
+            Color.White,
             Alignment.RIGHT
         )

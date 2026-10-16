@@ -12,7 +12,10 @@ type ErrorBarPage() =
 
     let config = Content.HUD
 
+    let show_guide = Setting.simple config.TimingDisplayShowGuide
+    let guide_thickness = Setting.percentf config.TimingDisplayGuideThickness
     let show_non_judgements = Setting.simple config.TimingDisplayShowNonJudgements
+
     let thickness =
         config.TimingDisplayThickness |> Setting.bounded (1.0f, 25.0f)
 
@@ -21,8 +24,6 @@ type ErrorBarPage() =
         |> Setting.bounded (-20.0f, 20.0f)
 
     let windows_opacity = config.TimingDisplayWindowsOpacity |> Setting.bounded (0.0f, 0.6f)
-
-    let window_scale = Setting.percentf config.TimingDisplayWindowScale
 
     let half_scale_releases = Setting.simple config.TimingDisplayHalfScaleReleases
 
@@ -40,11 +41,12 @@ type ErrorBarPage() =
     member this.SaveChanges() =
         Skins.save_hud_config
             { Content.HUD with
+                TimingDisplayShowGuide = show_guide.Value
                 TimingDisplayShowNonJudgements = show_non_judgements.Value
                 TimingDisplayThickness = thickness.Value
+                TimingDisplayGuideThickness = guide_thickness.Value
                 TimingDisplayReleasesExtraHeight = release_thickness.Value
                 TimingDisplayWindowsOpacity = windows_opacity.Value
-                TimingDisplayWindowScale = window_scale.Value
                 TimingDisplayHalfScaleReleases = half_scale_releases.Value
                 TimingDisplayFadeTime = animation_time.Value
                 TimingDisplayMovingAverageType = moving_average_type.Value
@@ -67,20 +69,21 @@ type ErrorBarPage() =
                 PageSetting(%"hud.error_bar.thickness", Slider(thickness, Step = 1f))
                     .Help(Help.Info("hud.error_bar.thickness"))
                     .Pos(4),
-                PageButton(%"hud.error_bar.guide_settings", fun () -> ErrorBarGuidePage().Show())
-                    .Help(Help.Info("hud.error_bar.guide_settings"))
+                PageSetting(%"hud.error_bar.showguide", Checkbox show_guide)
+                    .Help(Help.Info("hud.error_bar.showguide"))
                     .Pos(6),
+                PageSetting(%"hud.error_bar.guide_thickness", Slider.Percent(guide_thickness))
+                    .Help(Help.Info("hud.error_bar.guide_thickness"))
+                    .Pos(8)
+                    .Conditional(show_guide.Get),
                 PageSetting(%"hud.error_bar.releasesextraheight", Slider(release_thickness, Step = 1f))
                     .Help(Help.Info("hud.error_bar.releasesextraheight"))
-                    .Pos(8),
+                    .Pos(10),
                 PageSetting(%"hud.error_bar.animationtime", Slider(Setting.uom animation_time, Step = 5f))
                     .Help(Help.Info("hud.error_bar.animationtime"))
-                    .Pos(10),
+                    .Pos(12),
                 PageSetting(%"hud.error_bar.timingwindowsopacity", Slider.Percent(windows_opacity))
                     .Help(Help.Info("hud.error_bar.timingwindowsopacity"))
-                    .Pos(12),
-                PageSetting(%"hud.error_bar.windowscale", Slider.Percent(window_scale))
-                    .Help(Help.Info("hud.error_bar.windowscale"))
                     .Pos(14),
                 PageSetting(%"hud.error_bar.logsensitivity", Slider.Percent(log_scale_sensitivity, Step = 0.01f))
                     .Help(Help.Info("hud.error_bar.logsensitivity"))
@@ -97,7 +100,8 @@ type ErrorBarPage() =
                 )
                     .Help(Help.Info("hud.error_bar.moving_average_type"))
                     .Pos(18)
-            ).WithConditional(
+            )
+            .WithConditional(
                 (fun () -> moving_average_type.Value <> ErrorBarMovingAverageType.None),
 
                 PageSetting(%"hud.error_bar.moving_average_sensitivity", Slider.Percent(moving_average_sensitivity, Step = 0.05f))
