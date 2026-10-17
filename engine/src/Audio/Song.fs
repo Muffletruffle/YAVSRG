@@ -89,6 +89,9 @@ type Song =
         let set_frequency_multiplier (rate: float32<rate>) =
             let scaled_frequency = float32 this.Frequency * float32 rate
             Bass.ChannelSetAttribute(this.ID, ChannelAttribute.Frequency, scaled_frequency).LogBassError()
+    let mutable private _pitch_offset = 0.0f
+    let mutable private _local_offset = 0.0f<ms>
+    let mutable private _global_offset = 0.0f<ms / rate>
 
         let set_tempo (rate: float32<rate>) =
             let tempo_adjustment = (rate - 1.0f<rate>) * 100.0f< / rate>
@@ -177,3 +180,151 @@ type Song =
             Bass.ChannelSetSync(this.ID, SyncFlags.Slided ||| SyncFlags.Onetime, 0, callback).LogBassError()
             Bass.ChannelSetSync(this.ID, SyncFlags.End ||| SyncFlags.Onetime, 0, callback).LogBassError()
             Bass.ChannelSlideAttribute(this.ID, ChannelAttribute.Volume, 0.0f, duration_ms).LogBassError()
+        timer.Start()
+        paused <- false
+
+    let change_rate (new_rate: float32<rate>) : unit =
+        let rate_changed = rate <> new_rate
+        let time = time ()
+        rate <- new_rate
+
+        let pitch_enabled_for_direction =
+            if rate = 1.0f<rate> then true
+            elif rate > 1.0f<rate> then enable_pitch_rate_up
+            else enable_pitch_rate_down
+
+        if pitch_enabled_for_direction then
+            Bass.ChannelSetAttribute(now_playing.ID, ChannelAttribute.Tempo, 0.0f) |> display_bass_error
+            Bass.ChannelSetAttribute(now_playing.ID, ChannelAttribute.Frequency, float32 now_playing.Frequency * float32 rate) |> display_bass_error
+        else
+            Bass.ChannelSetAttribute(now_playing.ID, ChannelAttribute.Tempo, (rate - 1.0f<rate>) * 100.0f</rate>) |> display_bass_error
+            Bass.ChannelSetAttribute(now_playing.ID, ChannelAttribute.Frequency, float32 now_playing.Frequency) |> display_bass_error
+
+        if rate_changed then
+            seek time
+
+    let playback_rate () : float32<rate> = rate
+
+    let set_pitch_rate_down_enabled (enabled: bool) : unit =
+        enable_pitch_rate_down <- enabled
+        change_rate rate
+
+    let set_pitch_rate_up_enabled (enabled: bool) : unit =
+        enable_pitch_rate_up <- enabled
+        change_rate rate
+
+    let set_low_pass (amount: float32) : unit =
+        low_pass_target <- amount
+        now_playing.SetLowPass low_pass_amount
+
+    let private apply_pitch () : unit =
+        Bass.ChannelSetAttribute(now_playing.ID, ChannelAttribute.Pitch, _pitch_offset) |> display_bass_error
+
+    let set_pitch_offset (semitones: float32) : unit =
+        _pitch_offset <- semitones
+        apply_pitch ()
+    let adjust_pitch_offset (semitonedelta: float32) : unit =
+        _pitch_offset <- (_pitch_offset + semitonedelta)
+        apply_pitch ()
+    let set_local_offset (offset: Time): unit = _local_offset <- offset
+    let set_global_offset (offset: float32<ms / rate>) : unit = _global_offset <- offset
+
+    let private song_loader =
+        { new Async.CancelQueue<Time * Time * string option * SongLoadAction, Song * SongLoadAction>() with
+            override this.Process((preview, last_note, path, after_load)) =
+                async {
+                    return
+                        match path with
+                        | Some p -> Song.FromFile (preview, last_note, p), after_load
+                        | None -> Song.Default, after_load
+                }
+
+            override this.Handle((song, after_load: SongLoadAction)) =
+                loading <- false
+                now_playing <- song
+                change_rate rate
+                apply_pitch ()
+
+                song.SetLowPass low_pass_amount
+
+                match after_load with
+                | SongLoadAction.PlayFromPreview ->
+                    (if paused then seek else play_from) song.PreviewPoint
+                    Bass.ChannelSetAttribute(song.ID, ChannelAttribute.Volume, 0.0f) |> display_bass_error
+                    Bass.ChannelSlideAttribute(song.ID, ChannelAttribute.Volume, 1.0f, CROSSFADE_DURATION_MS) |> display_bass_error
+                | SongLoadAction.PlayFromBeginning ->
+                    (if paused then seek else play_from) 0.0f<ms>
+                | SongLoadAction.Wait ->
+                    play_from (LEADIN_TIME * rate)
+                    pause()
+
+                on_loaded_ev.Trigger()
+        }
+
+    let change (path: string option, offset: Time, new_rate: float32<rate>, (preview: Time, chart_last_note: Time), after_load: SongLoadAction) : unit =
+        let path_changed = path <> load_path
+        load_path <- path
+        set_local_offset offset
+        change_rate new_rate
+        apply_pitch ()
+
+        if path_changed then
+
+            let current = now_playing
+            let slide_completed _ _ _ _ = current.Free()
+
+            if current.ID <> 0 then
+                Bass.ChannelSetSync(current.ID, SyncFlags.Slided ||| SyncFlags.Onetime, 0, SyncProcedure(slide_completed)) |> display_bass_error
+                Bass.ChannelSetSync(current.ID, SyncFlags.End ||| SyncFlags.Onetime, 0, SyncProcedure(slide_completed)) |> display_bass_error
+                Bass.ChannelSlideAttribute(current.ID, ChannelAttribute.Volume, 0.0f, CROSSFADE_DURATION_MS) |> display_bass_error
+
+            channel_playing <- false
+            loading <- true
+            song_loader.Request(preview, chart_last_note, path, after_load)
+
+    let update (elapsed_ms: float) : unit =
+        let time_last_update = _time
+        update_time()
+
+        if low_pass_target <> low_pass_amount then
+            low_pass_amount <- lerp (float32 <| Math.Pow(0.994, elapsed_ms)) low_pass_target low_pass_amount
+            if abs (low_pass_amount - low_pass_target) < 0.01f then low_pass_amount <- low_pass_target
+            now_playing.SetLowPass low_pass_amount
+
+        song_loader.Join()
+
+        if playing () && _time >= 0.0f<ms> && _time < now_playing.Duration && not channel_playing then
+
+            channel_playing <- true
+
+            Bass.ChannelSetPosition(now_playing.ID, Bass.ChannelSeconds2Bytes(now_playing.ID, float <| _time / 1000.0f<ms>))
+            |> display_bass_error
+
+            Bass.ChannelPlay now_playing.ID |> display_bass_error
+
+        elif _time > now_playing.Duration then
+
+            match on_finish with
+            | SongFinishAction.LoopFromPreview ->
+                if _time >= now_playing.LastNote then
+                    play_from now_playing.PreviewPoint
+            | SongFinishAction.LoopFromBeginning ->
+                if _time >= now_playing.LastNote then
+                    play_from 0.0f<ms>
+            | SongFinishAction.Wait -> ()
+            | SongFinishAction.Custom action ->
+                if channel_playing then
+                    action ()
+
+            channel_playing <- false
+
+        elif channel_playing && playing () && timer.ElapsedMilliseconds > 80L && timer.ElapsedMilliseconds < 2000L then
+            let audio_position = Bass.ChannelBytes2Seconds(now_playing.ID, Bass.ChannelGetPosition(now_playing.ID, PositionFlags.Bytes)) |> float32
+
+            let clock_elapsed = _time - time_last_update
+
+            let off_by = time_compensated () - audio_position * 1000.0f<ms>
+            let adjustment = abs off_by |> min (clock_elapsed * 0.8f)
+
+            if adjustment > 0.5f<ms> && abs off_by < 200.0f<ms> then
+                seek_inaccuracy_compensation <- seek_inaccuracy_compensation + if off_by > 0.0f<ms> then adjustment else -adjustment

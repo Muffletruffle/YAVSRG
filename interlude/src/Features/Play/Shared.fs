@@ -26,12 +26,14 @@ type HudContextExtensions =
         | HudElement.ColumnErrorBars -> ctx.Config.ColumnErrorBarsEnabled
         | HudElement.Combo -> ctx.Config.ComboEnabled
         | HudElement.SkipButton -> true
+        | HudElement.SDMean -> ctx.Config.SDMeanEnabled
         | HudElement.Judgement -> ctx.Config.JudgementMeterEnabled
         | HudElement.EarlyLate -> ctx.Config.EarlyLateMeterEnabled
         | HudElement.ProgressPie -> ctx.Config.ProgressMeterEnabled
         | HudElement.JudgementCounter -> ctx.Config.JudgementCounterEnabled
         | HudElement.RateMods -> ctx.Config.RateModMeterEnabled
         | HudElement.BPM -> ctx.Config.BPMMeterEnabled
+        | HudElement.PerformancePoint -> ctx.Config.PerformancePointEnabled
         | HudElement.InputMeter -> ctx.Config.InputMeterEnabled
         | HudElement.Pacemaker -> not ctx.State.Pacemaker.IsNone
         | HudElement.KeysPerSecond -> ctx.Config.KeysPerSecondMeterEnabled
@@ -46,12 +48,14 @@ type HudContextExtensions =
         | HudElement.ColumnErrorBars -> ctx.Config.ColumnErrorBarsPosition
         | HudElement.Combo -> ctx.Config.ComboPosition
         | HudElement.SkipButton -> ctx.Config.SkipButtonPosition
+        | HudElement.SDMean -> ctx.Config.SDMeanPosition
         | HudElement.Judgement -> ctx.Config.JudgementMeterPosition
         | HudElement.EarlyLate -> ctx.Config.EarlyLateMeterPosition
         | HudElement.ProgressPie -> ctx.Config.ProgressMeterPosition
         | HudElement.JudgementCounter -> ctx.Config.JudgementCounterPosition
         | HudElement.RateMods -> ctx.Config.RateModMeterPosition
         | HudElement.BPM -> ctx.Config.BPMMeterPosition
+        | HudElement.PerformancePoint -> ctx.Config.PerformancePointPosition
         | HudElement.InputMeter -> ctx.Config.InputMeterPosition
         | HudElement.Pacemaker -> ctx.Config.PacemakerPosition
         | HudElement.KeysPerSecond -> ctx.Config.KeysPerSecondMeterPosition
@@ -75,12 +79,14 @@ type HudContextExtensions =
             | _ -> cast ColumnErrorBars
         | HudElement.Combo -> cast Combo
         | HudElement.SkipButton -> cast SkipButton
+        | HudElement.SDMean -> cast SDMean
         | HudElement.Judgement -> cast Judgement
         | HudElement.EarlyLate -> cast EarlyLate
         | HudElement.ProgressPie -> cast ProgressPie
         | HudElement.JudgementCounter -> cast JudgementCounter
         | HudElement.RateMods -> cast RateMods
         | HudElement.BPM -> cast BPM
+        | HudElement.PerformancePoint -> cast PerformancePoint
         | HudElement.InputMeter -> cast InputMeter
         | HudElement.Pacemaker -> cast Pacemaker
         | HudElement.KeysPerSecond -> cast KeysPerSecond
