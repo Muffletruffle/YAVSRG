@@ -188,6 +188,7 @@ type HudConfig =
         TimingDisplayShowNonJudgements: bool
         TimingDisplayReleasesExtraHeight: float32
         TimingDisplayWindowsOpacity: float32
+        TimingDisplayWindowScale: float32
         TimingDisplayHalfScaleReleases: bool
         TimingDisplayLogSensitivity: float32
         TimingDisplayMovingAverageType: ErrorBarMovingAverageType
@@ -208,6 +209,7 @@ type HudConfig =
         ColumnErrorBarsReleasesYScale: float32
         ColumnErrorBarsReleasesXScale: float32
         ColumnErrorBarsWindowsOpacity: float32
+        ColumnErrorBarsWindowScale: float32
         ColumnErrorBarsLogSensitivity: float32
         ColumnErrorBarsMovingAverage: bool
         ColumnErrorBarsMovingAverageSensitivity: float32
@@ -352,6 +354,7 @@ type HudConfig =
             TimingDisplayShowNonJudgements = true
             TimingDisplayReleasesExtraHeight = 5.0f
             TimingDisplayWindowsOpacity = 0.0f
+            TimingDisplayWindowScale = 1.0f
             TimingDisplayHalfScaleReleases = true
             TimingDisplayMovingAverageType = ErrorBarMovingAverageType.None
             TimingDisplayMovingAverageSensitivity = 0.5f
@@ -378,6 +381,7 @@ type HudConfig =
             ColumnErrorBarsReleasesYScale = 0.5f
             ColumnErrorBarsReleasesXScale = 1.25f
             ColumnErrorBarsWindowsOpacity = 0.0f
+            ColumnErrorBarsWindowScale = 1.0f
             ColumnErrorBarsLogSensitivity = 0.0f
             ColumnErrorBarsMovingAverage = false
             ColumnErrorBarsMovingAverageSensitivity = 0.5f

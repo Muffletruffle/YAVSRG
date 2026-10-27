@@ -14,7 +14,7 @@ type ErrorBarWindowPage() =
 
     let windows_opacity =
         config.TimingDisplayWindowsOpacity |> Setting.bounded(0.0f, 0.6f)
-
+    let window_scale = Setting.percentf config.ColumnErrorBarsWindowScale
     let log_scale_sensitivity =
         config.TimingDisplayLogSensitivity |> Setting.bounded(0.0f, 1.0f)
 
@@ -22,6 +22,7 @@ type ErrorBarWindowPage() =
         Skins.save_hud_config
             { Content.HUD with
                 TimingDisplayWindowsOpacity = windows_opacity.Value
+                TimingDisplayWindowScale = window_scale.Value
                 TimingDisplayLogSensitivity = log_scale_sensitivity.Value
             }
 
@@ -33,9 +34,12 @@ type ErrorBarWindowPage() =
                 PageSetting(%"hud.error_bar.timingwindowsopacity", Slider.Percent(windows_opacity))
                     .Help(Help.Info("hud.error_bar.timingwindowsopacity"))
                     .Pos(0),
+                PageSetting(%"hud.error_bar.windowscale", Slider.Percent(window_scale))
+                    .Help(Help.Info("hud.error_bar.windowscale"))
+                    .Pos(2),
                 PageSetting(%"hud.error_bar.logsensitivity", Slider.Percent(log_scale_sensitivity, Step = 0.01f))
                     .Help(Help.Info("hud.error_bar.logsensitivity"))
-                    .Pos(2)
+                    .Pos(4)
             )
 
 
