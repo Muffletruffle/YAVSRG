@@ -85,6 +85,7 @@ module Hotkeys =
         Hotkeys.register "random_chart" (mk Keys.R)
         Hotkeys.register "previous_random_chart" (shift Keys.R)
         Hotkeys.register "autoplay" (ctrl Keys.A)
+        Hotkeys.register "mirror" (ctrl Keys.M)
         Hotkeys.register "reload_content" (Bind.Key(Keys.S, (true, true, true)))
         Hotkeys.register "graph_alt_info" (mk Keys.LeftShift)
         Hotkeys.register "graph_alt_info_faster" (mk Keys.LeftControl)
