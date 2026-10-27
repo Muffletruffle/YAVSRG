@@ -24,9 +24,6 @@ type ErrorBarPage() =
     let animation_time =
         config.TimingDisplayFadeTime |> Setting.bounded(100.0f<ms / rate>, 2000.0f<ms / rate>)
 
-    let log_scale_sensitivity =
-        config.TimingDisplayLogSensitivity |> Setting.bounded(0.0f, 4.0f)
-
     let moving_average_type = Setting.simple config.TimingDisplayMovingAverageType
 
     let moving_average_sensitivity =
@@ -46,7 +43,6 @@ type ErrorBarPage() =
                 TimingDisplayMovingAverageType = moving_average_type.Value
                 TimingDisplayMovingAverageSensitivity = moving_average_sensitivity.Value
                 TimingDisplayMovingAverageColor = moving_average_color.Value
-                TimingDisplayLogSensitivity = log_scale_sensitivity.Value
             }
 
     override this.Content() : Widget =

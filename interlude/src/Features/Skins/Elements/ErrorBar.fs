@@ -52,7 +52,7 @@ type ErrorBar(ctx: HudContext) =
         if delta = 0.0f then
             0.0f
         elif log_factor = 0.0f then
-            delta / float32 max_window * width * 0.5f
+            Math.Clamp(delta / float32 max_window, -1.0f, 1.0f) * width * 0.5f
         else
             let sign = if delta < 0.0f then -1.0f else 1.0f
             let abs_delta = MathF.Abs(delta)

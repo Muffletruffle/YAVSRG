@@ -14,7 +14,7 @@ type ColumnErrorBarsWindowPage() =
 
     let windows_opacity =
         config.ColumnErrorBarsWindowsOpacity |> Setting.bounded(0.0f, 0.6f)
-    let window_scale = config.ColumnErrorBarsWindowScale |> Setting.bounded (0.1f, 1.0f)
+    let window_scale = config.ColumnErrorBarsWindowScale |> Setting.bounded (0.2f, 1.0f)
     let log_scale_sensitivity =
         config.ColumnErrorBarsLogSensitivity |> Setting.bounded(0.0f, 1.0f)
 

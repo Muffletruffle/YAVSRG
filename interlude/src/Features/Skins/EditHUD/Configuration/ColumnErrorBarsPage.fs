@@ -26,9 +26,6 @@ type ColumnErrorBarsPage() =
     let animation_time =
         config.ColumnErrorBarsFadeTime |> Setting.bounded(100.0f<ms / rate>, 2000.0f<ms / rate>)
 
-    let log_scale_sensitivity =
-        config.ColumnErrorBarsLogSensitivity |> Setting.bounded(0.0f, 4.0f)
-
     let enable_moving_average = Setting.simple config.ColumnErrorBarsMovingAverage
 
     let moving_average_sensitivity =
@@ -45,7 +42,6 @@ type ColumnErrorBarsPage() =
                 ColumnErrorBarsReleasesXScale = release_x_scale.Value
                 ColumnErrorBarsReleasesYScale = release_y_scale.Value
                 ColumnErrorBarsFadeTime = animation_time.Value
-                ColumnErrorBarsLogSensitivity = log_scale_sensitivity.Value
                 ColumnErrorBarsMovingAverage = enable_moving_average.Value
                 ColumnErrorBarsMovingAverageSensitivity = moving_average_sensitivity.Value
                 ColumnErrorBarsMovingAverageColor = moving_average_color.Value
