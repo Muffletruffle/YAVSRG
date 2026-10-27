@@ -24,6 +24,13 @@ type SDMean(ctx: HudContext) =
         mean <- cumul_sum / (float32) note_count
         sd <- sqrt((cumul_square_sum / (max 1.0f (float32 note_count))) - (mean * mean))
 
+    let sd_col(sd: float32) : Color * Color = 
+        Color.FromHsv(Math.Clamp((100.0f - 1.7f * MathF.Pow(MathF.Abs(sd), 1.16f)) / 255.0f, 0.0f, 1.0f), 1.0f, 1.0f),
+        Colors.shadow_1
+    
+    let mean_col(mean: float32) : Color * Color =
+        Color.FromHsv(Math.Clamp((100.0f - 16.5f * MathF.Pow(MathF.Abs(mean), 0.88f)) / 255.0f, 0.0f, 1.0f), 1.0f, 1.0f),
+        Colors.shadow_1
 
     override this.Init(parent: Widget) =
         ctx.State.Subscribe(fun ev ->
@@ -49,32 +56,32 @@ type SDMean(ctx: HudContext) =
         let sd_bounds = this.Bounds.SlicePercentT 0.5f
         let mean_bounds = this.Bounds.SlicePercentB 0.5f
 
-        Text.fill(
+        Text.fill_b(
             Style.font,
             "SD:", 
             sd_bounds,
-            Color.White,
+            Colors.text,
             Alignment.LEFT
         )
-        Text.fill(
+        Text.fill_b(
             Style.font,
             sprintf "%.2fms" sd,
             sd_bounds,
-            Color.White,
+            sd_col(sd),
             Alignment.RIGHT
         )
 
-        Text.fill(
+        Text.fill_b(
             Style.font,
             "Mean:", 
             mean_bounds,
-            Color.White,
+            Colors.text,
             Alignment.LEFT
         )
-        Text.fill(
+        Text.fill_b(
             Style.font,
             sprintf "%.2fms" mean, 
             mean_bounds,
-            Color.White,
+            mean_col(mean),
             Alignment.RIGHT
         )
