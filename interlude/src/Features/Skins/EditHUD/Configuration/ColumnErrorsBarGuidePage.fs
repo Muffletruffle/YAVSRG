@@ -34,15 +34,15 @@ type ColumnErrorBarsGuidePage() =
                 PageSetting(%"hud.column_error_bars.show_guide", Checkbox(show_guide))
                     .Help(Help.Info("hud.column_error_bars.show_guide"))
                     .Pos(0),
-                PageSetting(%"hud.column_error_bars.guideontop", Checkbox guide_on_top)
-                    .Help(Help.Info("hud.error_bar.guideontop"))
+                PageSetting(%"hud.column_error_bars.guide_on_top", Checkbox(guide_on_top))
+                    .Help(Help.Info("hud.column_error_bars.guide_on_top"))
                     .Pos(2)
                     .Conditional(show_guide.Get),
                 PageSetting(%"hud.column_error_bars.guide_thickness", Slider.Percent(guide_thickness))
                     .Help(Help.Info("hud.column_error_bars.guide_thickness"))
                     .Pos(4)
                     .Conditional(show_guide.Get),
-                PageSetting(%"hud.column_error_bars.guide_color", ColorPicker(%"hud.column_error_bars_guide_color.guide_color", guide_color, true))
+                PageSetting(%"hud.column_error_bars.guide_color", ColorPicker(%"hud.column_error_bars.guide_color", guide_color, true))
                     .Help(Help.Info("hud.column_error_bars.guide_color"))
                     .Pos(6)
                     .Conditional(show_guide.Get)

@@ -34,8 +34,8 @@ type ErrorBarGuidePage() =
                 PageSetting(%"hud.error_bar.showguide", Checkbox show_guide)
                     .Help(Help.Info("hud.error_bar.showguide"))
                     .Pos(0),
-                PageSetting(%"hud.error_bar.guideontop", Checkbox guide_on_top)
-                    .Help(Help.Info("hud.error_bar.guideontop"))
+                PageSetting(%"hud.error_bar.guide_on_top", Checkbox guide_on_top)
+                    .Help(Help.Info("hud.error_bar.guide_on_top"))
                     .Pos(2)
                     .Conditional(show_guide.Get),
                 PageSetting(%"hud.error_bar.guide_thickness", Slider.Percent(guide_thickness))
