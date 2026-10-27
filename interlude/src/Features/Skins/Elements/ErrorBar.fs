@@ -194,12 +194,10 @@ type ErrorBar(ctx: HudContext) =
             let center = this.Bounds.CenterX
             Rect.FromEdges(center + p1, this.Bounds.Top, center + p2, this.Bounds.Bottom)
 
-        if ctx.Config.TimingDisplayShowGuide then
+        if ctx.Config.TimingDisplayShowGuide && not ctx.Config.TimingDisplayGuideOnTop then
             Render.rect
-                (bar
-                    (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness)
-                    (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
-                Color.White
+                (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
+                ctx.Config.TimingDisplayGuideColor
 
         let now = ctx.State.CurrentChartTime()
 
@@ -249,9 +247,7 @@ type ErrorBar(ctx: HudContext) =
                     (if hit.IsRelease then rect.ExpandY(ctx.Config.TimingDisplayReleasesExtraHeight) else rect)
                     color
 
-        if ctx.Config.TimingDisplayShowGuide then
+        if ctx.Config.TimingDisplayShowGuide && ctx.Config.TimingDisplayGuideOnTop then
             Render.rect
-                (bar
-                    (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness)
-                    (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
-                Color.White
+                (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
+                ctx.Config.TimingDisplayGuideColor

@@ -13,13 +13,17 @@ type ColumnErrorBarsGuidePage() =
     let config = Content.HUD
 
     let show_guide = Setting.simple config.ColumnErrorBarsShowGuide
+    let guide_on_top = Setting.simple config.ColumnErrorBarsGuideOnTop
     let guide_thickness = Setting.percentf config.ColumnErrorBarsGuideThickness
+    let guide_color = Setting.simple config.ColumnErrorBarsGuideColor
 
     member this.SaveChanges() : unit =
         Skins.save_hud_config
             { Content.HUD with
                 ColumnErrorBarsShowGuide = show_guide.Value
+                ColumnErrorBarsGuideOnTop = guide_on_top.Value
                 ColumnErrorBarsGuideThickness = guide_thickness.Value
+                ColumnErrorBarsGuideColor = guide_color.Value
             }
 
     override this.Content() : Widget =
@@ -30,9 +34,17 @@ type ColumnErrorBarsGuidePage() =
                 PageSetting(%"hud.column_error_bars.show_guide", Checkbox(show_guide))
                     .Help(Help.Info("hud.column_error_bars.show_guide"))
                     .Pos(0),
+                PageSetting(%"hud.column_error_bars.guideontop", Checkbox guide_on_top)
+                    .Help(Help.Info("hud.error_bar.guideontop"))
+                    .Pos(2)
+                    .Conditional(show_guide.Get),
                 PageSetting(%"hud.column_error_bars.guide_thickness", Slider.Percent(guide_thickness))
                     .Help(Help.Info("hud.column_error_bars.guide_thickness"))
-                    .Pos(2)
+                    .Pos(4)
+                    .Conditional(show_guide.Get),
+                PageSetting(%"hud.column_error_bars.guide_color", ColorPicker(%"hud.column_error_bars_guide_color.guide_color", guide_color, true))
+                    .Help(Help.Info("hud.column_error_bars.guide_color"))
+                    .Pos(6)
                     .Conditional(show_guide.Get)
             )
 

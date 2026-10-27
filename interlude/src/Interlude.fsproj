@@ -227,7 +227,7 @@
     <Compile Include="Features\Skins\EditHUD\Configuration\ComboPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ProgressPiePage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\SkipButtonPage.fs" />
-    <Compile Include="Features\Skins\EditHUD\Configuration\SDMean.fs" />
+    <Compile Include="Features\Skins\EditHUD\Configuration\SDMeanPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\PacemakerPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\JudgementCounterPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\RateModsPage.fs" />

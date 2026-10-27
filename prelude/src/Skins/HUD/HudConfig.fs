@@ -182,6 +182,8 @@ type HudConfig =
         TimingDisplayFadeTime: float32<ms / rate>
         TimingDisplayThickness: float32
         TimingDisplayShowGuide: bool
+        TimingDisplayGuideColor: Color
+        TimingDisplayGuideOnTop: bool
         TimingDisplayGuideThickness: float32
         TimingDisplayShowNonJudgements: bool
         TimingDisplayReleasesExtraHeight: float32
@@ -199,6 +201,8 @@ type HudConfig =
         ColumnErrorBarsFadeTime: float32<ms / rate>
         ColumnErrorBarsThickness: float32
         ColumnErrorBarsShowGuide: bool
+        ColumnErrorBarsGuideColor: Color
+        ColumnErrorBarsGuideOnTop: bool
         ColumnErrorBarsGuideThickness: float32
         ColumnErrorBarsShowNonJudgements: bool
         ColumnErrorBarsReleasesYScale: float32
@@ -342,6 +346,8 @@ type HudConfig =
             TimingDisplayFadeTime = 1000.0f<ms / rate>
             TimingDisplayThickness = 5.0f
             TimingDisplayShowGuide = true
+            TimingDisplayGuideColor = Color.White
+            TimingDisplayGuideOnTop = false
             TimingDisplayGuideThickness = 1.0f
             TimingDisplayShowNonJudgements = true
             TimingDisplayReleasesExtraHeight = 5.0f
@@ -365,6 +371,8 @@ type HudConfig =
             ColumnErrorBarsThickness = 5.0f
             ColumnErrorBarsWidth = 25.0f
             ColumnErrorBarsShowGuide = true
+            ColumnErrorBarsGuideColor = Color.White
+            ColumnErrorBarsGuideOnTop = false
             ColumnErrorBarsGuideThickness = 1.0f
             ColumnErrorBarsShowNonJudgements = false
             ColumnErrorBarsReleasesYScale = 0.5f

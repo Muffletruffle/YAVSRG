@@ -186,14 +186,11 @@ type ColumnErrorBars(ctx: HudContext) =
                 .FromEdges(left_edge, center + p1, left_edge + ctx.Playfield.ColumnWidth, center + p2)
                 .SliceX(ctx.Config.ColumnErrorBarsWidth)
 
-        if ctx.Config.ColumnErrorBarsShowGuide then
+        if ctx.Config.ColumnErrorBarsShowGuide && not ctx.Config.ColumnErrorBarsGuideOnTop then
             for k = 0 to ctx.State.WithColors.Keys - 1 do
-                Render.rect
-                    (bar
-                        k
-                        (-ctx.Config.ColumnErrorBarsThickness * ctx.Config.ColumnErrorBarsGuideThickness)
-                        (ctx.Config.ColumnErrorBarsThickness * ctx.Config.ColumnErrorBarsGuideThickness))
-                    Color.White.O2
+            Render.rect
+                (bar k (-ctx.Config.ColumnErrorBarsThickness * ctx.Config.ColumnErrorBarsGuideThickness) (ctx.Config.ColumnErrorBarsThickness * ctx.Config.ColumnErrorBarsGuideThickness))
+                ctx.Config.ColumnErrorBarsGuideColor
 
         if ctx.Config.ColumnErrorBarsMovingAverage then
             for k = 0 to ctx.State.WithColors.Keys - 1 do
@@ -238,3 +235,10 @@ type ColumnErrorBars(ctx: HudContext) =
                              else
                                  rect)
                             color
+        
+
+        if ctx.Config.ColumnErrorBarsShowGuide && ctx.Config.ColumnErrorBarsGuideOnTop then
+            for k = 0 to ctx.State.WithColors.Keys - 1 do
+            Render.rect
+                (bar k (-ctx.Config.ColumnErrorBarsThickness * ctx.Config.ColumnErrorBarsGuideThickness) (ctx.Config.ColumnErrorBarsThickness * ctx.Config.ColumnErrorBarsGuideThickness))
+                ctx.Config.ColumnErrorBarsGuideColor
