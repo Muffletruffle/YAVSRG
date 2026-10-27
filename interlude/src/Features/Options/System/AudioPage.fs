@@ -39,12 +39,16 @@ type AudioPage() =
         )
             .Help(Help.Info("system.audio_pitch_rates_up"))
 
-    // static member AudioPitch() : PageSetting =
-    //     PageSetting(
-    //         %"system.audiopitch",
-    //         Slider(options.AudioPitch |> Setting.trigger(fun v -> Song.set_pitch_offset v), Step = 1f)
-    //     )
-    //         .Help(Help.Info("system.audiopitch"))
+    static member AudioPitch() : PageSetting =
+        PageSetting(
+            %"system.audiopitch",
+            { new Slider(Setting.uom options.AudioPitchOffset, Step = 1f) with
+                override this.OnDeselected(by_mouse: bool) : unit =
+                    base.OnDeselected(by_mouse)
+                    Song.SetPitchOffset(options.AudioPitchOffset.Value)
+            }
+        )
+            .Help(Help.Info("system.audiopitch"))
 
     static member MenusMuffleSong() : PageSetting =
         PageSetting(
@@ -87,7 +91,7 @@ type AudioPage() =
                 AudioPage.RatesChangePitchUp().Pos(7),
                 AudioPage.MenusMuffleSong().Pos(9),
                 AudioPage.CrossfadeEnabled().Pos(11),
-                // AudioPage.AudioPitch().Pos(13),
+                AudioPage.AudioPitch().Pos(13),
                 AudioPage.AudioOffset().Pos(16),
                 AudioPage.AutomaticOffset().Pos(18)
             )

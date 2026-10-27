@@ -42,6 +42,7 @@ module SelectedChart =
 
     let _rate = Setting.rate 1.0f<rate>
     let _selected_mods = options.SelectedMods
+    let _pitch_offset = options.AudioPitchOffset
 
     let private format_duration (chart_meta: ChartMeta option) =
         match chart_meta with
@@ -169,6 +170,7 @@ module SelectedChart =
                                         PreviewPoint = chart_meta.PreviewTime
                                         LastNote = chart.LastNote
                                         LocalOffset = save_data.Offset
+                                        PitchOffset = _pitch_offset.Value
                                     },
                                     rate
                                 )
