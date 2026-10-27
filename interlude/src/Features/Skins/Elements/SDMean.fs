@@ -56,32 +56,38 @@ type SDMean(ctx: HudContext) =
         let sd_bounds = this.Bounds.SlicePercentT 0.5f
         let mean_bounds = this.Bounds.SlicePercentB 0.5f
 
+        let sd_left = sd_bounds.SlicePercentL 0.3f
+        let sd_right = sd_bounds.SlicePercentR 0.7f
+
+        let mean_left = mean_bounds.SlicePercentL 0.4f
+        let mean_right = mean_bounds.SlicePercentR 0.6f
+
         Text.fill_b(
             Style.font,
             "SD:", 
-            sd_bounds,
+            sd_left,
             Colors.text,
             Alignment.LEFT
         )
         Text.fill_b(
             Style.font,
             sprintf "%.2fms" sd,
-            sd_bounds,
+            sd_right,
             sd_col(sd),
-            Alignment.RIGHT
+            Alignment.CENTER
         )
 
         Text.fill_b(
             Style.font,
             "Mean:", 
-            mean_bounds,
+            mean_left,
             Colors.text,
             Alignment.LEFT
         )
         Text.fill_b(
             Style.font,
             sprintf "%.2fms" mean, 
-            mean_bounds,
+            mean_right,
             mean_col(mean),
-            Alignment.RIGHT
+            Alignment.CENTER
         )
