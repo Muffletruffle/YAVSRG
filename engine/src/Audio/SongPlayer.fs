@@ -27,6 +27,7 @@ type SongLoadRequest =
         PreviewPoint: Time
         LastNote: Time
         LocalOffset: Time
+        PitchOffset: float32
     }
 
 [<Struct>]
@@ -73,6 +74,7 @@ type SongPlayer() =
     let mutable rate = 1.0f<rate>
     let mutable enable_pitch_rate_down = true
     let mutable enable_pitch_rate_up = true
+    let mutable pitch_offset = 0.0f
     let mutable global_offset = 0.0f<ms / rate>
     let mutable crossfade_enabled = true
 
@@ -174,6 +176,11 @@ type SongPlayer() =
     member this.LocalOffset: Time = song.LocalOffset
     member this.SetLocalOffset(offset: Time) : unit = song.LocalOffset <- offset
 
+    member this.PitchOffset: float32 = pitch_offset
+    member this.SetPitchOffset(offset: float32) : unit = 
+        pitch_offset <- offset
+        this.ApplyRateChange()
+
     // Global offset is with `ms / rate` units AKA *real time ms*, for offsetting a constant realtime delay with hardware
     member this.GlobalOffset: float32<ms / rate> = global_offset
     member this.SetGlobalOffset(offset: float32<ms / rate>) : unit = global_offset <- offset
@@ -187,7 +194,7 @@ type SongPlayer() =
 
     member private this.ApplyRateChange() : unit =
         let time = if song.Playing then song.Pause() else this.PositionRealtime()
-        song.ChangeRate(rate, this.RateChangesPitch(rate))
+        song.ChangeRate(rate, this.RateChangesPitch(rate), this.PitchOffset)
         this.Seek(time)
 
     member this.Rate: float32<rate> = rate
@@ -227,7 +234,7 @@ type SongPlayer() =
 
     member private this.FinishLoadingSong(new_song: Song, after_load: SongLoadAction) : unit =
         loading <- false
-        new_song.ChangeRate(rate, this.RateChangesPitch(rate))
+        new_song.ChangeRate(rate, this.RateChangesPitch(rate), this.PitchOffset)
         new_song.SetLowPassFilter(low_pass_amount)
         new_song.ChangeToCurrentDevice()
         let was_paused = state = Paused
@@ -269,6 +276,7 @@ type SongPlayer() =
     member this.LoadSong(request: SongLoadRequest, new_rate: float32<rate>) : unit =
         let path_changed = request.Path <> load_path
         rate <- new_rate
+        pitch_offset <- request.PitchOffset
 
         if path_changed then
             load_path <- request.Path

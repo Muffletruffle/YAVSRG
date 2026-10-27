@@ -89,6 +89,19 @@ type ChartPreview(info: LoadedChartInfo, multiplayer_lobby: bool) as this =
 
             last_time <- now
 
+        // let adjust_pitch(delta: float32) =
+        //     let current_pitch = options.AudioPitch.Get()
+        //     let clamped_delta =
+        //         Math.Clamp (delta, (-12.0f - current_pitch), (12.0f - current_pitch))
+        //     options.AudioPitch.Set (current_pitch + clamped_delta)
+        //     Song.adjust_pitch_offset clamped_delta
+
+        //     Notifications.system_feedback(
+        //         Icons.ALERT_CIRCLE,
+        //         sprintf "Pitch offset set to %.0f" ( options.AudioPitch.Get() ),
+        //         ""
+        //     )
+
         if (%%"preview").Pressed() || (%%"exit").Pressed() || Mouse.released Mouse.RIGHT then
             this.Close()
         elif (%%"select").Pressed() then

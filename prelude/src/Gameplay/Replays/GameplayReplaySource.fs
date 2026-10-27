@@ -39,6 +39,9 @@ type GameplayReplaySource(first_note: Time) =
 
             { Frames = buffer.ToArray() }
 
+        member this.GetPartialReplay() : Replay =
+            { Frames = buffer.ToArray() }
+
         member this.EnumerateRecentFrames() : ReplayFrame seq =
             seq {
                 let mutable j = buffer.Count - 1

@@ -13,12 +13,14 @@ type HudElement =
     | ColumnErrorBars
     | Combo
     | SkipButton
+    | SDMean
     | Judgement
     | EarlyLate
     | ProgressPie
     | JudgementCounter
     | RateMods
     | BPM
+    | PerformancePoint
     | Pacemaker
     | InputMeter
     | KeysPerSecond
@@ -41,8 +43,10 @@ type HudElement =
             JudgementCounter
             Judgement
             EarlyLate
+            SDMean
             RateMods
             BPM
+            PerformancePoint
             InputMeter
             KeysPerSecond
             CustomImage
@@ -66,7 +70,9 @@ type HudElement =
             JudgementCounter
             RateMods
             BPM
+            PerformancePoint
             Pacemaker
+            SDMean
             InputMeter
             KeysPerSecond
             CustomImage
@@ -93,6 +99,12 @@ type ErrorBarMovingAverageType =
     | None = 0
     | Arrow = 1
     | ReplaceBars = 2
+
+type PerformancePointText =
+    | None = 0
+    | Prefix = 1
+    | Suffix = 2
+    | SuffixSpace = 3
 
 [<Json.AutoCodec(false)>]
 type HudPosition =
@@ -170,15 +182,19 @@ type HudConfig =
         TimingDisplayFadeTime: float32<ms / rate>
         TimingDisplayThickness: float32
         TimingDisplayShowGuide: bool
+        TimingDisplayGuideColor: Color
+        TimingDisplayGuideOnTop: bool
         TimingDisplayGuideThickness: float32
         TimingDisplayShowNonJudgements: bool
         TimingDisplayReleasesExtraHeight: float32
         TimingDisplayWindowsOpacity: float32
+        TimingDisplayWindowScale: float32
         TimingDisplayHalfScaleReleases: bool
         TimingDisplayLogSensitivity: float32
         TimingDisplayMovingAverageType: ErrorBarMovingAverageType
         TimingDisplayMovingAverageSensitivity: float32
         TimingDisplayMovingAverageColor: Color
+        
 
         ColumnErrorBarsEnabled: bool
         ColumnErrorBarsPosition: HudPosition
@@ -186,11 +202,14 @@ type HudConfig =
         ColumnErrorBarsFadeTime: float32<ms / rate>
         ColumnErrorBarsThickness: float32
         ColumnErrorBarsShowGuide: bool
+        ColumnErrorBarsGuideColor: Color
+        ColumnErrorBarsGuideOnTop: bool
         ColumnErrorBarsGuideThickness: float32
         ColumnErrorBarsShowNonJudgements: bool
         ColumnErrorBarsReleasesYScale: float32
         ColumnErrorBarsReleasesXScale: float32
         ColumnErrorBarsWindowsOpacity: float32
+        ColumnErrorBarsWindowScale: float32
         ColumnErrorBarsLogSensitivity: float32
         ColumnErrorBarsMovingAverage: bool
         ColumnErrorBarsMovingAverageSensitivity: float32
@@ -206,6 +225,11 @@ type HudConfig =
 
         SkipButtonPosition: HudPosition
         SkipButtonBackground: BackgroundTextureOptions
+
+        SDMeanEnabled: bool
+        SDMeanPosition: HudPosition
+        SDMeanShowMean: bool
+        SDMeanShowSD: bool
 
         JudgementMeterEnabled: bool
         JudgementMeterPosition: HudPosition
@@ -260,6 +284,12 @@ type HudConfig =
 
         BPMMeterEnabled: bool
         BPMMeterPosition: HudPosition
+
+        PerformancePointEnabled: bool
+        PerformancePointPosition: HudPosition
+        PerformancePointTextType: PerformancePointText
+        PerformancePointUpdateInterval: float32
+        PerformancePointLerp: bool
 
         InputMeterEnabled: bool
         InputMeterPosition: HudPosition
@@ -318,10 +348,13 @@ type HudConfig =
             TimingDisplayFadeTime = 1000.0f<ms / rate>
             TimingDisplayThickness = 5.0f
             TimingDisplayShowGuide = true
+            TimingDisplayGuideColor = Color.White
+            TimingDisplayGuideOnTop = false
             TimingDisplayGuideThickness = 1.0f
             TimingDisplayShowNonJudgements = true
             TimingDisplayReleasesExtraHeight = 5.0f
             TimingDisplayWindowsOpacity = 0.0f
+            TimingDisplayWindowScale = 1.0f
             TimingDisplayHalfScaleReleases = true
             TimingDisplayMovingAverageType = ErrorBarMovingAverageType.None
             TimingDisplayMovingAverageSensitivity = 0.5f
@@ -341,11 +374,14 @@ type HudConfig =
             ColumnErrorBarsThickness = 5.0f
             ColumnErrorBarsWidth = 25.0f
             ColumnErrorBarsShowGuide = true
+            ColumnErrorBarsGuideColor = Color.White
+            ColumnErrorBarsGuideOnTop = false
             ColumnErrorBarsGuideThickness = 1.0f
             ColumnErrorBarsShowNonJudgements = false
             ColumnErrorBarsReleasesYScale = 0.5f
             ColumnErrorBarsReleasesXScale = 1.25f
             ColumnErrorBarsWindowsOpacity = 0.0f
+            ColumnErrorBarsWindowScale = 1.0f
             ColumnErrorBarsLogSensitivity = 0.0f
             ColumnErrorBarsMovingAverage = false
             ColumnErrorBarsMovingAverageSensitivity = 0.5f
@@ -381,6 +417,18 @@ type HudConfig =
                     AlignmentX = 0.5f
                     AlignmentY = 0.5f
                 }
+
+            SDMeanPosition =
+                {
+                    RelativeToPlayfield = true
+                    Left = -200.0f, 0.5f
+                    Top = 130.0f, 0.5f
+                    Right = 200.0f, 0.5f
+                    Bottom  = 230.0f, 0.5f
+                }
+            SDMeanEnabled = false
+            SDMeanShowMean = true
+            SDMeanShowSD = true
 
             JudgementMeterEnabled = true
             JudgementMeterPosition =
@@ -484,6 +532,19 @@ type HudConfig =
                     Right = 100.0f, 0.5f
                     Bottom = -10.0f, 1.0f
                 }
+
+            PerformancePointEnabled = false
+            PerformancePointPosition =
+                {
+                    RelativeToPlayfield = true
+                    Left = -200.0f, 0.5f
+                    Top = 130.0f, 0.5f
+                    Right = 200.0f, 0.5f
+                    Bottom  = 230.0f, 0.5f
+                }
+            PerformancePointTextType = PerformancePointText.SuffixSpace
+            PerformancePointUpdateInterval = 2.0f
+            PerformancePointLerp = false
 
             InputMeterEnabled = false
             InputMeterPosition =

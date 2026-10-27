@@ -48,6 +48,7 @@ module Startup =
             |]
 
         Audio.change_volume(options.AudioVolume.Value, options.AudioVolume.Value)
+        Song.SetPitchOffset(options.AudioPitchOffset.Value)
         Song.DownRatesChangePitch <- options.AudioPitchRatesDown.Value
         Song.UpRatesChangePitch <- options.AudioPitchRatesUp.Value
 

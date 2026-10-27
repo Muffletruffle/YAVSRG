@@ -30,10 +30,10 @@ module UnitConstants =
     let MS_PER_MINUTE = 60_000.0f<ms / minute>
 
     [<Literal>]
-    let LOWEST_SUPPORTED_RATE = 0.5f<rate>
+    let LOWEST_SUPPORTED_RATE = 0.2f<rate>
 
     [<Literal>]
-    let HIGHEST_SUPPORTED_RATE = 3.0f<rate>
+    let HIGHEST_SUPPORTED_RATE = 5.0f<rate>
 
 module Setting =
     open Percyqaz.Common.Setting

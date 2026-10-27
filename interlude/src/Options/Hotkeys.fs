@@ -71,6 +71,12 @@ module Hotkeys =
         Hotkeys.register "uprate_small" (shift Keys.Equal)
         Hotkeys.register "downrate_small" (shift Keys.Minus)
 
+        Hotkeys.register "pitchup" (ctrl Keys.RightBracket)
+        Hotkeys.register "pitchup_small" (ctrl_shift Keys.RightBracket)
+        Hotkeys.register "pitchdown" (ctrl Keys.LeftBracket)
+        Hotkeys.register "pitchdown_small" (ctrl_shift Keys.LeftBracket)
+        Hotkeys.register "pitchreset" (ctrl Keys.Backslash)
+
         Hotkeys.register "preview" (mk Keys.A)
         Hotkeys.register "mods" (mk Keys.S)
         Hotkeys.register "reset_mods" (shift Keys.S)
@@ -82,6 +88,7 @@ module Hotkeys =
         Hotkeys.register "mirror" (ctrl Keys.M)
         Hotkeys.register "reload_content" (Bind.Key(Keys.S, (true, true, true)))
         Hotkeys.register "graph_alt_info" (mk Keys.LeftShift)
+        Hotkeys.register "graph_alt_info_faster" (mk Keys.LeftControl)
         Hotkeys.register "difficulty_overlay" (mk Keys.F2)
 
         Hotkeys.register "skip" (mk Keys.Space)

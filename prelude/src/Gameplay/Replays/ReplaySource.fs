@@ -5,6 +5,7 @@ namespace Prelude.Gameplay.Replays
 type ReplaySource =
     abstract member Finished: bool
     abstract member GetFullReplay: unit -> Replay
+    abstract member GetPartialReplay: unit -> Replay
 
     abstract member HasNext: ChartTime -> bool
     // Only call if HasNext(max_desired_time) = true

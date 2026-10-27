@@ -1,4 +1,4 @@
-namespace Interlude.Features.Gameplay
+﻿namespace Interlude.Features.Gameplay
 
 open Percyqaz.Common
 open Percyqaz.Flux.Audio
@@ -42,6 +42,7 @@ module SelectedChart =
 
     let _rate = Setting.rate 1.0f<rate>
     let _selected_mods = options.SelectedMods
+    let _pitch_offset = options.AudioPitchOffset
 
     let private format_duration (chart_meta: ChartMeta option) =
         match chart_meta with
@@ -169,6 +170,7 @@ module SelectedChart =
                                         PreviewPoint = chart_meta.PreviewTime
                                         LastNote = chart.LastNote
                                         LocalOffset = save_data.Offset
+                                        PitchOffset = _pitch_offset.Value
                                     },
                                     rate
                                 )
@@ -419,6 +421,16 @@ module SelectedChart =
             change_rate_by(-0.25f<rate>)
         elif (%%"downrate").Pressed() then
             change_rate_by(-0.1f<rate>)
+
+    let change_pitch_hotkeys (change_pitch_by: float32 -> unit) =
+        if (%%"pitchup").Pressed() then
+            change_pitch_by(2.0f)
+        elif (%%"pitchup_small").Pressed() then
+            change_pitch_by(1.0f)
+        elif (%%"pitchdown").Pressed() then
+            change_pitch_by(-2.0f)
+        elif (%%"pitchdown_small").Pressed() then
+            change_pitch_by(-1.0f)
 
     let init () =
 

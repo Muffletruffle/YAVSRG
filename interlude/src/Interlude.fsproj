@@ -174,6 +174,7 @@
     <Compile Include="Features\Play\DifficultyOverlay.fs" />
     <Compile Include="Features\Play\HudContext.fs" />
     <Compile Include="Features\Skins\Elements\Accuracy.fs" />
+    <Compile Include="Features\Skins\Elements\PerformancePoint.fs" />
     <Compile Include="Features\Skins\Elements\ErrorBar.fs" />
     <Compile Include="Features\Skins\Elements\ColumnErrorBars.fs" />
     <Compile Include="Features\Skins\Elements\Judgement.fs" />
@@ -181,6 +182,7 @@
     <Compile Include="Features\Skins\Elements\Combo.fs" />
     <Compile Include="Features\Skins\Elements\ProgressPie.fs" />
     <Compile Include="Features\Skins\Elements\SkipButton.fs" />
+    <Compile Include="Features\Skins\Elements\SDMean.fs" />
     <Compile Include="Features\Skins\Elements\Pacemaker.fs" />
     <Compile Include="Features\Skins\Elements\JudgementCounter.fs" />
     <Compile Include="Features\Skins\Elements\MultiplayerScores.fs" />
@@ -216,6 +218,7 @@
     <Compile Include="Features\Skins\EditHUD\Configuration\ColumnErrorBarsWindowPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ColumnErrorBarsPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\AccuracyPage.fs" />
+    <Compile Include="Features\Skins\EditHUD\Configuration\PerformancePoint.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ErrorBarGuidePage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ErrorBarWindowPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ErrorBarPage.fs" />
@@ -224,6 +227,7 @@
     <Compile Include="Features\Skins\EditHUD\Configuration\ComboPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\ProgressPiePage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\SkipButtonPage.fs" />
+    <Compile Include="Features\Skins\EditHUD\Configuration\SDMeanPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\PacemakerPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\JudgementCounterPage.fs" />
     <Compile Include="Features\Skins\EditHUD\Configuration\RateModsPage.fs" />
