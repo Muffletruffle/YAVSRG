@@ -84,7 +84,7 @@ type Song =
     member this.ShouldPlayAt(time: Time) : bool =
         this.ID <> 0 && time >= 0.0f<ms> && time < this.Duration
 
-    member this.ChangeRate(rate: float32<rate>, change_pitch: bool) : unit =
+    member this.ChangeRate(rate: float32<rate>, change_pitch: bool, pitch_offset: float32) : unit =
 
         let set_frequency_multiplier (rate: float32<rate>) =
             let scaled_frequency = float32 this.Frequency * float32 rate
@@ -94,13 +94,18 @@ type Song =
             let tempo_adjustment = (rate - 1.0f<rate>) * 100.0f< / rate>
             Bass.ChannelSetAttribute(this.ID, ChannelAttribute.Tempo, tempo_adjustment).LogBassError()
 
+        let offset_pitch (offset: float32) =
+            Bass.ChannelSetAttribute(this.ID, ChannelAttribute.Pitch, int offset).LogBassError()
+
         if this.ID <> 0 then
             if change_pitch then
                 set_tempo(1.0f<rate>)
                 set_frequency_multiplier(rate)
+                offset_pitch(pitch_offset)
             else
                 set_tempo(rate)
                 set_frequency_multiplier(1.0f<rate>)
+                offset_pitch(pitch_offset)
 
     member this.SetLowPassFilter(amount: float32) : unit =
 
