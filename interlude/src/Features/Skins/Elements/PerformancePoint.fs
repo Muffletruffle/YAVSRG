@@ -67,8 +67,10 @@ type PerformancePoint(ctx: HudContext) =
         Text.fill_b(
             Style.font,
             (
-                if no_data then 
+                if chart_too_long then 
                     sprintf "%s-.--%s" prefix suffix
+                elif no_data then
+                    sprintf "%s0.00%s" prefix suffix
                 else
                     sprintf "%s%.2f%s" prefix
                         (if lerp then 
@@ -77,7 +79,7 @@ type PerformancePoint(ctx: HudContext) =
                         suffix),
             this.Bounds,
             (
-                if no_data then
+                if chart_too_long then
                     Colors.text_subheading
                 else
                     (Colors.white, Difficulty.color current_pr)
