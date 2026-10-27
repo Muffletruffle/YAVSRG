@@ -249,7 +249,7 @@ type private ModSelectPage(change_rate: Rate -> unit) =
 
     override this.Title = sprintf "%s %s" Icons.ZAP (%"mods")
 
-type ModSelect(change_rate: Rate -> unit) =
+type ModSelect(change_rate: Rate -> unit, change_pitch: float32 -> unit) =
     inherit
         AngledButton(
             sprintf "%s %s" Icons.ZAP (%"levelselect.mods"),
@@ -258,18 +258,30 @@ type ModSelect(change_rate: Rate -> unit) =
             Hotkey = "mods"
         )
 
-    let adjust_pitch(delta: float32) =
-        let current_pitch = options.AudioPitchOffset.Get()
-        let clamped_delta =
-            Math.Clamp (delta, (-12.0f - current_pitch), (12.0f - current_pitch))
-        options.AudioPitchOffset.Set (current_pitch + clamped_delta)
-        Song.SetPitchOffset (current_pitch + clamped_delta)
+    // let adjust_pitch(delta: float32) =
+    //     let current_pitch = options.AudioPitchOffset.Get()
+    //     let clamped_delta =
+    //         Math.Clamp (delta, (-12.0f - current_pitch), (12.0f - current_pitch))
+    //     options.AudioPitchOffset.Set (current_pitch + clamped_delta)
+    //     Song.SetPitchOffset (current_pitch + clamped_delta)
 
-        Notifications.system_feedback(
-            Icons.ALERT_CIRCLE,
-            sprintf "Pitch offset set to %.0f" ( options.AudioPitchOffset.Get() ),
-            ""
-        )
+    //     Notifications.system_feedback(
+    //         Icons.ALERT_CIRCLE,
+    //         sprintf "Pitch offset set to %.0f" ( options.AudioPitchOffset.Get() ),
+    //         ""
+    //     )
+    
+    // let pitch_offset_hotkeys() =
+    //     if (%%"pitchup").Pressed() then
+    //         adjust_pitch 2.0f
+    //     elif (%%"pitchup_small").Pressed() then
+    //         adjust_pitch 1.0f
+    //     elif (%%"pitchdown").Pressed() then
+    //         adjust_pitch -2.0f
+    //     elif (%%"pitchdown_small").Pressed() then
+    //         adjust_pitch -1.0f
+    //     elif (%%"pitchreset").Pressed() then
+    //         adjust_pitch (options.AudioPitchOffset.Get() * -1.0f)
 
     override this.Update(elapsed_ms: float, moved: bool) : unit =
         base.Update(elapsed_ms, moved)
@@ -284,15 +296,7 @@ type ModSelect(change_rate: Rate -> unit) =
             SelectedChart.autoplay <- false
             SelectedChart.set_rate_and_mods(1.0f<rate>, Map.empty)
             Style.click.Play()
-        elif (%%"pitchup").Pressed() then
-            adjust_pitch 2.0f
-        elif (%%"pitchup_small").Pressed() then
-            adjust_pitch 1.0f
-        elif (%%"pitchdown").Pressed() then
-            adjust_pitch -2.0f
-        elif (%%"pitchdown_small").Pressed() then
-            adjust_pitch -1.0f
-        elif (%%"pitchreset").Pressed() then
-            adjust_pitch (options.AudioPitchOffset.Get() * -1.0f)
         else
             SelectedChart.change_rate_hotkeys change_rate
+            SelectedChart.change_pitch_hotkeys change_pitch
+        

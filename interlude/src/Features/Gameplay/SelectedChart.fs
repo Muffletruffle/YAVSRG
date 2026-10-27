@@ -424,13 +424,27 @@ module SelectedChart =
 
     let change_pitch_hotkeys (change_pitch_by: float32 -> unit) =
         if (%%"pitchup").Pressed() then
-            change_pitch_by(2.0f)
+            change_pitch_by 2.0f
         elif (%%"pitchup_small").Pressed() then
-            change_pitch_by(1.0f)
+            change_pitch_by 1.0f
         elif (%%"pitchdown").Pressed() then
-            change_pitch_by(-2.0f)
+            change_pitch_by -2.0f
         elif (%%"pitchdown_small").Pressed() then
-            change_pitch_by(-1.0f)
+            change_pitch_by -1.0f
+        elif (%%"pitchreset").Pressed() then
+            change_pitch_by (options.AudioPitchOffset.Get() * -1.0f)
+    
+    // let pitch_offset_hotkeys(adjust_pitch: float32 -> unit) =
+    //     if (%%"pitchup").Pressed() then
+    //         adjust_pitch 2.0f
+    //     elif (%%"pitchup_small").Pressed() then
+    //         adjust_pitch 1.0f
+    //     elif (%%"pitchdown").Pressed() then
+    //         adjust_pitch -2.0f
+    //     elif (%%"pitchdown_small").Pressed() then
+    //         adjust_pitch -1.0f
+    //     elif (%%"pitchreset").Pressed() then
+    //         adjust_pitch (options.AudioPitchOffset.Get() * -1.0f)
 
     let init () =
 

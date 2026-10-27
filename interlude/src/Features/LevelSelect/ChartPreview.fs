@@ -9,6 +9,8 @@ open Interlude.Content
 open Interlude.Features.Gameplay
 open Interlude.Features.Play
 open Prelude.Mods
+open System
+open Interlude.Options
 
 type ChartPreview(info: LoadedChartInfo, multiplayer_lobby: bool) as this =
     inherit Dialog()
@@ -131,6 +133,18 @@ type ChartPreview(info: LoadedChartInfo, multiplayer_lobby: bool) as this =
             SelectedChart.change_rate_hotkeys(fun v ->
                 SelectedChart.rate.Set(SelectedChart.rate.Value + v)
                 LevelSelect.refresh_details()
+            )
+            SelectedChart.change_pitch_hotkeys(fun v ->
+                let current_pitch = options.AudioPitchOffset.Get()
+                let clamped_delta =
+                    Math.Clamp (v, (-12.0f - current_pitch), (12.0f - current_pitch))
+                options.AudioPitchOffset.Set (current_pitch + clamped_delta)
+                Song.SetPitchOffset (current_pitch + clamped_delta)
+                Notifications.system_feedback(
+                    Icons.ALERT_CIRCLE,
+                    sprintf "Pitch offset set to %.0f" ( options.AudioPitchOffset.Get() ),
+                    ""
+                )
             )
 
         if not(Mouse.held Mouse.LEFT) then
