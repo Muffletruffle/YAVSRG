@@ -180,12 +180,14 @@ type Timeline(with_mods: ModdedChart, on_seek: Time -> unit, rate: Setting.Bound
         let row_height = bounds.Height / 3.0f
         let text_b = bounds.SliceT(row_height).Shrink(20.0f, 0.0f)
 
+        let hover_time = time - START_OF_TIMELINE
+
         Text.fill_b(
             Style.font,
             (if rate.Value <> 1.0f<rate> then
-                 sprintf "%s (%s)" (format_duration_ms(time / float32 rate.Value)) (format_duration_ms time)
+                 sprintf "%s (%s)" (format_duration_ms(hover_time / float32 rate.Value)) (format_duration_ms hover_time)
              else
-                 format_duration_ms time),
+                 format_duration_ms hover_time),
             text_b,
             Colors.text,
             Alignment.LEFT

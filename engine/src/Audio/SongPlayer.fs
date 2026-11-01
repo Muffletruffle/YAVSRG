@@ -122,7 +122,7 @@ type SongPlayer() =
         time_at_start_of_frame <- this.PositionRealtime()
 
     member this.StartOfTimeline(first_note: Time) : Time =
-        max 0.0f<ms> (first_note - SongPlayer.LEADIN_TIME * rate)
+        first_note - SongPlayer.LEADIN_TIME * rate
 
     member this.IsPlaying: bool = state <> Paused
 
