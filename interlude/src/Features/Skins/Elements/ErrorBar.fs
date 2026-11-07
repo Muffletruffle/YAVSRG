@@ -69,15 +69,20 @@ type ErrorBar(ctx: HudContext) =
                 match ev.Inner with
                 | Hit e ->
                     if not e.Missed then
-                        let log_hit_err = ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
+                        let log_hit_err =
+                            ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
+
                         moving_average.Target <- lerp moving_average_sensitivity moving_average.Target log_hit_err
                 | Hold e ->
                     if not e.Missed then
-                        let log_hit_err = ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
+                        let log_hit_err =
+                            ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
+
                         moving_average.Target <- lerp moving_average_sensitivity moving_average.Target log_hit_err
                 | Release e ->
                     if not e.Missed then
-                        let log_hit_err = ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
+                        let log_hit_err =
+                            ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
 
                         moving_average.Target <-
                             lerp moving_average_sensitivity moving_average.Target (log_hit_err * ln_mult)
@@ -92,7 +97,8 @@ type ErrorBar(ctx: HudContext) =
                 if ev.Time >= last_seen_time - animation_time then
                     match ev.Inner with
                     | Hit e ->
-                        let log_hit_err = ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
+                        let log_hit_err =
+                            ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
 
                         hits.Add(
                             {
@@ -103,7 +109,8 @@ type ErrorBar(ctx: HudContext) =
                             }
                         )
                     | Hold e ->
-                        let log_hit_err = ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
+                        let log_hit_err =
+                            ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
 
                         hits.Add(
                             {
@@ -114,7 +121,8 @@ type ErrorBar(ctx: HudContext) =
                             }
                         )
                     | Release e ->
-                        let log_hit_err = ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
+                        let log_hit_err =
+                            ErrorBar.ApplyLogScale(float32 e.Delta, w, log_factor, max_window_scaled)
 
                         hits.Add(
                             {
@@ -180,7 +188,8 @@ type ErrorBar(ctx: HudContext) =
         let w = this.Bounds.Width
 
         let ms_to_x =
-            fun (time: float32<ms / rate>) -> center + ErrorBar.ApplyLogScale(float32 time, w, log_factor, max_window_scaled)
+            fun (time: float32<ms / rate>) ->
+                center + ErrorBar.ApplyLogScale(float32 time, w, log_factor, max_window_scaled)
 
         let r time1 time2 =
             Rect.FromEdges(ms_to_x time1, this.Bounds.Top, ms_to_x time2, this.Bounds.Bottom)
@@ -197,7 +206,9 @@ type ErrorBar(ctx: HudContext) =
 
         if ctx.Config.TimingDisplayShowGuide && not ctx.Config.TimingDisplayGuideOnTop then
             Render.rect
-                (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
+                (bar
+                    (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness)
+                    (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
                 ctx.Config.TimingDisplayGuideColor
 
         let now = ctx.State.CurrentChartTime()
@@ -250,5 +261,7 @@ type ErrorBar(ctx: HudContext) =
 
         if ctx.Config.TimingDisplayShowGuide && ctx.Config.TimingDisplayGuideOnTop then
             Render.rect
-                (bar (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness) (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
+                (bar
+                    (-ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness)
+                    (ctx.Config.TimingDisplayThickness * ctx.Config.TimingDisplayGuideThickness))
                 ctx.Config.TimingDisplayGuideColor

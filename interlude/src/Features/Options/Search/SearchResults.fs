@@ -182,7 +182,7 @@ module SearchResults =
             if token_match tokens [| %"library.vacuum" |] then
                 yield LibraryPage.Vacuum()
 
-            if token_match tokens [|%"stats.timeline_detailed_option"|] then
+            if token_match tokens [| %"stats.timeline_detailed_option" |] then
                 yield PageSetting(%"stats.timeline_detailed_option", Checkbox options.DetailedDifficultyGraph)
 
             // Secret, search-only results

@@ -14,24 +14,16 @@ type SDMeanPage() =
     let show_mean = Setting.simple config.SDMeanShowMean
     let show_sd = Setting.simple config.SDMeanShowSD
 
-    member this.SaveChanges() = 
-        Skins.save_hud_config
-            { Content.HUD with
-                SDMeanShowMean = show_mean.Value
-                SDMeanShowSD = show_sd.Value
-            }
+    member this.SaveChanges() =
+        Skins.save_hud_config { Content.HUD with SDMeanShowMean = show_mean.Value; SDMeanShowSD = show_sd.Value }
 
-    override this.Content() = 
+    override this.Content() =
         this.OnClose(this.SaveChanges)
 
         page_container()
             .With(
-                PageSetting(%"hud.sdmean.showmean", Checkbox show_mean)
-                    .Help(Help.Info("hud.sdmean.showmean"))
-                    .Pos(0),
-                PageSetting(%"hud.sdmean.showsd", Checkbox show_sd)
-                    .Help(Help.Info("hud.sdmean.showsd"))
-                    .Pos(2)
+                PageSetting(%"hud.sdmean.showmean", Checkbox show_mean).Help(Help.Info("hud.sdmean.showmean")).Pos(0),
+                PageSetting(%"hud.sdmean.showsd", Checkbox show_sd).Help(Help.Info("hud.sdmean.showsd")).Pos(2)
             )
 
     override this.Title = %"hud.sdmean"

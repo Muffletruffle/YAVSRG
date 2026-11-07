@@ -270,7 +270,7 @@ type ModSelect(change_rate: Rate -> unit, change_pitch: float32 -> unit) =
     //         sprintf "Pitch offset set to %.0f" ( options.AudioPitchOffset.Get() ),
     //         ""
     //     )
-    
+
     // let pitch_offset_hotkeys() =
     //     if (%%"pitchup").Pressed() then
     //         adjust_pitch 2.0f
@@ -299,4 +299,3 @@ type ModSelect(change_rate: Rate -> unit, change_pitch: float32 -> unit) =
         else
             SelectedChart.change_rate_hotkeys change_rate
             SelectedChart.change_pitch_hotkeys change_pitch
-        

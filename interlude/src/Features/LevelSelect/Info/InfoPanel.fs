@@ -22,35 +22,37 @@ type InfoPanel() =
             if not(Transitions.in_progress()) then
                 SelectedChart.rate.Value <- SelectedChart.rate.Value + change_rate_by
                 LevelSelect.refresh_details()
-        
 
-    // let adjust_pitch(delta: float32) =
-    //     let current_pitch = options.AudioPitchOffset.Get()
-    //     let clamped_delta =
-    //         Math.Clamp (delta, (-12.0f - current_pitch), (12.0f - current_pitch))
-    //     options.AudioPitchOffset.Set (current_pitch + clamped_delta)
-    //     Song.SetPitchOffset (current_pitch + clamped_delta)
 
-    //     Notifications.system_feedback(
-    //         Icons.ALERT_CIRCLE,
-    //         sprintf "Pitch offset set to %.0f" ( options.AudioPitchOffset.Get() ),
-    //         ""
-    //     )
+        // let adjust_pitch(delta: float32) =
+        //     let current_pitch = options.AudioPitchOffset.Get()
+        //     let clamped_delta =
+        //         Math.Clamp (delta, (-12.0f - current_pitch), (12.0f - current_pitch))
+        //     options.AudioPitchOffset.Set (current_pitch + clamped_delta)
+        //     Song.SetPitchOffset (current_pitch + clamped_delta)
+
+        //     Notifications.system_feedback(
+        //         Icons.ALERT_CIRCLE,
+        //         sprintf "Pitch offset set to %.0f" ( options.AudioPitchOffset.Get() ),
+        //         ""
+        //     )
 
         let change_pitch (change_pitch_by: float32) : unit =
             if not(Transitions.in_progress()) then
                 let current_pitch = options.AudioPitchOffset.Get()
+
                 let clamped_delta =
-                    Math.Clamp (change_pitch_by, (-12.0f - current_pitch), (12.0f - current_pitch))
-                options.AudioPitchOffset.Set (current_pitch + clamped_delta)
-                Song.SetPitchOffset (current_pitch + clamped_delta)
+                    Math.Clamp(change_pitch_by, (-12.0f - current_pitch), (12.0f - current_pitch))
+
+                options.AudioPitchOffset.Set(current_pitch + clamped_delta)
+                Song.SetPitchOffset(current_pitch + clamped_delta)
 
                 Notifications.system_feedback(
                     Icons.ALERT_CIRCLE,
-                    sprintf "Pitch offset set to %.0f" ( options.AudioPitchOffset.Get() ),
+                    sprintf "Pitch offset set to %.0f" (options.AudioPitchOffset.Get()),
                     ""
                 )
-                // SelectedChart._pitch_offset.Value <- SelectedChart._pitch_offset.Value + change_pitch_by
+        // SelectedChart._pitch_offset.Value <- SelectedChart._pitch_offset.Value + change_pitch_by
 
         let main_display =
             Container(NodeType.None)

@@ -39,7 +39,7 @@ module internal Shared =
         else 9, "Never"
 
     let format_duration (chart_meta: ChartMeta, _) : int * string =
-        let minutes = float32 (chart_meta.Length / 60000.0f) |> ceil |> int
+        let minutes = float32(chart_meta.Length / 60000.0f) |> ceil |> int
 
         if minutes = 1 then 0, "1 minute or less"
         elif minutes >= 6 && minutes <= 8 then 5, "8 minutes or less"

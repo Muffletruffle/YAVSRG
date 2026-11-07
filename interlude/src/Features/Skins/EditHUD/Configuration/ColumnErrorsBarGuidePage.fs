@@ -42,7 +42,10 @@ type ColumnErrorBarsGuidePage() =
                     .Help(Help.Info("hud.column_error_bars.guide_thickness"))
                     .Pos(4)
                     .Conditional(show_guide.Get),
-                PageSetting(%"hud.column_error_bars.guide_color", ColorPicker(%"hud.column_error_bars.guide_color", guide_color, true))
+                PageSetting(
+                    %"hud.column_error_bars.guide_color",
+                    ColorPicker(%"hud.column_error_bars.guide_color", guide_color, true)
+                )
                     .Help(Help.Info("hud.column_error_bars.guide_color"))
                     .Pos(6)
                     .Conditional(show_guide.Get)

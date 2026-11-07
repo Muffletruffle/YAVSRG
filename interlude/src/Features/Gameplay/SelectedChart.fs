@@ -438,8 +438,8 @@ module SelectedChart =
         elif (%%"pitchdown_small").Pressed() then
             change_pitch_by -1.0f
         elif (%%"pitchreset").Pressed() then
-            change_pitch_by (options.AudioPitchOffset.Get() * -1.0f)
-    
+            change_pitch_by(options.AudioPitchOffset.Get() * -1.0f)
+
     // let pitch_offset_hotkeys(adjust_pitch: float32 -> unit) =
     //     if (%%"pitchup").Pressed() then
     //         adjust_pitch 2.0f

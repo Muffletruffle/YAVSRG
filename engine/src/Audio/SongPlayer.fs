@@ -183,7 +183,8 @@ type SongPlayer() =
     member this.SetLocalOffset(offset: Time) : unit = song.LocalOffset <- offset
 
     member this.PitchOffset: float32 = pitch_offset
-    member this.SetPitchOffset(offset: float32) : unit = 
+
+    member this.SetPitchOffset(offset: float32) : unit =
         pitch_offset <- offset
         this.ApplyRateChange()
 

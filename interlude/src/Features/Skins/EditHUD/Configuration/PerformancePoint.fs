@@ -14,7 +14,10 @@ type PerformancePointPage() =
     let config = Content.HUD
 
     let text_format = Setting.simple config.PerformancePointTextType
-    let update_frequency = config.PerformancePointUpdateInterval |> Setting.bounded (0.1f, 2.0f)
+
+    let update_frequency =
+        config.PerformancePointUpdateInterval |> Setting.bounded(0.1f, 2.0f)
+
     let lerp_toggle = Setting.simple config.PerformancePointLerp
 
     member this.SaveChanges() =
@@ -25,21 +28,22 @@ type PerformancePointPage() =
                 PerformancePointLerp = lerp_toggle.Value
             }
 
-    override this.Content() = 
+    override this.Content() =
         this.OnClose(this.SaveChanges)
 
         page_container()
             .With(
-                PageSetting(%"hud.performance_point.text",
-                SelectDropdown(
-                    [|
-                        PerformancePointText.None, %"hud.performance_point.text.none"
-                        PerformancePointText.Suffix, %"hud.performance_point.text.suffix"
-                        PerformancePointText.SuffixSpace, %"hud.performance_point.text.suffixspace"
-                        PerformancePointText.Prefix, %"hud.performance_point.text.prefix"
-                    |],
-                    text_format
-                )
+                PageSetting(
+                    %"hud.performance_point.text",
+                    SelectDropdown(
+                        [|
+                            PerformancePointText.None, %"hud.performance_point.text.none"
+                            PerformancePointText.Suffix, %"hud.performance_point.text.suffix"
+                            PerformancePointText.SuffixSpace, %"hud.performance_point.text.suffixspace"
+                            PerformancePointText.Prefix, %"hud.performance_point.text.prefix"
+                        |],
+                        text_format
+                    )
                 )
                     .Help(Help.Info("hud.performance_point.text"))
                     .Pos(0),

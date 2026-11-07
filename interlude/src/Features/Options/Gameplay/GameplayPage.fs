@@ -36,8 +36,7 @@ type GameplayPage() =
             .With(
                 Text(fun () ->
                     [
-                        ((540.0f - options.HitPosition.Value * 2.0f).ToString("F0")
-                        ) // Insert some more conversions here, I don't know of any more
+                        ((540.0f - options.HitPosition.Value * 2.0f).ToString("F0")) // Insert some more conversions here, I don't know of any more
                     ]
                     %> "gameplay.hitposition.info"
                 )
@@ -45,7 +44,7 @@ type GameplayPage() =
                     .Position(page_position(2, 1, PageWidth.Normal).ShrinkL PAGE_LABEL_WIDTH)
             )
             .Help(Help.Info("gameplay.hitposition"))
-    
+
     static member Upscroll() : PageSetting =
         PageSetting(%"gameplay.upscroll", Checkbox options.Upscroll).Help(Help.Info("gameplay.upscroll"))
 

@@ -112,12 +112,7 @@ module HudElement =
                 (fun () -> Content.HUD.JudgementMeterEnabled)
         | HudElement.SDMean ->
             Setting.make
-                (fun v ->
-                    Skins.save_hud_config
-                        { Content.HUD with
-                            SDMeanEnabled = v
-                        }
-                )
+                (fun v -> Skins.save_hud_config { Content.HUD with SDMeanEnabled = v })
                 (fun () -> Content.HUD.SDMeanEnabled)
         | HudElement.EarlyLate ->
             Setting.make
@@ -141,12 +136,7 @@ module HudElement =
                 (fun () -> Content.HUD.BPMMeterEnabled)
         | HudElement.PerformancePoint ->
             Setting.make
-                (fun v ->
-                    Skins.save_hud_config
-                        { Content.HUD with
-                            PerformancePointEnabled = v
-                        }
-                )
+                (fun v -> Skins.save_hud_config { Content.HUD with PerformancePointEnabled = v })
                 (fun () -> Content.HUD.PerformancePointEnabled)
         | HudElement.Pacemaker -> show_pacemaker
         | HudElement.InputMeter ->
@@ -187,12 +177,7 @@ module HudElement =
                 (fun () -> Content.HUD.SkipButtonPosition)
         | HudElement.SDMean ->
             Setting.make
-                (fun v ->
-                    Skins.save_hud_config
-                        { Content.HUD with
-                            SDMeanPosition = v
-                        }
-                )
+                (fun v -> Skins.save_hud_config { Content.HUD with SDMeanPosition = v })
                 (fun () -> Content.HUD.SDMeanPosition)
         | HudElement.Judgement ->
             Setting.make
@@ -220,12 +205,7 @@ module HudElement =
                 (fun () -> Content.HUD.BPMMeterPosition)
         | HudElement.PerformancePoint ->
             Setting.make
-                (fun v ->
-                    Skins.save_hud_config
-                        { Content.HUD with
-                            PerformancePointPosition = v
-                        }
-                )
+                (fun v -> Skins.save_hud_config { Content.HUD with PerformancePointPosition = v })
                 (fun () -> Content.HUD.PerformancePointPosition)
         | HudElement.Pacemaker ->
             Setting.make

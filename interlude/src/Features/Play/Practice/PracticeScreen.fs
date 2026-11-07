@@ -156,15 +156,16 @@ type PracticeScreen =
                         SelectedChart.change_rate_hotkeys(fun change_by ->
                             SelectedChart.rate.Value <- SelectedChart.rate.Value + change_by
                         )
-                        SelectedChart.change_pitch_hotkeys(fun v -> 
+
+                        SelectedChart.change_pitch_hotkeys(fun v ->
                             let current_pitch = options.AudioPitchOffset.Get()
-                            let clamped_delta =
-                                Math.Clamp (v, (-12.0f - current_pitch), (12.0f - current_pitch))
-                            options.AudioPitchOffset.Set (current_pitch + clamped_delta)
-                            Song.SetPitchOffset (current_pitch + clamped_delta)
+                            let clamped_delta = Math.Clamp(v, (-12.0f - current_pitch), (12.0f - current_pitch))
+                            options.AudioPitchOffset.Set(current_pitch + clamped_delta)
+                            Song.SetPitchOffset(current_pitch + clamped_delta)
+
                             Notifications.system_feedback(
                                 Icons.ALERT_CIRCLE,
-                                sprintf "Pitch offset set to %.0f" ( options.AudioPitchOffset.Get() ),
+                                sprintf "Pitch offset set to %.0f" (options.AudioPitchOffset.Get()),
                                 ""
                             )
                         )
