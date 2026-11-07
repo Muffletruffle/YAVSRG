@@ -19,6 +19,9 @@ type SDMean(ctx: HudContext) =
     let mutable sd = 0.0f
     let mutable note_count = 0
 
+    let show_mean = ctx.Config.SDMeanShowMean
+    let show_sd = ctx.Config.SDMeanShowSD
+
     let calc_mean_sd () =
         // formula: sqrt((cumul_square_sum / n) - mean^2)
         mean <- cumul_sum / (float32) note_count
@@ -66,14 +69,22 @@ type SDMean(ctx: HudContext) =
         let sd_bounds = this.Bounds.SlicePercentT 0.5f
         let mean_bounds = this.Bounds.SlicePercentB 0.5f
 
-        let sd_left = sd_bounds.SlicePercentL 0.3f
-        let sd_right = sd_bounds.SlicePercentR 0.7f
+        let sd_left = sd_bounds.SlicePercentL 0.25f
+        let sd_right = sd_bounds.SlicePercentR 0.73f
+        let sd_r_num = sd_right.SlicePercentL 0.8f
+        let sd_r_ms = (sd_right.SlicePercentR 0.2f).SlicePercentB 0.7f
 
-        let mean_left = mean_bounds.SlicePercentL 0.4f
-        let mean_right = mean_bounds.SlicePercentR 0.6f
+        let mean_left = mean_bounds.SlicePercentL 0.25f
+        let mean_right = mean_bounds.SlicePercentR 0.73f
+        let mean_r_num = mean_right.SlicePercentL 0.8f
+        let mean_r_ms = (mean_right.SlicePercentR 0.2f).SlicePercentB 0.7f
 
-        Text.fill_b(Style.font, "SD:", sd_left, Colors.text, Alignment.LEFT)
-        Text.fill_b(Style.font, sprintf "%.2fms" sd, sd_right, sd_col(sd), Alignment.CENTER)
+        if show_sd then
+            Text.fill_b(Style.font, "SD:", sd_left, Colors.text, Alignment.LEFT)
+            Text.fill_b(Style.font, sprintf "%.2f" sd, sd_r_num, sd_col(sd), Alignment.RIGHT)
+            Text.fill_b(Style.font, "ms", sd_r_ms, sd_col(sd), Alignment.LEFT)
 
-        Text.fill_b(Style.font, "Mean:", mean_left, Colors.text, Alignment.LEFT)
-        Text.fill_b(Style.font, sprintf "%.2fms" mean, mean_right, mean_col(mean), Alignment.CENTER)
+        if show_mean then
+            Text.fill_b(Style.font, "M:", mean_left, Colors.text, Alignment.LEFT)
+            Text.fill_b(Style.font, sprintf "%.2f" mean, mean_r_num, mean_col(mean), Alignment.RIGHT)
+            Text.fill_b(Style.font, "ms", mean_r_ms, mean_col(mean), Alignment.LEFT)
