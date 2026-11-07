@@ -72,8 +72,14 @@ type SongPlayer() =
                     "BASS didn't report playback as expected (%.1fms vs %.1fms)"
                     actual_bass_delay
                     estimated_bass_delay
+
+                actual_bass_delay <- delay
+                estimated_bass_delay <- delay
+                playback_start <- Stopwatch.GetTimestamp()
+                state <- PlayingWithAudio
             else
                 actual_bass_delay <- delay
+                estimated_bass_delay <- delay
                 playback_start <- Stopwatch.GetTimestamp()
                 state <- PlayingWithAudio
 
@@ -114,10 +120,14 @@ type SongPlayer() =
             let run_time =
                 float32(Stopwatch.GetElapsedTime(playback_start).TotalMilliseconds) * 1.0f<ms / rate>
 
-            let multiplier =
-                min 1.0f ((run_time - actual_bass_delay) / (250.0f * abs target_compensation))
+            // let multiplier =
+            //     min 1.0f ((run_time - actual_bass_delay) / (250.0f * abs target_compensation))
 
-            compensation_at_start_of_frame <- estimated_bass_delay + multiplier * target_compensation
+            // compensation_at_start_of_frame <- estimated_bass_delay + multiplier * target_compensation
+
+            compensation_at_start_of_frame <- estimated_bass_delay + target_compensation
+
+
         | PlayingWithoutAudio ->
             let run_time =
                 float32(Stopwatch.GetElapsedTime(timer_start).TotalMilliseconds) * 1.0f<ms / rate>
